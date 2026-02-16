@@ -5,12 +5,12 @@
         <!-- Top Controls -->
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 min-h-[44px]">
             <h2 class="text-xl font-bold text-gray-800 dark:text-white">
-                Edit Kompetensi Keahlian
+                Edit Program Keahlian
             </h2>
             <nav>
                 <ol class="flex items-center gap-1.5 text-sm">
                     <li>
-                        <a class="font-medium text-gray-400 dark:text-amoled-text hover:text-school-blue transition duration-150" href="{{ route('departments.index') }}">Kompetensi Keahlian</a>
+                        <a class="font-medium text-gray-400 dark:text-amoled-text hover:text-school-blue transition duration-150" href="{{ route('departments.index') }}">Program Keahlian</a>
                     </li>
                     <li class="text-gray-300 dark:text-gray-600">/</li>
                     <li class="font-medium text-gray-800 dark:text-gray-200">Edit</li>
@@ -22,7 +22,7 @@
         <div class="rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-amoled-border dark:bg-amoled-surface">
             <div class="border-b border-gray-200 dark:border-amoled-border py-4 px-6 sm:px-8">
                 <h3 class="text-sm font-semibold text-gray-500 dark:text-amoled-text">
-                    Informasi Kompetensi Keahlian
+                    Informasi Program Keahlian
                 </h3>
             </div>
 
@@ -33,7 +33,7 @@
                     <!-- Department Name -->
                     <div>
                         <label for="name" class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                            Nama Kompetensi Keahlian <span class="text-red-500">*</span>
+                            Nama Program Keahlian <span class="text-red-500">*</span>
                         </label>
                         <input
                             type="text"
@@ -52,7 +52,7 @@
                     <!-- Department Code -->
                     <div>
                         <label for="code" class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                            Kode Kompetensi Keahlian <span class="text-red-500">*</span>
+                            Kode Program Keahlian <span class="text-red-500">*</span>
                         </label>
                         <input
                             type="text"

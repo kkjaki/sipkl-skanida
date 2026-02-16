@@ -5,7 +5,7 @@
         <!-- Top Controls -->
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 min-h-[44px]">
             <h2 class="text-xl font-bold text-gray-800 dark:text-white">
-                Manajemen Kompetensi Keahlian
+                Manajemen Program Keahlian
             </h2>
             <a href="{{ route('departments.create') }}" class="inline-flex items-center justify-center gap-2.5 rounded-xl bg-school-blue py-2.5 px-6 text-center text-sm font-medium text-white hover:bg-school-blue/90 transition duration-150 ease-in-out shadow-sm">
                 <span>
@@ -13,7 +13,7 @@
                         <path d="M10 0C4.47715 0 0 4.47715 0 10C0 15.5228 4.47715 20 10 20C15.5228 20 20 15.5228 20 10C20 4.47715 15.5228 0 10 0ZM15 11H11V15H9V11H5V9H9V5H11V9H15V11Z" fill=""/>
                     </svg>
                 </span>
-                Tambah Kompetensi Keahlian
+                Tambah Program Keahlian
             </a>
         </div>
 
