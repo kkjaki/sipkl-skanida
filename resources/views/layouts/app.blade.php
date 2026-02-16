@@ -69,6 +69,9 @@
             });
         });
     </script>
+    <style>
+        [x-cloak] { display: none !important; }
+    </style>
 </head>
 <body
     x-data="{ 'loaded': true }"

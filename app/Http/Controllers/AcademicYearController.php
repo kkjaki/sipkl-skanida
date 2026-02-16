@@ -44,7 +44,7 @@ class AcademicYearController extends Controller
         ]);
 
         return redirect()->route('academic-years.index')
-            ->with('success', 'Academic year created successfully.');
+            ->with('success', 'Tahun ajaran berhasil ditambahkan.');
     }
 
     /**
@@ -77,7 +77,7 @@ class AcademicYearController extends Controller
         ]);
 
         return redirect()->route('academic-years.index')
-            ->with('success', 'Academic year updated successfully.');
+            ->with('success', 'Tahun ajaran berhasil diperbarui.');
     }
 
     /**
@@ -88,7 +88,7 @@ class AcademicYearController extends Controller
         $academicYear->delete();
 
         return redirect()->route('academic-years.index')
-            ->with('success', 'Academic year deleted successfully.');
+            ->with('success', 'Tahun ajaran berhasil dihapus.');
     }
 
     /**
@@ -103,6 +103,6 @@ class AcademicYearController extends Controller
         $academicYear->update(['is_active' => true]);
 
         return redirect()->route('academic-years.index')
-            ->with('success', "Academic year \"{$academicYear->name}\" has been set as active.");
+            ->with('success', "Tahun ajaran \"{$academicYear->name}\" berhasil diaktifkan.");
     }
 }
