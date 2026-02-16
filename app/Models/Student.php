@@ -16,6 +16,7 @@ class Student extends Model
     protected $fillable = [
         'user_id',
         'department_id',
+        'academic_year_id',
         'nis',
         'class_name',
         'phone',
@@ -35,5 +36,13 @@ class Student extends Model
     public function department()
     {
         return $this->belongsTo(Department::class);
+    }
+
+    /**
+     * Get the academic year that the student belongs to.
+     */
+    public function academicYear()
+    {
+        return $this->belongsTo(AcademicYear::class);
     }
 }
