@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\AcademicYearController;
 use App\Http\Controllers\StudentController;
+use App\Http\Controllers\SupervisorController;
 use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 
@@ -26,6 +27,8 @@ Route::middleware('auth')->group(function () {
     Route::resource('academic-years', AcademicYearController::class);
 
     Route::resource('students', StudentController::class);
+
+    Route::resource('supervisors', SupervisorController::class);
 });
 
 require __DIR__.'/auth.php';
