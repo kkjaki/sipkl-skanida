@@ -28,7 +28,7 @@
     <!-- Menu -->
     <div class="flex flex-col overflow-y-auto duration-300 ease-linear no-scrollbar">
         <nav class="mt-4 px-4 py-4 lg:mt-6 lg:px-5">
-            <!-- Dashboard Group -->
+            <!-- Dashboard (All Roles) -->
             <div>
                 <h3 class="mb-3 ml-3 text-[11px] font-semibold text-gray-400 dark:text-amoled-text uppercase tracking-widest"
                     x-show="$store.sidebar.isExpanded || $store.sidebar.isHovered || $store.sidebar.isMobileOpen" x-cloak>
@@ -51,7 +51,10 @@
                 </ul>
             </div>
 
-            <!-- Master Data Group -->
+            {{-- ============================================ --}}
+            {{-- ADMIN MENU --}}
+            {{-- ============================================ --}}
+            @role('admin')
             <div>
                  <h3 class="mb-3 ml-3 text-[11px] font-semibold text-gray-400 dark:text-amoled-text uppercase tracking-widest"
                     x-show="$store.sidebar.isExpanded || $store.sidebar.isHovered || $store.sidebar.isMobileOpen" x-cloak>
@@ -117,8 +120,101 @@
                             <span x-show="$store.sidebar.isExpanded || $store.sidebar.isHovered || $store.sidebar.isMobileOpen" x-cloak>Guru Pembimbing</span>
                         </a>
                     </li>
+
+                    <!-- Industries -->
+                    <li>
+                        <a href="{{ route('industries.index') }}"
+                           class="group relative flex items-center gap-2.5 rounded-xl px-4 py-2.5 font-medium text-sm duration-200 ease-in-out
+                                  {{ request()->routeIs('industries.*')
+                                      ? 'bg-school-blue/10 text-school-blue dark:bg-white/[0.08] dark:text-white'
+                                      : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-white/[0.06] dark:hover:text-white' }}"
+                        >
+                            <svg class="w-5 h-5 flex-shrink-0" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0H5m14 0h2m-16 0H3m2 0V5m12 0v16m-5-14h.01M9 7h.01M9 11h.01M12 11h.01M9 15h.01M12 15h.01"/>
+                            </svg>
+                            <span x-show="$store.sidebar.isExpanded || $store.sidebar.isHovered || $store.sidebar.isMobileOpen" x-cloak>Industri</span>
+                        </a>
+                    </li>
                 </ul>
             </div>
+            @endrole
+
+            {{-- ============================================ --}}
+            {{-- STUDENT MENU --}}
+            {{-- ============================================ --}}
+            @role('student')
+            <div>
+                <h3 class="mb-3 ml-3 text-[11px] font-semibold text-gray-400 dark:text-amoled-text uppercase tracking-widest"
+                    x-show="$store.sidebar.isExpanded || $store.sidebar.isHovered || $store.sidebar.isMobileOpen" x-cloak>
+                    PKL
+                </h3>
+                <ul class="mb-6 flex flex-col gap-1">
+                    <!-- Pengajuan Lokasi -->
+                    <li>
+                        <a href="{{ route('student.proposals.index') }}"
+                           class="group relative flex items-center gap-2.5 rounded-xl px-4 py-2.5 font-medium text-sm duration-200 ease-in-out
+                                  {{ request()->routeIs('industries.*')
+                                      ? 'bg-school-blue/10 text-school-blue dark:bg-white/[0.08] dark:text-white'
+                                      : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-white/[0.06] dark:hover:text-white' }}"
+                        >
+                            <svg class="fill-current w-5 h-5 flex-shrink-0" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M4 4C4 2.89543 4.89543 2 6 2H10.5858C11.1162 2 11.6249 2.21071 12 2.58579L15.4142 6C15.7893 6.37507 16 6.88378 16 7.41421V16C16 17.1046 15.1046 18 14 18H6C4.89543 18 4 17.1046 4 16V4ZM14 16V8H11C10.4477 8 10 7.55228 10 7V4H6V16H14ZM12 4.41421L13.5858 6H12V4.41421ZM7 10H13V12H7V10ZM7 13H11V15H7V13Z" fill=""/>
+                            </svg>
+                            <span x-show="$store.sidebar.isExpanded || $store.sidebar.isHovered || $store.sidebar.isMobileOpen" x-cloak>Pengajuan Lokasi</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            @endrole
+
+            {{-- ============================================ --}}
+            {{-- DEPARTMENT HEAD (KAPROG) MENU --}}
+            {{-- ============================================ --}}
+            @role('department_head')
+            <div>
+                <h3 class="mb-3 ml-3 text-[11px] font-semibold text-gray-400 dark:text-amoled-text uppercase tracking-widest"
+                    x-show="$store.sidebar.isExpanded || $store.sidebar.isHovered || $store.sidebar.isMobileOpen" x-cloak>
+                    VERIFIKASI
+                </h3>
+                <ul class="mb-6 flex flex-col gap-1">
+                    <li>
+                        <a href="{{ route('verification.index') }}"
+                           class="group relative flex items-center gap-2.5 rounded-xl px-4 py-2.5 font-medium text-sm duration-200 ease-in-out
+                                  {{ request()->routeIs('verification.*')
+                                      ? 'bg-school-blue/10 text-school-blue dark:bg-white/[0.08] dark:text-white'
+                                      : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-white/[0.06] dark:hover:text-white' }}"
+                        >
+                            <svg class="w-5 h-5 flex-shrink-0" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                            </svg>
+                            <span x-show="$store.sidebar.isExpanded || $store.sidebar.isHovered || $store.sidebar.isMobileOpen" x-cloak>Verifikasi Industri</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            @endrole
+
+            {{-- ============================================ --}}
+            {{-- SUPERVISOR MENU --}}
+            {{-- ============================================ --}}
+            @role('supervisor')
+            <div>
+                <h3 class="mb-3 ml-3 text-[11px] font-semibold text-gray-400 dark:text-amoled-text uppercase tracking-widest"
+                    x-show="$store.sidebar.isExpanded || $store.sidebar.isHovered || $store.sidebar.isMobileOpen" x-cloak>
+                    PEMBIMBINGAN
+                </h3>
+                <ul class="mb-6 flex flex-col gap-1">
+                    <li>
+                        <span class="group relative flex items-center gap-2.5 rounded-xl px-4 py-2.5 font-medium text-sm text-gray-400 dark:text-gray-500 cursor-default">
+                            <svg class="fill-current w-5 h-5 flex-shrink-0" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M10 0C4.48 0 0 4.48 0 10C0 15.52 4.48 20 10 20C15.52 20 20 15.52 20 10C20 4.48 15.52 0 10 0ZM11 15H9V9H11V15ZM11 7H9V5H11V7Z" fill=""/>
+                            </svg>
+                            <span x-show="$store.sidebar.isExpanded || $store.sidebar.isHovered || $store.sidebar.isMobileOpen" x-cloak>Segera Hadir</span>
+                        </span>
+                    </li>
+                </ul>
+            </div>
+            @endrole
         </nav>
     </div>
 </aside>

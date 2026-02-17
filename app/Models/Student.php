@@ -45,4 +45,12 @@ class Student extends Model
     {
         return $this->belongsTo(AcademicYear::class);
     }
+
+    /**
+     * Get the internship record for the student.
+     */
+    public function internship()
+    {
+        return $this->hasOne(Internship::class, 'student_id', 'user_id');
+    }
 }
