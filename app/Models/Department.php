@@ -13,4 +13,12 @@ class Department extends Model
         'name',
         'code',
     ];
+
+    /**
+     * Get the industry allocations for this department.
+     */
+    public function industryAllocations()
+    {
+        return $this->hasMany(IndustryAllocation::class);
+    }
 }

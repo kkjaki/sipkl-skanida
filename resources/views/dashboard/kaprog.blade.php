@@ -66,18 +66,18 @@
                 </div>
             </div>
 
-            <!-- Card 3: Mitra Aktif (Blue) -->
-            <div class="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm dark:border-amoled-border dark:bg-amoled-surface">
+            <!-- Card 3: Mitra Aktif (Coming Soon) -->
+            <div class="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm dark:border-amoled-border dark:bg-amoled-surface opacity-60">
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-sm font-medium text-gray-500 dark:text-amoled-text">Total Mitra {{ $department->code }}</p>
-                        <h3 class="mt-2 text-3xl font-bold text-school-blue">
-                            {{ $mitraAktif }}
+                        <h3 class="mt-2 text-lg font-bold text-gray-400 dark:text-gray-500">
+                            Coming Soon
                         </h3>
-                        <p class="mt-1 text-xs text-gray-400 dark:text-gray-500">industri dengan kuota</p>
+                        <p class="mt-1 text-xs text-gray-400 dark:text-gray-500">menunggu manajemen MoU</p>
                     </div>
-                    <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-school-blue/10 dark:bg-school-blue/20">
-                        <svg class="w-6 h-6 text-school-blue" width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-gray-100 dark:bg-white/[0.06]">
+                        <svg class="w-6 h-6 text-gray-400 dark:text-gray-500" width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0H5m14 0h2m-16 0H3m2 0V5m12 0v16m-5-14h.01M9 7h.01M9 11h.01M12 11h.01M9 15h.01M12 15h.01"></path>
                         </svg>
                     </div>

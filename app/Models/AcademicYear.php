@@ -17,4 +17,12 @@ class AcademicYear extends Model
     protected $casts = [
         'is_active' => 'boolean',
     ];
+
+    /**
+     * Get the industry allocations for this academic year.
+     */
+    public function industryAllocations()
+    {
+        return $this->hasMany(IndustryAllocation::class);
+    }
 }
