@@ -140,6 +140,47 @@
             @endrole
 
             {{-- ============================================ --}}
+            {{-- CURRICULUM MENU (WKS Kurikulum) --}}
+            {{-- ============================================ --}}
+            @role('curriculum')
+            <div>
+                 <h3 class="mb-3 ml-3 text-[11px] font-semibold text-gray-400 dark:text-amoled-text uppercase tracking-widest"
+                    x-show="$store.sidebar.isExpanded || $store.sidebar.isHovered || $store.sidebar.isMobileOpen" x-cloak>
+                KELOLA DATA KURIKULUM
+                </h3>
+                <ul class="mb-6 flex flex-col gap-1">
+                    <!-- Alokasi Guru -->
+                    <li>
+                        <a href="{{ route('supervisors.allocate') }}"
+                           class="group relative flex items-center gap-2.5 rounded-xl px-4 py-2.5 font-medium text-sm duration-200 ease-in-out
+                                  {{ request()->routeIs('supervisors.allocate.*')
+                                      ? 'bg-school-blue/10 text-school-blue dark:bg-white/[0.08] dark:text-white'
+                                      : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-white/[0.06] dark:hover:text-white' }}"
+                        >
+                            <svg class="fill-current w-5 h-5 flex-shrink-0" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M10 10C12.21 10 14 8.21 14 6C14 3.79 12.21 2 10 2C7.79 2 6 3.79 6 6C6 8.21 7.79 10 10 10ZM10 4C11.1 4 12 4.9 12 6C12 7.1 11.1 8 10 8C8.9 8 8 7.1 8 6C8 4.9 8.9 4 10 4ZM2 16V18H18V16C18 13.34 12.67 12 10 12C7.33 12 2 13.34 2 16ZM4 16C4.22 15.28 7.31 14 10 14C12.7 14 15.8 15.29 16 16H4Z" fill=""/>
+                            </svg>
+                            <span x-show="$store.sidebar.isExpanded || $store.sidebar.isHovered || $store.sidebar.isMobileOpen" x-cloak>Alokasi Guru</span>
+                        </a>
+                    </li>
+
+                    <!-- Indikator Penilaian -->
+                    <li>
+                        <a href="#"
+                           class="group relative flex items-center gap-2.5 rounded-xl px-4 py-2.5 font-medium text-sm duration-200 ease-in-out text-gray-400 hover:bg-gray-50 hover:text-gray-900 dark:text-gray-500 dark:hover:bg-amoled-surface dark:hover:text-white cursor-not-allowed"
+                           title="Segera Hadir"
+                        >
+                            <svg class="fill-current w-5 h-5 flex-shrink-0" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M2 10C2 5.58 5.58 2 10 2C14.42 2 18 5.58 18 10C18 14.42 14.42 18 10 18C5.58 18 2 14.42 2 10ZM4 10C4 13.31 6.69 16 10 16C13.31 16 16 13.31 16 10C16 6.69 13.31 4 10 4C6.69 4 4 6.69 4 10ZM11 11H9V6H11V11ZM11 14H9V12H11V14Z" fill=""/>
+                            </svg>
+                            <span x-show="$store.sidebar.isExpanded || $store.sidebar.isHovered || $store.sidebar.isMobileOpen" x-cloak>Indikator Penilaian</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            @endrole
+
+            {{-- ============================================ --}}
             {{-- STUDENT MENU --}}
             {{-- ============================================ --}}
             @role('student')

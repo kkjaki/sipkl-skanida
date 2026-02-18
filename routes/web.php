@@ -5,6 +5,7 @@ use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\AcademicYearController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\SupervisorController;
+use App\Http\Controllers\SupervisorAllocationController;
 use App\Http\Controllers\IndustryController;
 use App\Http\Controllers\IndustryProposalController;
 use App\Http\Controllers\IndustryVerificationController;
@@ -24,7 +25,15 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-
+    
+    // =========================================================
+    // CURRICULUM ROUTES (WKS Kurikulum)
+    // =========================================================
+    Route::middleware('role:curriculum')->group(function () {
+        Route::get('/supervisors/allocate', [SupervisorAllocationController::class, 'index'])->name('supervisors.allocate');
+        Route::post('/supervisors/allocate/bulk', [SupervisorAllocationController::class, 'updateBulk'])->name('supervisors.allocate.bulk');
+    });
+    
     // =========================================================
     // ADMIN-ONLY ROUTES
     // =========================================================
@@ -43,7 +52,7 @@ Route::middleware('auth')->group(function () {
 
         // Industry: Admin CRUD
         Route::resource('industries', IndustryController::class)->except(['show']);
-    });
+        });
 
     // =========================================================
     // DEPARTMENT HEAD (KAPROG) ROUTES
@@ -56,6 +65,7 @@ Route::middleware('auth')->group(function () {
         Route::put('verification/{industry}/unreject', [IndustryVerificationController::class, 'unreject'])->name('verification.unreject');
         Route::put('verification/{industry}/unsync', [IndustryVerificationController::class, 'unsync'])->name('verification.unsync');
     });
+
 
     // =========================================================
     // STUDENT-ONLY ROUTES

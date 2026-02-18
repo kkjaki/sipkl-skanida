@@ -6,6 +6,10 @@ use App\Models\Industry;
 use App\Models\Student;
 use App\Models\AcademicYear;
 use App\Models\IndustryAllocation;
+use App\Models\Supervisor;
+use App\Models\EvaluationIndicator;
+use App\Models\SupervisorAllocation;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 
@@ -31,6 +35,11 @@ class DashboardController extends Controller
         // ── Kaprog (Department Head) Dashboard ──
         if ($user->hasRole('department_head')) {
             return $this->kaprogDashboard($user);
+        }
+
+        // ── Curriculum (WKS Kurikulum) Dashboard ──
+        if ($user->hasRole('curriculum')) {
+            return $this->curriculumDashboard();
         }
 
         // ── Supervisor Dashboard ──
@@ -146,6 +155,46 @@ class DashboardController extends Controller
             'siswaBelumPkl',
             'mitraAktif',
             'recentProposals'
+        ));
+    }
+
+    /**
+     * Curriculum (WKS Kurikulum): overall monitoring.
+     */
+    private function curriculumDashboard()
+    {
+        $activeYear = AcademicYear::where('is_active', true)->first();
+        
+        // 1. Total Guru Pembimbing (tanpa Kepala program): count users with role 'supervisor'
+        $totalSupervisors = User::role('supervisor')->count();
+
+        // 2. Total guru pembimbing yang sudah dialokasikan ke siswa (memiliki alokasi di tahun aktif)
+        $totalSupervisorsAllocated = SupervisorAllocation::where('academic_year_id', $activeYear->id)
+            ->where('quota', '>', 0)
+            ->distinct('supervisor_id')
+            ->count('supervisor_id');
+
+        // 3. Total Indikator Penilaian
+        $totalIndicators = EvaluationIndicator::count();
+
+        // 4. Total Students Allocated (Progress Kuota)
+        // We sum up the quota assigned to supervisors for the active year
+        $totalAllocatedQuota = 0;
+        $totalStudents = 0;
+        if ($activeYear) {
+            $totalAllocatedQuota = SupervisorAllocation::where('academic_year_id', $activeYear->id)
+                ->sum('quota');
+                $totalStudents = Student::where('academic_year_id', $activeYear->id)->count();
+        }
+
+
+        return view('dashboard.curriculum', compact(
+            'activeYear',
+            'totalSupervisors',
+            'totalSupervisorsAllocated',
+            'totalIndicators',
+            'totalAllocatedQuota',
+            'totalStudents'
         ));
     }
 

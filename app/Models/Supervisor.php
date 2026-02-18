@@ -42,4 +42,11 @@ class Supervisor extends Model
     {
         return $this->hasMany(Internship::class, 'supervisor_id', 'user_id');
     }
+    /**
+     * Get the quota allocations for the supervisor.
+     */
+    public function allocations()
+    {
+        return $this->hasMany(SupervisorAllocation::class, 'supervisor_id', 'user_id');
+    }
 }
