@@ -1,15 +1,16 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\AcademicYearController;
-use App\Http\Controllers\StudentController;
-use App\Http\Controllers\SupervisorController;
-use App\Http\Controllers\SupervisorAllocationController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\IndustryController;
+use App\Http\Controllers\IndustryPartnershipController;
 use App\Http\Controllers\IndustryProposalController;
 use App\Http\Controllers\IndustryVerificationController;
-use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\StudentController;
+use App\Http\Controllers\SupervisorAllocationController;
+use App\Http\Controllers\SupervisorController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -25,7 +26,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    
+
     // =========================================================
     // CURRICULUM ROUTES (WKS Kurikulum)
     // =========================================================
@@ -33,7 +34,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/supervisors/allocate', [SupervisorAllocationController::class, 'index'])->name('supervisors.allocate');
         Route::post('/supervisors/allocate/bulk', [SupervisorAllocationController::class, 'updateBulk'])->name('supervisors.allocate.bulk');
     });
-    
+
     // =========================================================
     // ADMIN-ONLY ROUTES
     // =========================================================
@@ -50,9 +51,14 @@ Route::middleware('auth')->group(function () {
         Route::get('industries/{industry}/allocate', [IndustryController::class, 'allocate'])->name('industries.allocate');
         Route::put('industries/{industry}/allocate', [IndustryController::class, 'storeAllocation'])->name('industries.storeAllocation');
 
+        // Industry: Partnerships (MoU Management)
+        Route::post('industries/{industry}/partnerships', [IndustryPartnershipController::class, 'store'])->name('industries.partnerships.store');
+        Route::get('partnerships/{partnership}/download', [IndustryPartnershipController::class, 'download'])->name('partnerships.download');
+        Route::delete('partnerships/{partnership}', [IndustryPartnershipController::class, 'destroy'])->name('partnerships.destroy');
+
         // Industry: Admin CRUD
-        Route::resource('industries', IndustryController::class)->except(['show']);
-        });
+        Route::resource('industries', IndustryController::class);
+    });
 
     // =========================================================
     // DEPARTMENT HEAD (KAPROG) ROUTES
@@ -65,7 +71,6 @@ Route::middleware('auth')->group(function () {
         Route::put('verification/{industry}/unreject', [IndustryVerificationController::class, 'unreject'])->name('verification.unreject');
         Route::put('verification/{industry}/unsync', [IndustryVerificationController::class, 'unsync'])->name('verification.unsync');
     });
-
 
     // =========================================================
     // STUDENT-ONLY ROUTES

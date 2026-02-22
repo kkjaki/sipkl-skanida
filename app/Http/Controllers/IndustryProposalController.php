@@ -106,7 +106,6 @@ class IndustryProposalController extends Controller
                 'contact_person'           => $validated['contact_person'] ?? null,
                 'email'                    => $validated['email'] ?? null,
                 'phone'                    => $validated['phone'] ?? null,
-                'delivery_method_proposal' => $validated['delivery_method_proposal'],
                 'student_submitter_id'     => $userId,
                 'status'                   => 'open',
                 'is_synced'                => false,

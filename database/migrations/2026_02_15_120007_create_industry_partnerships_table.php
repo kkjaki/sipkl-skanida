@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('industry_partnerships', function (Blueprint $table) {
             $table->id();
             $table->foreignId('industry_id')->constrained('industries')->onDelete('cascade');
+            $table->string('document_number', 100)->nullable();
             $table->date('start_date');
             $table->date('end_date');
             $table->string('mou_file_path')->nullable();

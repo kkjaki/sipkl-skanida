@@ -20,7 +20,6 @@ class StoreProposalRequest extends FormRequest
             'contact_person'           => ['nullable', 'string', 'max:255'],
             'email'                    => ['nullable', 'string', 'email', 'max:255', 'required_without:phone'],
             'phone'                    => ['nullable', 'string', 'max:20', 'required_without:email'],
-            'delivery_method_proposal' => ['required', 'in:independent,school'],
         ];
     }
 
@@ -34,8 +33,6 @@ class StoreProposalRequest extends FormRequest
             'email.required_without'            => 'Email wajib diisi jika No. Telepon / WA tidak diisi.',
             'phone.max'                         => 'No. Telepon / WA maksimal 20 karakter.',
             'phone.required_without'            => 'No. Telepon / WA wajib diisi jika Email tidak diisi.',
-            'delivery_method_proposal.required' => 'Metode pengiriman surat wajib dipilih.',
-            'delivery_method_proposal.in'       => 'Metode pengiriman surat tidak valid.',
         ];
     }
 }
