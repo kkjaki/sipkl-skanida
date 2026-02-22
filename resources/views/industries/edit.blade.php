@@ -19,7 +19,6 @@
                     <svg class="w-5 h-5 text-violet-500 shrink-0" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                     <p class="text-sm text-violet-600 dark:text-violet-400 font-medium">
                         Diajukan oleh siswa: <strong>{{ $industry->studentSubmitter->name ?? '-' }}</strong>
-                        &bull; Metode pengiriman: <strong>{{ $industry->delivery_method_proposal === 'school' ? 'Diantar Sekolah' : 'Antar Sendiri' }}</strong>
                     </p>
                 </div>
             </div>
@@ -65,6 +64,30 @@
                         <p class="mb-1.5 text-xs text-gray-400 dark:text-gray-500">Wajib diisi jika Email tidak diisi. (<span class="text-red-500">**</span>) Minimal salah satu harus diisi.</p>
                         <input type="text" id="phone" name="phone" value="{{ old('phone', $industry->phone) }}" placeholder="cth. 08123456789 / 0293-123456" class="h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 outline-none transition duration-150 focus:border-school-blue focus:ring-3 focus:ring-school-blue/10 dark:border-amoled-border dark:bg-amoled-input dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-school-blue" />
                         @error('phone')<p class="text-red-500 text-xs mt-1.5">{{ $message }}</p>@enderror
+                    </div>
+                </div>
+
+                <div class="border-b border-gray-200 dark:border-amoled-border py-4 px-6 sm:px-8">
+                    <h3 class="text-sm font-semibold text-gray-500 dark:text-amoled-text">Data Penanggung Jawab (PIC) Sertifikat</h3>
+                    <p class="text-xs text-gray-400 dark:text-gray-500 mt-0.5">Data yang akan dicetak pada sertifikat siswa.</p>
+                </div>
+                <div class="p-6 sm:p-8 space-y-6 border-b border-gray-200 dark:border-amoled-border">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div>
+                            <label for="pic_name" class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Nama Penanggung Jawab</label>
+                            <input type="text" id="pic_name" name="pic_name" value="{{ old('pic_name', $industry->pic_name) }}" placeholder="Nama Lengkap & Gelar" class="h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 outline-none transition duration-150 focus:border-school-blue focus:ring-3 focus:ring-school-blue/10 dark:border-amoled-border dark:bg-amoled-input dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-school-blue" />
+                            @error('pic_name')<p class="text-red-500 text-xs mt-1.5">{{ $message }}</p>@enderror
+                        </div>
+                        <div>
+                            <label for="pic_position" class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Jabatan</label>
+                            <input type="text" id="pic_position" name="pic_position" value="{{ old('pic_position', $industry->pic_position) }}" placeholder="cth. Direktur / HRD Manager" class="h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 outline-none transition duration-150 focus:border-school-blue focus:ring-3 focus:ring-school-blue/10 dark:border-amoled-border dark:bg-amoled-input dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-school-blue" />
+                            @error('pic_position')<p class="text-red-500 text-xs mt-1.5">{{ $message }}</p>@enderror
+                        </div>
+                        <div>
+                            <label for="nip" class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">NIP (Opsional)</label>
+                            <input type="text" id="nip" name="nip" value="{{ old('nip', $industry->nip) }}" placeholder="cth. 19800101..." class="h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 outline-none transition duration-150 focus:border-school-blue focus:ring-3 focus:ring-school-blue/10 dark:border-amoled-border dark:bg-amoled-input dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-school-blue" />
+                            @error('nip')<p class="text-red-500 text-xs mt-1.5">{{ $message }}</p>@enderror
+                        </div>
                     </div>
                 </div>
 

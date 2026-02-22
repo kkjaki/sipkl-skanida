@@ -15,12 +15,31 @@ class UpdateIndustryRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name'           => ['required', 'string', 'max:255', Rule::unique('industries', 'name')->ignore($this->route('industry'))],
+            'name'           => [
+                'required', 
+                'string', 
+                'max:255', 
+                Rule::unique('industries', 'name')
+                    ->ignore($this->route('industry'))
+                    ->whereNull('deleted_at')
+            ],
             'address'        => ['required', 'string'],
             'city'           => ['required', 'string', 'max:255'],
             'contact_person' => ['nullable', 'string', 'max:255'],
-            'email'          => ['nullable', 'string', 'email', 'max:255', Rule::unique('industries', 'email')->ignore($this->route('industry')), 'required_without:phone'],
+            'email'          => [
+                'nullable', 
+                'string', 
+                'email', 
+                'max:255', 
+                Rule::unique('industries', 'email')
+                    ->ignore($this->route('industry'))
+                    ->whereNull('deleted_at'), 
+                'required_without:phone'
+            ],
             'phone'          => ['nullable', 'string', 'max:30', 'required_without:email'],
+            'pic_name'       => ['nullable', 'string', 'max:255'],
+            'pic_position'   => ['nullable', 'string', 'max:255'],
+            'nip'            => ['nullable', 'string', 'max:255'],
             'quotas'         => ['nullable', 'array'],
             'quotas.*'       => ['nullable', 'integer', 'min:0'],
         ];

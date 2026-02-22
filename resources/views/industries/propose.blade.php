@@ -72,27 +72,6 @@
                     </div>
                 </div>
 
-                <div class="border-b border-gray-200 dark:border-amoled-border py-4 px-6 sm:px-8">
-                    <h3 class="text-sm font-semibold text-gray-500 dark:text-amoled-text">Metode Pengiriman Surat</h3>
-                </div>
-                <div class="p-6 sm:p-8 space-y-3 border-b border-gray-200 dark:border-amoled-border">
-                    <label class="flex items-center gap-3 cursor-pointer rounded-xl border border-gray-200 dark:border-amoled-border p-4 transition hover:bg-gray-50 dark:hover:bg-white/[0.03]" for="delivery_school">
-                        <input type="radio" id="delivery_school" name="delivery_method_proposal" value="school" {{ old('delivery_method_proposal', 'school') === 'school' ? 'checked' : '' }} class="w-4 h-4 text-school-blue border-gray-300 focus:ring-school-blue dark:border-amoled-border dark:bg-amoled-input" />
-                        <div>
-                            <p class="text-sm font-medium text-gray-800 dark:text-white">Diantar Sekolah</p>
-                            <p class="text-xs text-gray-400 dark:text-gray-500">Surat pengantar akan dikirimkan oleh pihak sekolah ke perusahaan</p>
-                        </div>
-                    </label>
-                    <label class="flex items-center gap-3 cursor-pointer rounded-xl border border-gray-200 dark:border-amoled-border p-4 transition hover:bg-gray-50 dark:hover:bg-white/[0.03]" for="delivery_independent">
-                        <input type="radio" id="delivery_independent" name="delivery_method_proposal" value="independent" {{ old('delivery_method_proposal') === 'independent' ? 'checked' : '' }} class="w-4 h-4 text-school-blue border-gray-300 focus:ring-school-blue dark:border-amoled-border dark:bg-amoled-input" />
-                        <div>
-                            <p class="text-sm font-medium text-gray-800 dark:text-white">Antar Sendiri</p>
-                            <p class="text-xs text-gray-400 dark:text-gray-500">Anda akan mengantarkan surat pengantar ke perusahaan secara mandiri</p>
-                        </div>
-                    </label>
-                    @error('delivery_method_proposal')<p class="text-red-500 text-xs mt-1.5">{{ $message }}</p>@enderror
-                </div>
-
                 <div class="p-6 sm:p-8">
                     <div class="flex items-center justify-end gap-3">
                         <a href="{{ route('dashboard') }}" class="inline-flex items-center justify-center rounded-xl border border-gray-200 dark:border-amoled-border bg-transparent py-2.5 px-6 text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/[0.06] transition duration-150 ease-in-out">Batal</a>

@@ -21,6 +21,43 @@
             </nav>
         </div>
 
+        @if ($industry->is_synced)
+            <!-- Magic Link Access (Admin Only) -->
+            <div class="rounded-xl bg-emerald-500/5 border border-emerald-500/10 p-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-full bg-emerald-100 dark:bg-emerald-500/10 flex items-center justify-center shrink-0">
+                        <svg class="w-5 h-5 text-emerald-600 dark:text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <h4 class="text-sm font-bold text-gray-800 dark:text-white">Link Akses Mandiri Mitra</h4>
+                        <p class="text-xs text-gray-500 dark:text-amoled-text">Berikan link ini ke pihak industri agar mereka bisa update data PIC & kuota secara mandiri.</p>
+                    </div>
+                </div>
+                <div x-data="{ 
+                    copied: false,
+                    copyLink() {
+                        const link = '{{ URL::temporarySignedRoute('mitra.confirm', now()->addDays(14), ['industry' => $industry->id]) }}';
+                        navigator.clipboard.writeText(link);
+                        this.copied = true;
+                        setTimeout(() => this.copied = false, 2000);
+                    }
+                }">
+                    <button @click="copyLink" type="button"
+                            class="inline-flex items-center justify-center gap-2.5 rounded-xl bg-emerald-600 py-2.5 px-6 text-center text-sm font-medium text-white hover:bg-emerald-700 transition duration-150 ease-in-out shadow-sm w-full sm:w-auto">
+                        <svg x-show="!copied" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path>
+                        </svg>
+                        <svg x-show="copied" x-cloak class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        <span x-text="copied ? 'Link Berhasil Disalin!' : 'Salin Link Akses Mitra'"></span>
+                    </button>
+                </div>
+            </div>
+        @endif
+
         <!-- Flash Messages -->
         @if (session('success'))
             <div
@@ -179,6 +216,18 @@
                         <dt class="text-xs font-medium text-gray-400 dark:text-gray-500 uppercase tracking-wide">No.
                             Telepon</dt>
                         <dd class="mt-0.5 text-sm text-gray-700 dark:text-gray-300">{{ $industry->phone ?? '-' }}</dd>
+                    </div>
+                    <div>
+                        <dt class="text-xs font-medium text-gray-400 dark:text-gray-500 uppercase tracking-wide">Penanggung Jawab (PIC)</dt>
+                        <dd class="mt-0.5 text-sm font-medium text-gray-800 dark:text-white">{{ $industry->pic_name ?? '-' }}</dd>
+                    </div>
+                    <div>
+                        <dt class="text-xs font-medium text-gray-400 dark:text-gray-500 uppercase tracking-wide">Jabatan PIC</dt>
+                        <dd class="mt-0.5 text-sm text-gray-700 dark:text-gray-300">{{ $industry->pic_position ?? '-' }}</dd>
+                    </div>
+                    <div>
+                        <dt class="text-xs font-medium text-gray-400 dark:text-gray-500 uppercase tracking-wide">NIP PIC</dt>
+                        <dd class="mt-0.5 text-sm text-gray-700 dark:text-gray-300">{{ $industry->nip ?? '-' }}</dd>
                     </div>
                     <div>
                         <dt class="text-xs font-medium text-gray-400 dark:text-gray-500 uppercase tracking-wide">Status

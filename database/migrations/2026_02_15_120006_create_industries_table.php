@@ -4,6 +4,8 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+use function Laravel\Prompts\table;
+
 return new class extends Migration
 {
     /**
@@ -20,7 +22,9 @@ return new class extends Migration
             $table->string('contact_person')->nullable();
             $table->string('email')->unique()->nullable();
             $table->string('phone')->nullable();
-            $table->enum('delivery_method_proposal', ['independent', 'school'])->default('school');
+            $table->string('pic_name')->nullable();
+            $table->string('pic_position')->nullable();
+            $table->string('nip')->nullable();
             $table->boolean('is_synced')->default(false);
             $table->enum('status', ['open', 'full', 'blacklisted'])->default('open');
             $table->softDeletes();

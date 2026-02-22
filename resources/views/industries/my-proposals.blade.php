@@ -105,19 +105,6 @@
                                         </p>
                                     </div>
                                 </div>
-
-                                <!-- Metode Pengiriman -->
-                                <div class="flex items-start gap-2.5">
-                                    <svg class="w-4 h-4 text-gray-400 dark:text-gray-500 mt-0.5 shrink-0" width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
-                                    </svg>
-                                    <div class="min-w-0">
-                                        <p class="text-xs text-gray-400 dark:text-gray-500 font-medium">Pengiriman Surat</p>
-                                        <p class="text-sm text-gray-700 dark:text-gray-300">
-                                            {{ $proposal->delivery_method_proposal === 'school' ? 'Diantar Sekolah' : 'Antar Sendiri' }}
-                                        </p>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     </div>

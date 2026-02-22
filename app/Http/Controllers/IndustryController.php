@@ -2,17 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Industry;
-use App\Models\Department;
-use App\Models\AcademicYear;
-use App\Models\Internship;
-use App\Models\IndustryAllocation;
+use App\Http\Requests\ApproveProposalRequest;
 use App\Http\Requests\StoreIndustryRequest;
 use App\Http\Requests\UpdateIndustryRequest;
-use App\Http\Requests\ApproveProposalRequest;
+use App\Models\AcademicYear;
+use App\Models\Department;
+use App\Models\Industry;
+use App\Models\IndustryAllocation;
+use App\Models\Internship;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Http\Request;
 
 class IndustryController extends Controller
 {
@@ -31,8 +31,8 @@ class IndustryController extends Controller
             ->when($search, function ($query, $search) {
                 $query->where(function ($q) use ($search) {
                     $q->where('name', 'like', "%{$search}%")
-                      ->orWhere('city', 'like', "%{$search}%")
-                      ->orWhere('contact_person', 'like', "%{$search}%");
+                        ->orWhere('city', 'like', "%{$search}%")
+                        ->orWhere('contact_person', 'like', "%{$search}%");
                 });
             })
             ->latest()
@@ -62,14 +62,17 @@ class IndustryController extends Controller
 
         DB::transaction(function () use ($validated) {
             $industry = Industry::create([
-                'name'           => $validated['name'],
-                'address'        => $validated['address'],
-                'city'           => $validated['city'],
+                'name' => $validated['name'],
+                'address' => $validated['address'],
+                'city' => $validated['city'],
                 'contact_person' => $validated['contact_person'] ?? null,
-                'email'          => $validated['email'] ?? null,
-                'phone'          => $validated['phone'] ?? null,
-                'is_synced'      => true,
-                'status'         => 'open',
+                'email' => $validated['email'] ?? null,
+                'phone' => $validated['phone'] ?? null,
+                'pic_name' => $validated['pic_name'] ?? null,
+                'pic_position' => $validated['pic_position'] ?? null,
+                'nip' => $validated['nip'] ?? null,
+                'is_synced' => true,
+                'status' => 'open',
                 'student_submitter_id' => null,
             ]);
 
@@ -115,12 +118,15 @@ class IndustryController extends Controller
 
         DB::transaction(function () use ($validated, $industry) {
             $industry->update([
-                'name'           => $validated['name'],
-                'address'        => $validated['address'],
-                'city'           => $validated['city'],
+                'name' => $validated['name'],
+                'address' => $validated['address'],
+                'city' => $validated['city'],
                 'contact_person' => $validated['contact_person'] ?? null,
-                'email'          => $validated['email'] ?? null,
-                'phone'          => $validated['phone'] ?? null,
+                'email' => $validated['email'] ?? null,
+                'phone' => $validated['phone'] ?? null,
+                'pic_name' => $validated['pic_name'] ?? null,
+                'pic_position' => $validated['pic_position'] ?? null,
+                'nip' => $validated['nip'] ?? null,
             ]);
 
             // Only sync quotas if industry is verified and not blacklisted
@@ -130,7 +136,7 @@ class IndustryController extends Controller
                     ->where('status', 'ongoing')
                     ->exists();
 
-                if (!$hasOngoing) {
+                if (! $hasOngoing) {
                     $this->syncAllocations($industry, $validated['quotas'] ?? []);
                 }
             }
@@ -150,7 +156,7 @@ class IndustryController extends Controller
     {
         $industry = Industry::with(['studentSubmitter', 'allocations'])->findOrFail($id);
 
-        if (!$industry->is_synced) {
+        if (! $industry->is_synced) {
             return redirect()->route('industries.index')
                 ->with('error', 'Industri ini belum diverifikasi oleh Kepala Program. Hubungi Kaprog terkait untuk sinkronisasi kurikulum terlebih dahulu.');
         }
@@ -181,7 +187,7 @@ class IndustryController extends Controller
         $validated = $request->validated();
         $industry = Industry::findOrFail($id);
 
-        if (!$industry->is_synced) {
+        if (! $industry->is_synced) {
             return redirect()->route('industries.index')
                 ->with('error', 'Industri ini belum diverifikasi oleh Kepala Program.');
         }
@@ -207,6 +213,20 @@ class IndustryController extends Controller
     }
 
     /**
+     * Display the specified industry with partnerships (MoU).
+     */
+    public function show(Industry $industry)
+    {
+        $industry->load([
+            'partnerships' => fn ($q) => $q->latest(),
+            'allocations.department',
+            'studentSubmitter',
+        ]);
+
+        return view('industries.show', compact('industry'));
+    }
+
+    /**
      * Remove the specified resource from storage (Admin - Soft Delete).
      */
     public function destroy(string $id)
@@ -228,7 +248,7 @@ class IndustryController extends Controller
     {
         $activeYear = AcademicYear::where('is_active', true)->first();
 
-        if (!$activeYear) {
+        if (! $activeYear) {
             return;
         }
 
@@ -238,16 +258,16 @@ class IndustryController extends Controller
             if ($qty > 0) {
                 IndustryAllocation::updateOrCreate(
                     [
-                        'industry_id'      => $industry->id,
-                        'department_id'    => $departmentId,
+                        'industry_id' => $industry->id,
+                        'department_id' => $departmentId,
                         'academic_year_id' => $activeYear->id,
                     ],
                     ['quota' => $qty]
                 );
             } else {
                 IndustryAllocation::where([
-                    'industry_id'      => $industry->id,
-                    'department_id'    => $departmentId,
+                    'industry_id' => $industry->id,
+                    'department_id' => $departmentId,
                     'academic_year_id' => $activeYear->id,
                 ])->delete();
             }

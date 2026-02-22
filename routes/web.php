@@ -21,6 +21,14 @@ Route::get('/dashboard', [DashboardController::class, 'index'])
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
 
+Route::middleware(['signed', 'throttle:6,1'])->group(function () {
+    Route::get('/mitra/{industry}/confirm', [App\Http\Controllers\IndustryPartnerController::class, 'edit'])->name('mitra.confirm');
+    Route::put('/mitra/{industry}/confirm', [App\Http\Controllers\IndustryPartnerController::class, 'update'])->name('mitra.update');
+});
+
+Route::view('/mitra/locked', 'mitra.locked')->name('mitra.locked');
+Route::view('/mitra/success', 'mitra.success')->name('mitra.success');
+
 Route::middleware('auth')->group(function () {
     // Profile (all authenticated users)
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
