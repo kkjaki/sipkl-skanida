@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('department_id')->constrained('departments');
             $table->string('nis')->unique();
             $table->string('class_name');
+            $table->string('address')->nullable();
             $table->string('phone')->nullable();
             $table->timestamps();
         });

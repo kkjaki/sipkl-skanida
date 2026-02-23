@@ -81,6 +81,7 @@ class StudentController extends Controller
                 'class_name'       => $validated['class_name'],
                 'department_id'    => $validated['department_id'],
                 'academic_year_id' => $activeYear?->id,
+                'address'          => $validated['address'] ?? null,
                 'phone'            => $validated['phone'] ?? null,
             ]);
         });
@@ -140,6 +141,7 @@ class StudentController extends Controller
                 'nis'           => $validated['nis'],
                 'class_name'    => $validated['class_name'],
                 'department_id' => $validated['department_id'],
+                'address'       => $validated['address'] ?? null,
                 'phone'         => $validated['phone'] ?? null,
             ]);
         });

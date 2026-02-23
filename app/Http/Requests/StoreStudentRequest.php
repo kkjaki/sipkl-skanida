@@ -24,8 +24,9 @@ class StoreStudentRequest extends FormRequest
             'email'         => 'nullable|email|max:255|unique:users,email',
             'nis'           => 'required|string|max:20|unique:students,nis',
             'class_name'    => 'required|string|max:50',
-            'department_id' => 'required|exists:departments,id',
+            'address'       => 'nullable|string|max:255',
             'phone'         => 'nullable|string|max:20',
+            'department_id' => 'required|exists:departments,id',
         ];
     }
 
@@ -41,6 +42,7 @@ class StoreStudentRequest extends FormRequest
             'nis.required'           => 'NIS wajib diisi.',
             'nis.unique'             => 'NIS sudah terdaftar.',
             'class_name.required'    => 'Kelas wajib diisi.',
+            'address.string'         => 'Alamat harus berupa teks.',
             'department_id.required' => 'Kompetensi Keahlian wajib dipilih.',
             'department_id.exists'   => 'Kompetensi Keahlian tidak valid.',
         ];

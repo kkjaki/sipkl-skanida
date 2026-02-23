@@ -27,8 +27,9 @@ class UpdateStudentRequest extends FormRequest
             'email'         => 'nullable|email|max:255|unique:users,email,' . $student->user_id,
             'nis'           => 'required|string|max:20|unique:students,user_id,' . $student->user_id . ',user_id',
             'class_name'    => 'required|string|max:50',
-            'department_id' => 'required|exists:departments,id',
+            'address'       => 'nullable|string|max:255',
             'phone'         => 'nullable|string|max:20',
+            'department_id' => 'required|exists:departments,id',
             'reset_email'   => 'nullable|boolean',
         ];
     }
@@ -45,6 +46,7 @@ class UpdateStudentRequest extends FormRequest
             'nis.required'           => 'NIS wajib diisi.',
             'nis.unique'             => 'NIS sudah terdaftar.',
             'class_name.required'    => 'Kelas wajib diisi.',
+            'address.string'         => 'Alamat harus berupa teks.',
             'department_id.required' => 'Kompetensi Keahlian wajib dipilih.',
             'department_id.exists'   => 'Kompetensi Keahlian tidak valid.',
         ];

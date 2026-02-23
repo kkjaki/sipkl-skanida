@@ -19,6 +19,7 @@ class Student extends Model
         'academic_year_id',
         'nis',
         'class_name',
+        'address',
         'phone',
     ];
 
@@ -52,5 +53,13 @@ class Student extends Model
     public function internship()
     {
         return $this->hasOne(Internship::class, 'student_id', 'user_id');
+    }
+
+    /**
+     * Get all internship records for the student (across academic years).
+     */
+    public function internships()
+    {
+        return $this->hasMany(Internship::class, 'student_id', 'user_id');
     }
 }
