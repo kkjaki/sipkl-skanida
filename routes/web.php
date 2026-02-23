@@ -78,6 +78,12 @@ Route::middleware('auth')->group(function () {
         Route::put('verification/{industry}/reject', [IndustryVerificationController::class, 'reject'])->name('verification.reject');
         Route::put('verification/{industry}/unreject', [IndustryVerificationController::class, 'unreject'])->name('verification.unreject');
         Route::put('verification/{industry}/unsync', [IndustryVerificationController::class, 'unsync'])->name('verification.unsync');
+
+        // Placement (Plotting) Routes
+        Route::get('placements', [App\Http\Controllers\PlacementController::class, 'index'])->name('placements.index');
+        Route::post('placements', [App\Http\Controllers\PlacementController::class, 'store'])->name('placements.store');
+        Route::delete('placements/bulk', [App\Http\Controllers\PlacementController::class, 'destroyBulk'])->name('placements.destroyBulk');
+        Route::delete('placements/{internship}', [App\Http\Controllers\PlacementController::class, 'destroy'])->name('placements.destroy');
     });
 
     // =========================================================
