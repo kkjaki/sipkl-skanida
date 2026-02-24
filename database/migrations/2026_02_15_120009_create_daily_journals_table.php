@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('internship_id')->constrained('internships')->onDelete('cascade');
             $table->date('date');
-            $table->text('activity');
-            $table->enum('status_attendance', ['present', 'sick', 'permission', 'absent']);
+            $table->text('activity')->nullable();
+            $table->enum('status_attendance', ['present', 'excused', 'sick']);
             $table->enum('verification_status', ['pending', 'verified', 'rejected'])->default('pending');
             $table->string('attachment_path')->nullable();
             $table->text('rejection_note')->nullable();

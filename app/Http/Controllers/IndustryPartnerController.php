@@ -6,6 +6,7 @@ use App\Models\AcademicYear;
 use App\Models\Department;
 use App\Models\Industry;
 use App\Models\IndustryAllocation;
+use App\Models\Internship;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -23,22 +24,21 @@ class IndustryPartnerController extends Controller
 
         $departments = Department::all();
         $activeYear = AcademicYear::where('is_active', true)->firstOrFail();
-        
+
         $existingQuotas = $industry->allocations()
             ->where('academic_year_id', $activeYear->id)
             ->pluck('quota', 'department_id');
 
         return view('mitra.confirm', compact('industry', 'departments', 'activeYear', 'existingQuotas'));
     }
-    
 
     /**
      * Update industry profile and allocations from partner portal.
+     * After successful submission, auto-plot the submitter student.
      */
     public function update(Request $request, Industry $industry)
     {
         $activeYear = AcademicYear::where('is_active', true)->firstOrFail();
-
 
         // Lockout Check: Prevent updates if already submitted
         if ($industry->pic_name && $industry->pic_position) {
@@ -71,7 +71,7 @@ class IndustryPartnerController extends Controller
             // Sync allocations
             foreach ($validated['quotas'] as $deptId => $quota) {
                 $quota = (int) ($quota ?? 0);
-                
+
                 if ($quota > 0) {
                     IndustryAllocation::updateOrCreate(
                         [
@@ -87,6 +87,23 @@ class IndustryPartnerController extends Controller
                         'department_id'    => $deptId,
                         'academic_year_id' => $activeYear->id,
                     ])->delete();
+                }
+            }
+
+            // ─── AUTO-PLOT: Buat record Internship untuk siswa pengaju ───
+            if ($industry->student_submitter_id) {
+                $alreadyPlotted = Internship::where('student_id', $industry->student_submitter_id)
+                    ->where('academic_year_id', $activeYear->id)
+                    ->exists();
+
+                if (! $alreadyPlotted) {
+                    Internship::create([
+                        'student_id'       => $industry->student_submitter_id,
+                        'industry_id'      => $industry->id,
+                        'academic_year_id' => $activeYear->id,
+                        'start_date'       => now(),
+                        'status'           => 'ongoing',
+                    ]);
                 }
             }
         });

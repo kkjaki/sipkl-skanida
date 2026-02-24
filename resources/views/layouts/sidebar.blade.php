@@ -194,7 +194,7 @@
                     <li>
                         <a href="{{ route('student.proposals.index') }}"
                            class="group relative flex items-center gap-2.5 rounded-xl px-4 py-2.5 font-medium text-sm duration-200 ease-in-out
-                                  {{ request()->routeIs('industries.*')
+                                  {{ request()->routeIs('student.proposals.*')
                                       ? 'bg-school-blue/10 text-school-blue dark:bg-white/[0.08] dark:text-white'
                                       : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-white/[0.06] dark:hover:text-white' }}"
                         >
@@ -202,6 +202,21 @@
                                 <path d="M4 4C4 2.89543 4.89543 2 6 2H10.5858C11.1162 2 11.6249 2.21071 12 2.58579L15.4142 6C15.7893 6.37507 16 6.88378 16 7.41421V16C16 17.1046 15.1046 18 14 18H6C4.89543 18 4 17.1046 4 16V4ZM14 16V8H11C10.4477 8 10 7.55228 10 7V4H6V16H14ZM12 4.41421L13.5858 6H12V4.41421ZM7 10H13V12H7V10ZM7 13H11V15H7V13Z" fill=""/>
                             </svg>
                             <span x-show="$store.sidebar.isExpanded || $store.sidebar.isHovered || $store.sidebar.isMobileOpen" x-cloak>Pengajuan Lokasi</span>
+                        </a>
+                    </li>
+
+                    <!-- Jurnal Harian -->
+                    <li>
+                        <a href="{{ route('student.journals.index') }}"
+                           class="group relative flex items-center gap-2.5 rounded-xl px-4 py-2.5 font-medium text-sm duration-200 ease-in-out
+                                  {{ request()->routeIs('student.journals.*')
+                                      ? 'bg-school-blue/10 text-school-blue dark:bg-white/[0.08] dark:text-white'
+                                      : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-white/[0.06] dark:hover:text-white' }}"
+                        >
+                            <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/>
+                            </svg>
+                            <span x-show="$store.sidebar.isExpanded || $store.sidebar.isHovered || $store.sidebar.isMobileOpen" x-cloak>Jurnal Harian</span>
                         </a>
                     </li>
                 </ul>
