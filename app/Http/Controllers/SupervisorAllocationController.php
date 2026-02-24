@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Supervisor;
 use App\Models\AcademicYear;
+use App\Models\Department;
 use App\Models\SupervisorAllocation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -39,7 +40,9 @@ class SupervisorAllocationController extends Controller
             ->sortBy(fn($supervisor) => $supervisor->user->department_id); // Sort by department_id
         });
 
-        return view('supervisors.allocate', compact('supervisors', 'activeYear'));
+        $departments = Department::orderBy('name')->get();
+
+        return view('supervisors.allocate', compact('supervisors', 'activeYear', 'departments'));
     }
 
     /**

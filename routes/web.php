@@ -5,12 +5,14 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\IndustryController;
 use App\Http\Controllers\IndustryPartnershipController;
+use App\Http\Controllers\DailyJournalController;
 use App\Http\Controllers\IndustryProposalController;
 use App\Http\Controllers\IndustryVerificationController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\SupervisorAllocationController;
 use App\Http\Controllers\SupervisorController;
+use App\Http\Controllers\SupervisorPlacementController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -84,6 +86,11 @@ Route::middleware('auth')->group(function () {
         Route::post('placements', [App\Http\Controllers\PlacementController::class, 'store'])->name('placements.store');
         Route::delete('placements/bulk', [App\Http\Controllers\PlacementController::class, 'destroyBulk'])->name('placements.destroyBulk');
         Route::delete('placements/{internship}', [App\Http\Controllers\PlacementController::class, 'destroy'])->name('placements.destroy');
+
+        // Supervisor Placement (Plotting Guru Pembimbing)
+        Route::get('supervisor-placements', [SupervisorPlacementController::class, 'index'])->name('supervisor-placements.index');
+        Route::post('supervisor-placements', [SupervisorPlacementController::class, 'store'])->name('supervisor-placements.store');
+        Route::delete('supervisor-placements/bulk', [SupervisorPlacementController::class, 'destroy'])->name('supervisor-placements.destroy');
     });
 
     // =========================================================
@@ -94,6 +101,13 @@ Route::middleware('auth')->group(function () {
             Route::get('/', [IndustryProposalController::class, 'index'])->name('index');
             Route::get('/create', [IndustryProposalController::class, 'create'])->name('create');
             Route::post('/', [IndustryProposalController::class, 'store'])->name('store');
+        });
+
+        Route::prefix('student/journals')->name('student.journals.')->group(function () {
+            Route::get('/', [DailyJournalController::class, 'index'])->name('index');
+            Route::post('/', [DailyJournalController::class, 'store'])->name('store');
+            Route::get('/{journal}/edit', [DailyJournalController::class, 'edit'])->name('edit');
+            Route::put('/{journal}', [DailyJournalController::class, 'update'])->name('update');
         });
     });
 });
