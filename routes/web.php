@@ -8,6 +8,7 @@ use App\Http\Controllers\IndustryPartnershipController;
 use App\Http\Controllers\DailyJournalController;
 use App\Http\Controllers\IndustryProposalController;
 use App\Http\Controllers\IndustryVerificationController;
+use App\Http\Controllers\JournalValidationController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\SupervisorAllocationController;
@@ -109,6 +110,15 @@ Route::middleware('auth')->group(function () {
             Route::get('/{journal}/edit', [DailyJournalController::class, 'edit'])->name('edit');
             Route::put('/{journal}', [DailyJournalController::class, 'update'])->name('update');
         });
+    });
+
+    // =========================================================
+    // SUPERVISOR ROUTES
+    // =========================================================
+    Route::middleware('role:supervisor')->prefix('supervisor')->name('supervisor.')->group(function () {
+        Route::get('journal-validations', [JournalValidationController::class, 'index'])->name('journal-validations.index');
+        Route::get('journal-validations/{internship}', [JournalValidationController::class, 'show'])->name('journal-validations.show');
+        Route::post('journal-validations/{internship}/bulk-update', [JournalValidationController::class, 'bulkUpdate'])->name('journal-validations.bulkUpdate');
     });
 });
 

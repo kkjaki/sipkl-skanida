@@ -68,7 +68,7 @@
                 </svg>
                 {{ $journal->verification_status === 'rejected' ? 'Perbaiki Jurnal' : 'Ubah Data Jurnal' }}
             </h2>
-            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Setelah disimpan, status verifikasi akan kembali ke <span class="font-semibold text-yellow-600 dark:text-yellow-500">Pending</span>.</p>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Setelah disimpan, status validasi akan kembali ke <span class="font-semibold text-yellow-600 dark:text-yellow-500">Pending</span>.</p>
         </div>
 
         <form action="{{ route('student.journals.update', $journal) }}" method="POST" enctype="multipart/form-data" class="p-5 sm:p-6 space-y-5">

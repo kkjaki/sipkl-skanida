@@ -93,7 +93,7 @@ class DailyJournalController extends Controller
         // Only allow edit if pending or rejected
         if (!in_array($journal->verification_status, ['pending', 'rejected'])) {
             return redirect()->route('student.journals.index')
-                ->with('error', 'Jurnal yang sudah diverifikasi tidak dapat diedit.');
+                ->with('error', 'Jurnal yang sudah divalidasi tidak dapat diedit.');
         }
 
         return view('journals.edit', compact('journal', 'internship'));
@@ -115,7 +115,7 @@ class DailyJournalController extends Controller
         // Only allow update if pending or rejected
         if (!in_array($journal->verification_status, ['pending', 'rejected'])) {
             return redirect()->route('student.journals.index')
-                ->with('error', 'Jurnal yang sudah diverifikasi tidak dapat diedit.');
+                ->with('error', 'Jurnal yang sudah divalidasi tidak dapat diedit.');
         }
 
         $validated = $request->validated();
