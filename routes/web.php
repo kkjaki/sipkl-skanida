@@ -49,6 +49,10 @@ Route::middleware('auth')->group(function () {
 
         Route::resource('evaluation-indicators', EvaluationIndicatorController::class)
             ->only(['index', 'store', 'update', 'destroy']);
+
+        // Grade Recap (Rekap Nilai PKL)
+        Route::get('/grade-recap', [App\Http\Controllers\GradeRecapController::class, 'index'])->name('grade-recap.index');
+        Route::get('/grade-recap/export', [App\Http\Controllers\GradeRecapController::class, 'export'])->name('grade-recap.export');
     });
 
     // =========================================================
