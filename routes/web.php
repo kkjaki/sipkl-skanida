@@ -1,11 +1,13 @@
 <?php
 
 use App\Http\Controllers\AcademicYearController;
+use App\Http\Controllers\AssessmentController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\IndustryController;
 use App\Http\Controllers\IndustryPartnershipController;
 use App\Http\Controllers\DailyJournalController;
+use App\Http\Controllers\EvaluationIndicatorController;
 use App\Http\Controllers\IndustryProposalController;
 use App\Http\Controllers\IndustryVerificationController;
 use App\Http\Controllers\JournalValidationController;
@@ -44,6 +46,9 @@ Route::middleware('auth')->group(function () {
     Route::middleware('role:curriculum')->group(function () {
         Route::get('/supervisors/allocate', [SupervisorAllocationController::class, 'index'])->name('supervisors.allocate');
         Route::post('/supervisors/allocate/bulk', [SupervisorAllocationController::class, 'updateBulk'])->name('supervisors.allocate.bulk');
+
+        Route::resource('evaluation-indicators', EvaluationIndicatorController::class)
+            ->only(['index', 'store', 'update', 'destroy']);
     });
 
     // =========================================================
@@ -119,6 +124,10 @@ Route::middleware('auth')->group(function () {
         Route::get('journal-validations', [JournalValidationController::class, 'index'])->name('journal-validations.index');
         Route::get('journal-validations/{internship}', [JournalValidationController::class, 'show'])->name('journal-validations.show');
         Route::post('journal-validations/{internship}/bulk-update', [JournalValidationController::class, 'bulkUpdate'])->name('journal-validations.bulkUpdate');
+
+        Route::get('assessments', [AssessmentController::class, 'index'])->name('assessments.index');
+        Route::get('assessments/{internship}/edit', [AssessmentController::class, 'edit'])->name('assessments.edit');
+        Route::put('assessments/{internship}', [AssessmentController::class, 'update'])->name('assessments.update');
     });
 });
 
