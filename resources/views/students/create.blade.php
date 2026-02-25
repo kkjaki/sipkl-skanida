@@ -106,20 +106,24 @@
                         @enderror
                     </div>
 
-                    <!-- Kelas -->
+                    <!-- Kelas (Dropdown) -->
                     <div>
                         <label for="class_name" class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
                             Kelas <span class="text-red-500">*</span>
                         </label>
-                        <input
-                            type="text"
+                        <select
                             id="class_name"
                             name="class_name"
-                            value="{{ old('class_name') }}"
-                            placeholder="cth. XII PPLG 1"
                             required
-                            class="h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 outline-none transition duration-150 focus:border-school-blue focus:ring-3 focus:ring-school-blue/10 dark:border-amoled-border dark:bg-amoled-input dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-school-blue"
-                        />
+                            class="h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 outline-none transition duration-150 focus:border-school-blue focus:ring-3 focus:ring-school-blue/10 dark:border-amoled-border dark:bg-amoled-input dark:text-white/90 dark:focus:border-school-blue appearance-none cursor-pointer"
+                        >
+                            <option value="" class="dark:bg-amoled-surface">— Pilih Kelas —</option>
+                            @foreach($availableClasses as $class)
+                                <option value="{{ $class }}" class="dark:bg-amoled-surface" {{ old('class_name') == $class ? 'selected' : '' }}>
+                                    {{ $class }}
+                                </option>
+                            @endforeach
+                        </select>
                         @error('class_name')
                             <p class="text-red-500 text-xs mt-1.5">{{ $message }}</p>
                         @enderror

@@ -9,6 +9,16 @@ class Student extends Model
 {
     use HasFactory;
 
+    /**
+     * Daftar kelas XII yang valid untuk dropdown.
+     */
+    public const AVAILABLE_CLASSES = [
+        'XII PPLG 1', 'XII PPLG 2', 'XII PPLG 3',
+        'XII AKL 1', 'XII AKL 2', 'XII AKL 3',
+        'XII MPLB 1', 'XII MPLB 2', 'XII MPLB 3',
+        'XII PM 1', 'XII PM 2',
+    ];
+
     // user_id is the primary key and foreign key to users
     protected $primaryKey = 'user_id';
     public $incrementing = false;

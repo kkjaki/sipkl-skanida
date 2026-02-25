@@ -18,24 +18,47 @@ class StudentController extends Controller
     /**
      * Display a listing of the resource.
      */
+    /**
+     * Flush all cached student list data.
+     * Call this whenever students data is mutated.
+     */
+    private function flushStudentCache(): void
+    {
+        Cache::forget('students_list_all');
+        Cache::forget('dashboard_stats');
+    }
+
     public function index(Request $request)
     {
         $search = $request->query('search');
 
-        $students = Student::with(['user', 'department', 'academicYear'])
-            ->when($search, function ($query, $search) {
-                $query->where('nis', 'like', "%{$search}%")
-                      ->orWhere('class_name', 'like', "%{$search}%")
-                      ->orWhereHas('user', function ($q) use ($search) {
-                          $q->where('name', 'like', "%{$search}%")
-                            ->orWhere('email', 'like', "%{$search}%");
-                      });
-            })
-            ->latest('user_id')
-            ->paginate(10)
-            ->withQueryString();
+        // Base list (no search) — cached 10 menit untuk performa optimal.
+        // Search results — cached 2 menit (bersifat sementara).
+        $cacheKey = $search
+            ? 'students_list_search_' . md5($search)
+            : 'students_list_all';
+        $cacheTtl = $search ? 120 : 600;
 
-        return view('students.index', compact('students', 'search'));
+        $students = Cache::remember($cacheKey, $cacheTtl, function () use ($search) {
+            return Student::with(['user', 'department', 'academicYear'])
+                ->when($search, function ($query, $search) {
+                    $query->where('nis', 'like', "%{$search}%")
+                          ->orWhere('class_name', 'like', "%{$search}%")
+                          ->orWhereHas('user', function ($q) use ($search) {
+                              $q->where('name', 'like', "%{$search}%")
+                                ->orWhere('email', 'like', "%{$search}%");
+                          });
+                })
+                ->join('users', 'students.user_id', '=', 'users.id')
+                ->orderBy('users.name', 'asc')
+                ->select('students.*')
+                ->get();
+        });
+
+        $departments = Department::orderBy('name')->get();
+        $availableClasses = Student::AVAILABLE_CLASSES;
+
+        return view('students.index', compact('students', 'search', 'departments', 'availableClasses'));
     }
 
     /**
@@ -44,7 +67,9 @@ class StudentController extends Controller
     public function create()
     {
         $departments = Department::orderBy('name')->get();
-        return view('students.create', compact('departments'));
+        $availableClasses = Student::AVAILABLE_CLASSES;
+
+        return view('students.create', compact('departments', 'availableClasses'));
     }
 
     /**
@@ -86,8 +111,7 @@ class StudentController extends Controller
             ]);
         });
 
-        // Invalidate dashboard cache so stats refresh
-        Cache::forget('dashboard_stats');
+        $this->flushStudentCache();
 
         return redirect()->route('students.index')
             ->with('success', 'Peserta didik berhasil ditambahkan.');
@@ -100,8 +124,9 @@ class StudentController extends Controller
     {
         $student = Student::with(['user', 'academicYear'])->findOrFail($id);
         $departments = Department::orderBy('name')->get();
+        $availableClasses = Student::AVAILABLE_CLASSES;
 
-        return view('students.edit', compact('student', 'departments'));
+        return view('students.edit', compact('student', 'departments', 'availableClasses'));
     }
 
     /**
@@ -146,8 +171,7 @@ class StudentController extends Controller
             ]);
         });
 
-        // Invalidate dashboard cache so stats refresh
-        Cache::forget('dashboard_stats');
+        $this->flushStudentCache();
 
         return redirect()->route('students.index')
             ->with('success', 'Data peserta didik berhasil diperbarui.');
@@ -163,8 +187,7 @@ class StudentController extends Controller
         // Deleting the User cascades to Student (onDelete('cascade'))
         $student->user->delete();
 
-        // Invalidate dashboard cache so stats refresh
-        Cache::forget('dashboard_stats');
+        $this->flushStudentCache();
 
         return redirect()->route('students.index')
             ->with('success', 'Peserta didik berhasil dihapus.');

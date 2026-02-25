@@ -1,7 +1,15 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="flex flex-col gap-6">
+    <div class="flex flex-col gap-6"
+         x-data="{
+            filterDept: '',
+            filterClass: '',
+            get visibleCount() {
+                return document.querySelectorAll('[data-student-row]:not([style*=&quot;display: none&quot;])').length;
+            }
+         }"
+    >
         <!-- Top Controls -->
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 min-h-[44px]">
             <h2 class="text-xl font-bold text-gray-800 dark:text-white">
@@ -53,6 +61,54 @@
             @endif
         </form>
 
+        <!-- Filter Dropdowns -->
+        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+            <!-- Filter Jurusan -->
+            <div class="relative flex-1 sm:max-w-[220px]">
+                <select
+                    x-model="filterDept"
+                    class="h-11 w-full rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm text-gray-800 outline-none transition duration-150 focus:border-school-blue focus:ring-3 focus:ring-school-blue/10 dark:border-amoled-border dark:bg-amoled-surface dark:text-white/90 dark:focus:border-school-blue appearance-none cursor-pointer"
+                >
+                    <option value="" class="dark:bg-amoled-surface">Semua Jurusan</option>
+                    @foreach($departments as $dept)
+                        <option value="{{ $dept->name }}" class="dark:bg-amoled-surface">{{ $dept->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+
+            <!-- Filter Kelas -->
+            <div class="relative flex-1 sm:max-w-[220px]">
+                <select
+                    x-model="filterClass"
+                    class="h-11 w-full rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm text-gray-800 outline-none transition duration-150 focus:border-school-blue focus:ring-3 focus:ring-school-blue/10 dark:border-amoled-border dark:bg-amoled-surface dark:text-white/90 dark:focus:border-school-blue appearance-none cursor-pointer"
+                >
+                    <option value="" class="dark:bg-amoled-surface">Semua Kelas</option>
+                    @foreach($availableClasses as $class)
+                        <option value="{{ $class }}" class="dark:bg-amoled-surface">{{ $class }}</option>
+                    @endforeach
+                </select>
+            </div>
+
+            <!-- Reset Filters -->
+            <button
+                x-show="filterDept !== '' || filterClass !== ''"
+                x-cloak
+                @click="filterDept = ''; filterClass = ''"
+                type="button"
+                class="inline-flex items-center justify-center gap-1.5 rounded-xl border border-gray-200 dark:border-amoled-border py-2.5 px-4 text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/[0.06] transition duration-150 h-11"
+            >
+                <svg class="w-4 h-4" width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+                Reset Filter
+            </button>
+
+            <!-- Counter Badge -->
+            <span class="text-xs text-gray-400 dark:text-gray-500 sm:ml-auto self-center whitespace-nowrap">
+                Total: {{ $students->count() }} siswa
+            </span>
+        </div>
+
         <!-- Content Container -->
         <div class="rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-amoled-border dark:bg-amoled-surface">
 
@@ -86,9 +142,16 @@
                     </thead>
                     <tbody>
                         @forelse ($students as $index => $student)
-                            <tr class="hover:bg-gray-50 dark:hover:bg-white/[0.04] transition duration-150 border-b border-gray-200 dark:border-amoled-border last:border-b-0">
+                            <tr
+                                data-student-row
+                                data-dept="{{ $student->department->name ?? '' }}"
+                                data-class="{{ $student->class_name }}"
+                                x-show="(filterDept === '' || $el.dataset.dept === filterDept) && (filterClass === '' || $el.dataset.class === filterClass)"
+                                x-transition.opacity.duration.150ms
+                                class="hover:bg-gray-50 dark:hover:bg-white/[0.04] transition duration-150 border-b border-gray-200 dark:border-amoled-border last:border-b-0"
+                            >
                                 <td class="py-4 px-4 xl:pl-8">
-                                    <span class="text-sm text-gray-500 dark:text-amoled-text">{{ $students->firstItem() + $index }}</span>
+                                    <span class="text-sm text-gray-500 dark:text-amoled-text">{{ $index + 1 }}</span>
                                 </td>
                                 <td class="py-4 px-4">
                                     <h5 class="font-medium text-gray-800 dark:text-white text-sm">{{ $student->user->name }}</h5>
@@ -156,7 +219,14 @@
             <!-- Card View (Mobile) -->
             <div class="md:hidden flex flex-col divide-y divide-gray-200 dark:divide-amoled-border">
                  @forelse ($students as $index => $student)
-                    <div class="p-4">
+                    <div
+                        class="p-4"
+                        data-student-row
+                        data-dept="{{ $student->department->name ?? '' }}"
+                        data-class="{{ $student->class_name }}"
+                        x-show="(filterDept === '' || $el.dataset.dept === filterDept) && (filterClass === '' || $el.dataset.class === filterClass)"
+                        x-transition.opacity.duration.150ms
+                    >
                         <div class="flex items-start justify-between mb-2">
                             <div>
                                 <h5 class="font-semibold text-gray-800 dark:text-white text-sm">{{ $student->user->name }}</h5>
@@ -214,8 +284,13 @@
                  @endforelse
             </div>
 
-            <div class="px-4 py-3 border-t border-gray-200 dark:border-amoled-border">
-                {{ $students->links() }}
+            <!-- Empty state when all filtered out -->
+            <div
+                x-show="(filterDept !== '' || filterClass !== '') && document.querySelectorAll('[data-student-row]:not([style*=\'display: none\'])').length === 0"
+                x-cloak
+                class="py-8 px-4 text-center text-sm text-gray-500 dark:text-amoled-text"
+            >
+                Tidak ada peserta didik yang sesuai dengan filter yang dipilih.
             </div>
         </div>
     </div>
