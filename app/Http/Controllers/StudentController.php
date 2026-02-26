@@ -104,6 +104,8 @@ class StudentController extends Controller
                 'user_id'          => $user->id,
                 'nis'              => $validated['nis'],
                 'class_name'       => $validated['class_name'],
+                'place_of_birth'   => $validated['place_of_birth'],
+                'date_of_birth'    => $validated['date_of_birth'],
                 'department_id'    => $validated['department_id'],
                 'academic_year_id' => $activeYear?->id,
                 'address'          => $validated['address'] ?? null,
@@ -165,6 +167,8 @@ class StudentController extends Controller
             $student->update([
                 'nis'           => $validated['nis'],
                 'class_name'    => $validated['class_name'],
+                'place_of_birth'=> $validated['place_of_birth'],
+                'date_of_birth' => $validated['date_of_birth'],
                 'department_id' => $validated['department_id'],
                 'address'       => $validated['address'] ?? null,
                 'phone'         => $validated['phone'] ?? null,

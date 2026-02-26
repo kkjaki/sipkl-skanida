@@ -28,9 +28,20 @@ class Student extends Model
         'department_id',
         'academic_year_id',
         'nis',
+        'place_of_birth',
+        'date_of_birth',
         'class_name',
         'address',
         'phone',
+    ];
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'date_of_birth' => 'date',
     ];
 
     /**

@@ -15,6 +15,8 @@ return new class extends Migration
             $table->foreignId('user_id')->primary()->constrained('users')->onDelete('cascade');
             $table->foreignId('department_id')->constrained('departments');
             $table->string('nis')->unique();
+            $table->string('place_of_birth');
+            $table->date('date_of_birth');
             $table->string('class_name');
             $table->string('address')->nullable();
             $table->string('phone')->nullable();

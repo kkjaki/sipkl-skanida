@@ -48,7 +48,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.072 16.5c-.77.833.192 2.5 1.732 2.5z"/>
                     </svg>
                     <p class="text-sm text-amber-700 dark:text-amber-400 leading-relaxed">
-                        Mohon periksa kembali ejaan <strong>Nama</strong>, <strong>NIS</strong>, dan <strong>Tempat Magang</strong> Anda sebelum sertifikat dicetak.
+                        Mohon periksa kembali ejaan <strong>seluruh data diri</strong> Anda sebelum sertifikat dicetak.
                         <span class="font-semibold">Kesalahan data setelah proses cetak bukan tanggung jawab sekolah.</span>
                     </p>
                 </div>
@@ -82,7 +82,7 @@
             {{-- Data Preview Card --}}
             <div class="rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-amoled-border dark:bg-amoled-surface">
                 <div class="border-b border-gray-200 dark:border-amoled-border py-4 px-5 sm:px-8">
-                    <h3 class="text-base font-semibold text-gray-800 dark:text-white">Preview Data Sertifikat</h3>
+                    <h3 class="text-base font-semibold text-gray-800 dark:text-white">Pratinjau Data Sertifikat</h3>
                     <p class="text-xs text-gray-400 dark:text-gray-500 mt-0.5">Data di bawah ini akan tercetak pada sertifikat Anda.</p>
                 </div>
 
@@ -98,6 +98,14 @@
                         <div>
                             <dt class="text-[11px] font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-1.5">NIS</dt>
                             <dd class="text-sm font-semibold text-gray-800 dark:text-white font-mono">{{ $internship->student->nis ?? '-' }}</dd>
+                        </div>
+
+                        {{-- TTL --}}
+                        <div>
+                            <dt class="text-[11px] font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-1.5">Tempat, Tanggal Lahir</dt>
+                            <dd class="text-sm font-semibold text-gray-800 dark:text-white">
+                                {{ $internship->student->place_of_birth }}, {{ \Carbon\Carbon::parse($internship->student->date_of_birth)->locale('id')->translatedFormat('d F Y') }}
+                            </dd>
                         </div>
 
                         {{-- Kelas --}}

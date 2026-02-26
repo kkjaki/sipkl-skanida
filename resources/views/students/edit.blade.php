@@ -109,6 +109,43 @@
                         @enderror
                     </div>
 
+                    <!-- Tempat Lahir -->
+                    <div>
+                        <label for="place_of_birth" class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                            Tempat Lahir <span class="text-red-500">*</span>
+                        </label>
+                        <input
+                            type="text"
+                            id="place_of_birth"
+                            name="place_of_birth"
+                            value="{{ old('place_of_birth', $student->place_of_birth) }}"
+                            placeholder="cth. Magelang"
+                            required
+                            class="h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 outline-none transition duration-150 focus:border-school-blue focus:ring-3 focus:ring-school-blue/10 dark:border-amoled-border dark:bg-amoled-input dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-school-blue"
+                        />
+                        @error('place_of_birth')
+                            <p class="text-red-500 text-xs mt-1.5">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <!-- Tanggal Lahir -->
+                    <div>
+                        <label for="date_of_birth" class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                            Tanggal Lahir <span class="text-red-500">*</span>
+                        </label>
+                        <input
+                            type="date"
+                            id="date_of_birth"
+                            name="date_of_birth"
+                            value="{{ old('date_of_birth', $student->date_of_birth?->format('Y-m-d')) }}"
+                            required
+                            class="h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 outline-none transition duration-150 focus:border-school-blue focus:ring-3 focus:ring-school-blue/10 dark:border-amoled-border dark:bg-amoled-input dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-school-blue"
+                        />
+                        @error('date_of_birth')
+                            <p class="text-red-500 text-xs mt-1.5">{{ $message }}</p>
+                        @enderror
+                    </div>
+
                     <!-- Kelas (Dropdown) -->
                     <div>
                         <label for="class_name" class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
