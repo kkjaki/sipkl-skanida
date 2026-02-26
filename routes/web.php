@@ -119,6 +119,12 @@ Route::middleware('auth')->group(function () {
             Route::get('/{journal}/edit', [DailyJournalController::class, 'edit'])->name('edit');
             Route::put('/{journal}', [DailyJournalController::class, 'update'])->name('update');
         });
+
+        // Certificate Validation (Validasi Data Sertifikat)
+        Route::prefix('student/certificate-validations')->name('student.certificate-validations.')->group(function () {
+            Route::get('/', [App\Http\Controllers\CertificateValidationController::class, 'index'])->name('index');
+            Route::put('/{certificate}/validate', [App\Http\Controllers\CertificateValidationController::class, 'validate'])->name('validate');
+        });
     });
 
     // =========================================================

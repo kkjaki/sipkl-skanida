@@ -14,9 +14,8 @@ return new class extends Migration
         Schema::create('certificates', function (Blueprint $table) {
             $table->id();
             $table->foreignId('internship_id')->constrained('internships')->onDelete('cascade');
-            $table->string('certificate_number')->unique()->nullable();
+            $table->string('certificate_number')->nullable();
             $table->date('issued_date')->nullable();
-            $table->string('file_path')->nullable();
             $table->enum('status', ['draft', 'validated', 'generated'])->default('draft');
             $table->timestamps();
         });

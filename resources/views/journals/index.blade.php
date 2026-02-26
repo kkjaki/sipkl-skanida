@@ -11,13 +11,24 @@
 }" class="space-y-4 sm:space-y-6">
 
     {{-- Page Header --}}
-    <div class="flex flex-col gap-1">
-        <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Jurnal Harian PKL</h1>
-        @if($internship)
-            <p class="text-sm text-gray-500 dark:text-gray-400">
-                Tempat PKL: <span class="font-medium text-school-blue">{{ $internship->industry->name ?? '-' }}</span>
-            </p>
-        @endif
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 min-h-[44px]">
+        <div class="flex flex-col gap-1">
+            <h1 class="text-xl font-bold text-gray-800 dark:text-white">Jurnal Harian PKL</h1>
+            @if($internship)
+                <p class="text-sm text-gray-500 dark:text-gray-400">
+                    Tempat PKL: <span class="font-medium text-school-blue">{{ $internship->industry->name ?? '-' }}</span>
+                </p>
+            @endif
+        </div>
+        <nav>
+            <ol class="flex items-center gap-1.5 text-sm">
+                <li>
+                    <a class="font-medium text-gray-400 dark:text-amoled-text hover:text-school-blue transition duration-150" href="{{ route('dashboard') }}">Dashboard</a>
+                </li>
+                <li class="text-gray-300 dark:text-gray-600">/</li>
+                <li class="font-medium text-gray-800 dark:text-gray-200">Jurnal Harian</li>
+            </ol>
+        </nav>
     </div>
 
     {{-- Flash Messages --}}
