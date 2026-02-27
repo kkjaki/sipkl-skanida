@@ -186,7 +186,7 @@
                 x-show="showErrorModal"
                 x-cloak
                 x-transition.opacity.duration.200ms
-                class="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+                class="fixed inset-0 z-[9999] flex items-center justify-center p-4 sm:p-6 bg-black/60 backdrop-blur-sm"
                 @click.self="showErrorModal = false"
                 @keydown.escape.window="showErrorModal = false"
             >

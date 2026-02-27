@@ -299,10 +299,10 @@
          x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
          x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
          x-cloak>
-        <div class="flex items-end sm:items-center justify-center min-h-screen p-0 sm:p-6">
+        <div class="flex items-center justify-center min-h-screen p-4 sm:p-6">
             <div class="fixed inset-0 bg-black/70" @click="closeRejectModal()"></div>
 
-            <div class="relative w-full sm:max-w-md bg-white dark:bg-amoled-surface rounded-t-2xl sm:rounded-2xl shadow-2xl overflow-hidden border-t sm:border border-gray-200 dark:border-amoled-border"
+            <div class="relative w-full sm:max-w-md bg-white dark:bg-amoled-surface rounded-2xl shadow-2xl overflow-hidden border border-gray-200 dark:border-amoled-border"
                  x-transition:enter="transition ease-out duration-200"
                  x-transition:enter-start="translate-y-full sm:translate-y-4 sm:scale-95 opacity-0"
                  x-transition:enter-end="translate-y-0 sm:scale-100 opacity-100">

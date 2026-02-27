@@ -43,8 +43,8 @@
         </div>
 
         <!-- Right Side Actions -->
-        <div :class="isApplicationMenuOpen ? 'flex' : 'hidden'"
-            class="items-center justify-between w-full gap-4 px-5 py-4 lg:flex shadow-theme-md lg:justify-end lg:px-0 lg:shadow-none bg-white dark:bg-amoled-surface lg:bg-transparent">
+        <div x-show="isApplicationMenuOpen" x-cloak
+            class="items-center justify-between w-full gap-4 px-5 py-4 flex shadow-theme-md lg:!flex lg:justify-end lg:px-0 lg:shadow-none bg-white dark:bg-amoled-surface lg:bg-transparent">
 
             <div class="flex items-center gap-2">
                 <!-- Theme Toggle -->

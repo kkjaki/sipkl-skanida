@@ -1,5 +1,5 @@
 <aside
-    class="fixed left-0 top-0 z-50 flex h-screen w-[280px] flex-col overflow-y-hidden bg-white dark:bg-amoled-surface duration-300 ease-linear lg:static lg:translate-x-0 border-r border-gray-200 dark:border-amoled-border"
+    class="fixed left-0 top-0 z-50 flex h-screen w-[280px] -translate-x-full flex-col overflow-y-hidden bg-white dark:bg-amoled-surface duration-300 ease-linear lg:static lg:translate-x-0 border-r border-gray-200 dark:border-amoled-border"
     :class="{
         'w-[280px]': $store.sidebar.isExpanded || $store.sidebar.isMobileOpen || $store.sidebar.isHovered,
         'w-[88px]': !$store.sidebar.isExpanded && !$store.sidebar.isHovered && !$store.sidebar.isMobileOpen,

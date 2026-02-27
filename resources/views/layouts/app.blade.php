@@ -7,16 +7,65 @@
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
-    <!-- Fonts (LCP optimized) -->
+    <!-- Synchronous Theme Init (prevents FOUC — runs before body paint) -->
+    <script>
+        (function() {
+            var t = localStorage.getItem('theme');
+            if (!t) t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+            if (t === 'dark') document.documentElement.classList.add('dark');
+        })();
+    </script>
+
+    <!-- Fonts (preloaded to prevent CLS from font swap) -->
     <link rel="preconnect" href="https://fonts.bunny.net" crossorigin>
     <link rel="dns-prefetch" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
-    <noscript><link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" /></noscript>
+    <link rel="preload" href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" as="style">
+    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
-    <!-- Scripts -->
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <!-- CSS only (non-blocking) -->
+    @vite(['resources/css/app.css'])
 
-    <!-- Alpine.js State Management -->
+    <style>
+        [x-cloak] { display: none !important; }
+    </style>
+</head>
+<body x-data class="font-sans antialiased bg-gray-50 dark:bg-amoled text-gray-800 dark:text-gray-100">
+    <!-- Screen overlay for mobile sidebar -->
+    <div
+        x-show="$store.sidebar.isMobileOpen"
+        @click="$store.sidebar.setMobileOpen(false)"
+        x-transition:enter="transition ease-out duration-300"
+        x-transition:enter-start="opacity-0"
+        x-transition:enter-end="opacity-100"
+        x-transition:leave="transition ease-in duration-200"
+        x-transition:leave-start="opacity-100"
+        x-transition:leave-end="opacity-0"
+        class="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm lg:hidden"
+        style="display: none;"
+    ></div>
+
+    <div class="flex h-screen overflow-hidden">
+        <!-- Sidebar -->
+        @include('layouts.sidebar')
+
+        <!-- Content Area -->
+        <div class="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
+            <!-- Header -->
+            @include('layouts.app-header')
+
+            <!-- Main Content -->
+            <main>
+                <div class="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10">
+                    @yield('content')
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- JS at end of body (non-blocking render) -->
+    @vite(['resources/js/app.js'])
+
+    <!-- Alpine.js State Management (runs after Alpine loads) -->
     <script>
         document.addEventListener('alpine:init', () => {
             Alpine.store('theme', {
@@ -71,45 +120,6 @@
             });
         });
     </script>
-    <style>
-        [x-cloak] { display: none !important; }
-    </style>
-</head>
-<body
-    x-data="{ 'loaded': true }"
-    class="font-sans antialiased bg-gray-50 dark:bg-amoled text-gray-800 dark:text-gray-100"
->
-    <!-- Screen overlay for mobile sidebar -->
-    <div
-        x-show="$store.sidebar.isMobileOpen"
-        @click="$store.sidebar.setMobileOpen(false)"
-        x-transition:enter="transition ease-out duration-300"
-        x-transition:enter-start="opacity-0"
-        x-transition:enter-end="opacity-100"
-        x-transition:leave="transition ease-in duration-200"
-        x-transition:leave-start="opacity-100"
-        x-transition:leave-end="opacity-0"
-        class="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm lg:hidden"
-        style="display: none;"
-    ></div>
-
-    <div class="flex h-screen overflow-hidden">
-        <!-- Sidebar -->
-        @include('layouts.sidebar')
-
-        <!-- Content Area -->
-        <div class="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
-            <!-- Header -->
-            @include('layouts.app-header')
-
-            <!-- Main Content -->
-            <main>
-                <div class="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10">
-                    @yield('content')
-                </div>
-            </main>
-        </div>
-    </div>
 
     @stack('scripts')
 </body>

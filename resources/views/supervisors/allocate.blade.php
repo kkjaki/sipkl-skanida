@@ -33,24 +33,29 @@
                 this.$refs.form.submit();
             }
         },
-        get filteredSupervisors() {
-            let result = this.supervisors;
+        get filteredCount() {
+            let count = 0;
+            this.supervisors.forEach(s => {
+                if (this.isVisible(s)) count++;
+            });
+            return count;
+        },
+        isVisible(s) {
+            let visible = true;
             if (this.searchQuery.trim()) {
                 const q = this.searchQuery.toLowerCase();
-                result = result.filter(s =>
-                    s.name.toLowerCase().includes(q) ||
-                    (s.nip && s.nip.toLowerCase().includes(q))
-                );
+                visible = s.name.toLowerCase().includes(q) ||
+                          (s.nip && s.nip.toLowerCase().includes(q));
             }
-            if (this.filterDepartment !== 'all') {
-                result = result.filter(s => String(s.department_id) === String(this.filterDepartment));
+            if (visible && this.filterDepartment !== 'all') {
+                visible = String(s.department_id) === String(this.filterDepartment);
             }
-            if (this.filterStatus === 'empty') {
-                result = result.filter(s => !this.allocations[s.user_id] || this.allocations[s.user_id] == 0);
-            } else if (this.filterStatus === 'filled') {
-                result = result.filter(s => this.allocations[s.user_id] && this.allocations[s.user_id] > 0);
+            if (visible && this.filterStatus === 'empty') {
+                visible = !this.allocations[s.user_id] || this.allocations[s.user_id] == 0;
+            } else if (visible && this.filterStatus === 'filled') {
+                visible = this.allocations[s.user_id] && this.allocations[s.user_id] > 0;
             }
-            return result;
+            return visible;
         },
         init() {
             // Peringatan saat akan meninggalkan halaman
@@ -88,8 +93,8 @@
 
             <!-- Save Button -->
             <button type="button" @click="submitForm()" :disabled="!isDirty"
-                class="inline-flex items-center justify-center gap-2.5 rounded-xl bg-school-blue py-2.5 px-6 text-base font-medium text-white shadow-sm transition-all duration-200 ease-in-out hover:bg-school-blue/90 disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none translate-y-0"
-                :class="{ 'translate-y-1': !isDirty, 'shadow-lg ring-2 ring-school-blue/20': isDirty }">
+                class="inline-flex items-center justify-center gap-2.5 rounded-xl bg-school-blue py-2.5 px-6 text-base font-medium text-white shadow-sm transition-all duration-200 ease-in-out hover:bg-school-blue/90 disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none translate-y-1"
+                :class="{ 'translate-y-1': !isDirty, 'shadow-lg ring-2 ring-school-blue/20 translate-y-0': isDirty }">
                 <svg class="w-5 h-5 transition-transform duration-200" :class="{ 'scale-110': isDirty }" fill="none"
                     stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -97,7 +102,7 @@
                     </path>
                 </svg>
                 <span>Simpan Perubahan</span>
-                <span x-show="isDirty" x-transition class="ml-1 text-xs bg-white/20 px-1.5 py-0.5 rounded-md">Unsaved</span>
+                <span x-show="isDirty" style="display: none;" x-transition class="ml-1 text-xs bg-white/20 px-1.5 py-0.5 rounded-md">Unsaved</span>
             </button>
         </div>
 
@@ -160,66 +165,63 @@
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-100 dark:divide-amoled-border">
-                            <template x-for="(supervisor, index) in filteredSupervisors" :key="supervisor.user_id">
-                                <tr class="hover:bg-gray-50/50 dark:hover:bg-white/[0.02] transition-colors duration-150">
-                                    <td class="px-6 py-4 font-medium text-gray-900 dark:text-gray-200" x-text="index + 1"></td>
+                            @foreach($supervisors as $index => $supervisor)
+                                <tr x-show="isVisible(supervisors.find(s => s.user_id == {{ $supervisor->user_id }}))"
+                                    class="hover:bg-gray-50/50 dark:hover:bg-white/[0.02] transition-colors duration-150">
+                                    <td class="px-6 py-4 font-medium text-gray-900 dark:text-gray-200">{{ $loop->iteration }}</td>
                                     <td class="px-6 py-4">
                                         <div class="flex items-center gap-3">
                                             <div
-                                                class="h-9 w-9 rounded-full bg-school-blue/10 text-school-blue flex items-center justify-center text-xs font-bold flex-shrink-0"
-                                                x-text="supervisor.name.substring(0, 2)">
+                                                class="h-9 w-9 rounded-full bg-school-blue/10 text-school-blue flex items-center justify-center text-xs font-bold flex-shrink-0">
+                                                {{ substr($supervisor->user->name, 0, 2) }}
                                             </div>
                                             <div class="min-w-0">
-                                                <div class="font-medium text-gray-900 dark:text-white truncate" x-text="supervisor.name"></div>
-                                                <div class="text-sm text-gray-400 truncate" x-text="supervisor.nip || '-'"></div>
+                                                <div class="font-medium text-gray-900 dark:text-white truncate">{{ $supervisor->user->name }}</div>
+                                                <div class="text-sm text-gray-400 truncate">{{ $supervisor->nip ?? '-' }}</div>
                                             </div>
                                         </div>
                                     </td>
                                     <td class="px-6 py-4">
-                                        <template x-if="supervisor.department_name">
-                                            <span
-                                                class="inline-flex items-center rounded-md bg-gray-100 px-2.5 py-1 text-sm font-medium text-gray-600 dark:bg-white/[0.08] dark:text-gray-300"
-                                                x-text="supervisor.department_name + ' (' + supervisor.department_code + ')'">
+                                        @if($supervisor->department)
+                                            <span class="inline-flex items-center rounded-md bg-gray-100 px-2.5 py-1 text-sm font-medium text-gray-600 dark:bg-white/[0.08] dark:text-gray-300">
+                                                {{ $supervisor->department->name }} ({{ $supervisor->department->code }})
                                             </span>
-                                        </template>
-                                        <template x-if="!supervisor.department_name">
+                                        @else
                                             <span class="text-gray-400 italic">-</span>
-                                        </template>
+                                        @endif
                                     </td>
                                     <td class="px-6 py-4">
                                         <div class="relative flex items-center justify-center"
-                                            :class="{ 'text-school-blue font-bold': allocations[supervisor.user_id] != initialAllocations[supervisor.user_id] }">
+                                            :class="{ 'text-school-blue font-bold': allocations[{{ $supervisor->user_id }}] != initialAllocations[{{ $supervisor->user_id }}] }">
                                             <input type="number"
-                                                x-model.number="allocations[supervisor.user_id]"
-                                                @input="checkDirty()" min="0"
+                                                x-model.number="allocations[{{ $supervisor->user_id }}]"
+                                                @input="checkDirty()" min="0" value="{{ $supervisor->allocations->first()->quota ?? 0 }}"
                                                 class="peer block w-24 rounded-lg border-0 bg-gray-50 py-2 px-3 text-center text-gray-900 ring-1 ring-inset ring-gray-200 focus:ring-2 focus:ring-inset focus:ring-school-blue text-base sm:leading-6 dark:bg-white/[0.05] dark:text-white dark:ring-white/10 dark:focus:ring-school-blue transition-all duration-200
                                                           hover:bg-white dark:hover:bg-white/[0.08]"
                                                 placeholder="0" />
 
                                             <!-- Indicator dot for changed value -->
-                                            <div x-show="allocations[supervisor.user_id] != initialAllocations[supervisor.user_id]"
-                                                x-transition
+                                            <div x-show="allocations[{{ $supervisor->user_id }}] != initialAllocations[{{ $supervisor->user_id }}]"
+                                                x-cloak x-transition
                                                 class="absolute -right-2 top-1/2 -translate-y-1/2 h-1.5 w-1.5 rounded-full bg-amber-500">
                                             </div>
                                         </div>
                                     </td>
                                 </tr>
-                            </template>
-                            <template x-if="filteredSupervisors.length === 0">
-                                <tr>
-                                    <td colspan="4" class="px-6 py-12 text-center text-gray-500 dark:text-gray-400">
-                                        <div class="flex flex-col items-center justify-center gap-2">
-                                            <svg class="h-10 w-10 text-gray-300 dark:text-gray-600" fill="none"
-                                                stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z">
-                                                </path>
-                                            </svg>
-                                            <p class="text-base" x-text="supervisors.length === 0 ? 'Belum ada data guru pembimbing.' : 'Tidak ada guru yang cocok dengan filter.'"></p>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </template>
+                            @endforeach
+                            <tr x-show="filteredCount === 0" x-cloak>
+                                <td colspan="4" class="px-6 py-12 text-center text-gray-500 dark:text-gray-400">
+                                    <div class="flex flex-col items-center justify-center gap-2">
+                                        <svg class="h-10 w-10 text-gray-300 dark:text-gray-600" fill="none"
+                                            stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z">
+                                            </path>
+                                        </svg>
+                                        <p class="text-base">{{ count($supervisors) === 0 ? 'Belum ada data guru pembimbing.' : 'Tidak ada guru yang cocok dengan filter.' }}</p>
+                                    </div>
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -227,12 +229,12 @@
                 <!-- Footer with summary -->
                 <div
                     class="bg-gray-50 px-6 py-4 border-t border-gray-200 dark:bg-amoled-surface dark:border-amoled-border flex justify-between items-center">
-                    <span class="text-sm text-gray-500 dark:text-gray-400">Menampilkan <span class="font-medium" x-text="filteredSupervisors.length"></span> dari {{ count($supervisors) }} guru
+                    <span class="text-sm text-gray-500 dark:text-gray-400">Menampilkan <span class="font-medium" x-text="filteredCount">{{ count($supervisors) }}</span> dari {{ count($supervisors) }} guru
                         pembimbing</span>
                     <div class="text-base font-medium text-gray-700 dark:text-gray-300">
                         Total Kuota: <span
                             x-text="Object.values(allocations).reduce((a, b) => parseInt(a||0) + parseInt(b||0), 0)"
-                            class="font-bold text-school-blue">0</span>
+                            class="font-bold text-school-blue">{{ $supervisors->sum(fn($s) => $s->allocations->first()->quota ?? 0) }}</span>
                     </div>
                 </div>
             </div>

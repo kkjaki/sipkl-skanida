@@ -145,7 +145,6 @@
                                     (selectedClass === '' || $el.dataset.class === selectedClass) &&
                                     (search === '' || $el.dataset.name.includes(search.toLowerCase()) || $el.dataset.nis.includes(search.toLowerCase()))
                                 "
-                                x-transition.opacity.duration.150ms
                                 class="hover:bg-gray-50 dark:hover:bg-white/[0.04] transition duration-150 border-b border-gray-200 dark:border-amoled-border last:border-b-0"
                             >
                                 <td class="py-4 px-4 xl:pl-8">
@@ -169,7 +168,7 @@
                                         @php
                                             $colorIndustry = match(true) {
                                                 $avgIndustry >= 90 => 'bg-emerald-500/10 text-emerald-600 border-emerald-500/20',
-                                                $avgIndustry < 90 && $avgIndustry >= 80 => 'bg-amber-500/10 text-amber-600 border-amber-500/20',
+                                                $avgIndustry >= 80 => 'bg-amber-500/10 text-amber-600 border-amber-500/20',
                                                 default            => 'bg-red-500/10 text-red-600 border-red-500/20',
                                             };
                                         @endphp
@@ -187,8 +186,8 @@
                                     @if($avgSchool !== null)
                                         @php
                                             $colorSchool = match(true) {
-                                                $avgIndustry >= 90 => 'bg-emerald-500/10 text-emerald-600 border-emerald-500/20',
-                                                $avgIndustry < 90 && $avgIndustry >= 80 => 'bg-amber-500/10 text-amber-600 border-amber-500/20',
+                                                $avgSchool >= 90   => 'bg-emerald-500/10 text-emerald-600 border-emerald-500/20',
+                                                $avgSchool >= 80   => 'bg-amber-500/10 text-amber-600 border-amber-500/20',
                                                 default            => 'bg-red-500/10 text-red-600 border-red-500/20',
                                             };
                                         @endphp
@@ -206,8 +205,8 @@
                                     @if($finalScore !== null)
                                         @php
                                             $colorFinal = match(true) {
-                                                $avgIndustry >= 90 => 'bg-emerald-500/10 text-emerald-600 border-emerald-500/20',
-                                                $avgIndustry < 90 && $avgIndustry >= 80 => 'bg-amber-500/10 text-amber-600 border-amber-500/20',
+                                                $finalScore >= 90  => 'bg-emerald-500/10 text-emerald-600 border-emerald-500/20',
+                                                $finalScore >= 80  => 'bg-amber-500/10 text-amber-600 border-amber-500/20',
                                                 default            => 'bg-red-500/10 text-red-600 border-red-500/20',
                                             };
                                         @endphp
@@ -256,7 +255,6 @@
                             (selectedClass === '' || $el.dataset.class === selectedClass) &&
                             (search === '' || $el.dataset.name.includes(search.toLowerCase()) || $el.dataset.nis.includes(search.toLowerCase()))
                         "
-                        x-transition.opacity.duration.150ms
                     >
                         <div class="flex items-start justify-between mb-2">
                             <div>
@@ -277,7 +275,7 @@
                                     @php
                                         $colorIndustry = match(true) {
                                             $avgIndustry >= 90 => 'bg-emerald-500/10 text-emerald-600 border-emerald-500/20',
-                                            $avgIndustry < 90 && $avgIndustry >= 80 => 'bg-amber-500/10 text-amber-600 border-amber-500/20',
+                                            $avgIndustry >= 80 => 'bg-amber-500/10 text-amber-600 border-amber-500/20',
                                             default            => 'bg-red-500/10 text-red-600 border-red-500/20',
                                         };
                                     @endphp
@@ -292,8 +290,8 @@
                                 @if($avgSchool !== null)
                                     @php
                                         $colorSchool = match(true) {
-                                            $avgIndustry >= 90 => 'bg-emerald-500/10 text-emerald-600 border-emerald-500/20',
-                                            $avgIndustry < 90 && $avgIndustry >= 80 => 'bg-amber-500/10 text-amber-600 border-amber-500/20',
+                                            $avgSchool >= 90 => 'bg-emerald-500/10 text-emerald-600 border-emerald-500/20',
+                                            $avgSchool >= 80 => 'bg-amber-500/10 text-amber-600 border-amber-500/20',
                                             default            => 'bg-red-500/10 text-red-600 border-red-500/20',
                                         };
                                     @endphp
@@ -308,8 +306,8 @@
                                 @if($finalScore !== null)
                                     @php
                                         $colorFinal = match(true) {
-                                            $avgIndustry >= 90 => 'bg-emerald-500/10 text-emerald-600 border-emerald-500/20',
-                                            $avgIndustry < 90 && $avgIndustry >= 80 => 'bg-amber-500/10 text-amber-600 border-amber-500/20',
+                                            $finalScore >= 90 => 'bg-emerald-500/10 text-emerald-600 border-emerald-500/20',
+                                            $finalScore >= 80 => 'bg-amber-500/10 text-amber-600 border-amber-500/20',
                                             default            => 'bg-red-500/10 text-red-600 border-red-500/20',
                                         };
                                     @endphp

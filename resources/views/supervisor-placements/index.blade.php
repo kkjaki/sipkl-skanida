@@ -207,12 +207,12 @@
          x-transition:leave-end="opacity-0"
          x-cloak>
 
-        <div class="flex items-end sm:items-center justify-center min-h-screen sm:p-6">
+        <div class="flex items-center justify-center min-h-screen p-4 sm:p-6">
             <!-- Backdrop -->
             <div class="fixed inset-0 bg-black/80 backdrop-blur-md" @click="closeModal()"></div>
 
             <!-- Modal Content -->
-            <div class="relative w-full sm:max-w-2xl bg-white dark:bg-amoled-surface sm:rounded-[2rem] rounded-t-3xl shadow-2xl overflow-hidden border-t sm:border border-gray-200 dark:border-amoled-border max-h-[95vh] sm:max-h-[90vh] flex flex-col"
+            <div class="relative w-full sm:max-w-2xl bg-white dark:bg-amoled-surface rounded-2xl sm:rounded-[2rem] shadow-2xl overflow-hidden border border-gray-200 dark:border-amoled-border max-h-[90vh] flex flex-col"
                  x-transition:enter="transition ease-out duration-400"
                  x-transition:enter-start="opacity-0 translate-y-full sm:translate-y-10 sm:scale-90"
                  x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100">

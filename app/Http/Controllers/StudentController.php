@@ -31,34 +31,43 @@ class StudentController extends Controller
     public function index(Request $request)
     {
         $search = $request->query('search');
+        $filterDept = $request->query('department');
+        $filterClass = $request->query('class');
 
-        // Base list (no search) — cached 10 menit untuk performa optimal.
-        // Search results — cached 2 menit (bersifat sementara).
-        $cacheKey = $search
-            ? 'students_list_search_' . md5($search)
-            : 'students_list_all';
-        $cacheTtl = $search ? 120 : 600;
+        // Cache key includes search, filters, and page for proper caching.
+        $page = $request->query('page', 1);
+        $cacheKey = 'students_list_' . md5(json_encode(compact('search', 'filterDept', 'filterClass', 'page')));
+        $cacheTtl = $search || $filterDept || $filterClass ? 120 : 600;
 
-        $students = Cache::remember($cacheKey, $cacheTtl, function () use ($search) {
+        $students = Cache::remember($cacheKey, $cacheTtl, function () use ($search, $filterDept, $filterClass) {
             return Student::with(['user', 'department', 'academicYear'])
                 ->when($search, function ($query, $search) {
-                    $query->where('nis', 'like', "%{$search}%")
+                    $query->where(function ($q) use ($search) {
+                        $q->where('nis', 'like', "%{$search}%")
                           ->orWhere('class_name', 'like', "%{$search}%")
-                          ->orWhereHas('user', function ($q) use ($search) {
-                              $q->where('name', 'like', "%{$search}%")
-                                ->orWhere('email', 'like', "%{$search}%");
+                          ->orWhereHas('user', function ($q2) use ($search) {
+                              $q2->where('name', 'like', "%{$search}%")
+                                 ->orWhere('email', 'like', "%{$search}%");
                           });
+                    });
+                })
+                ->when($filterDept, function ($query, $filterDept) {
+                    $query->whereHas('department', fn ($q) => $q->where('name', $filterDept));
+                })
+                ->when($filterClass, function ($query, $filterClass) {
+                    $query->where('class_name', $filterClass);
                 })
                 ->join('users', 'students.user_id', '=', 'users.id')
                 ->orderBy('users.name', 'asc')
                 ->select('students.*')
-                ->get();
+                ->paginate(25)
+                ->withQueryString();
         });
 
         $departments = Department::orderBy('name')->get();
         $availableClasses = Student::AVAILABLE_CLASSES;
 
-        return view('students.index', compact('students', 'search', 'departments', 'availableClasses'));
+        return view('students.index', compact('students', 'search', 'filterDept', 'filterClass', 'departments', 'availableClasses'));
     }
 
     /**
