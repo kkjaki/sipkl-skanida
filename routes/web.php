@@ -14,6 +14,7 @@ use App\Http\Controllers\JournalValidationController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\SupervisorAllocationController;
+use App\Http\Controllers\CertificateGenerationController;
 use App\Http\Controllers\SupervisorController;
 use App\Http\Controllers\SupervisorPlacementController;
 use Illuminate\Support\Facades\Route;
@@ -78,6 +79,10 @@ Route::middleware('auth')->group(function () {
 
         // Industry: Admin CRUD
         Route::resource('industries', IndustryController::class);
+
+        // Certificate Generation (Cetak Sertifikat Massal)
+        Route::get('certificates', [CertificateGenerationController::class, 'index'])->name('certificates.index');
+        Route::post('certificates/generate', [CertificateGenerationController::class, 'generate'])->name('certificates.generate');
     });
 
     // =========================================================
