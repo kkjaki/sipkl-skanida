@@ -111,7 +111,7 @@
                         </path>
                     </svg>
                     <p class="text-sm text-red-600 dark:text-red-400 font-medium">
-                        <strong>Belum ada MoU aktif!</strong> Industri ini belum dapat menerima plotting siswa.
+                        <strong>Belum ada MoU aktif!</strong> Industri ini belum memperbarui dokumen kerjasama.
                     </p>
                 </div>
             </div>

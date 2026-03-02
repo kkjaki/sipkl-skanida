@@ -6,6 +6,7 @@ use App\Models\Industry;
 use App\Models\Student;
 use App\Models\AcademicYear;
 use App\Models\IndustryAllocation;
+use App\Models\Internship;
 use App\Models\Supervisor;
 use App\Models\EvaluationIndicator;
 use App\Models\SupervisorAllocation;
@@ -58,12 +59,16 @@ class DashboardController extends Controller
     {
         $activeYear = AcademicYear::where('is_active', true)->first();
 
-        $stats = Cache::remember('dashboard_stats', 60 * 60, function () use ($activeYear) {
+        $stats = Cache::remember('dashboard_admin_stats', 60 * 60, function () use ($activeYear) {
             if (!$activeYear) {
                 return [
-                    'active_year'        => null,
-                    'total_students'     => 0,
-                    'students_per_dept'  => collect(),
+                    'active_year'             => null,
+                    'total_students'          => 0,
+                    'students_per_dept'       => collect(),
+                    'total_synced_industries' => 0,
+                    'students_placed'         => 0,
+                    'students_unplaced'       => 0,
+                    'active_supervisors'      => 0,
                 ];
             }
 
@@ -76,10 +81,22 @@ class DashboardController extends Controller
                 ->orderBy('departments.name')
                 ->get();
 
+            $totalSyncedIndustries = Industry::where('is_synced', true)->count();
+
+            $studentsPlaced = Internship::where('academic_year_id', $activeYear->id)
+                ->distinct('student_id')
+                ->count('student_id');
+
+            $activeSupervisors = User::role('supervisor')->count();
+
             return [
-                'active_year'        => $activeYear->name,
-                'total_students'     => $totalStudents,
-                'students_per_dept'  => $studentsPerDept,
+                'active_year'             => $activeYear->name,
+                'total_students'          => $totalStudents,
+                'students_per_dept'       => $studentsPerDept,
+                'total_synced_industries' => $totalSyncedIndustries,
+                'students_placed'         => $studentsPlaced,
+                'students_unplaced'       => max(0, $totalStudents - $studentsPlaced),
+                'active_supervisors'      => $activeSupervisors,
             ];
         });
 
@@ -87,15 +104,26 @@ class DashboardController extends Controller
     }
 
     /**
-     * Student: personal PKL status.
+     * Student: personal PKL status & journal summary.
      */
     private function studentDashboard($user)
     {
-        $student = Student::where('user_id', $user->id)->first();
+        $student = Student::where('user_id', $user->id)
+            ->with(['internship.industry', 'internship.dailyJournals'])
+            ->first();
+
+        $internship       = $student?->internship;
+        $totalJournals    = $internship?->dailyJournals->count() ?? 0;
+        $verifiedJournals = $internship?->dailyJournals->where('verification_status', 'approved')->count() ?? 0;
+        $pendingJournals  = $internship?->dailyJournals->where('verification_status', 'pending')->count() ?? 0;
 
         return view('dashboard.student', [
-            'user'    => $user,
-            'student' => $student,
+            'user'             => $user,
+            'student'          => $student,
+            'internship'       => $internship,
+            'totalJournals'    => $totalJournals,
+            'verifiedJournals' => $verifiedJournals,
+            'pendingJournals'  => $pendingJournals,
         ]);
     }
 
@@ -104,7 +132,7 @@ class DashboardController extends Controller
      */
     private function kaprogDashboard($user)
     {
-        $deptId = $user->supervisor->department_id;
+        $deptId     = $user->supervisor->department_id;
         $department = $user->supervisor->department;
         $activeYear = AcademicYear::where('is_active', true)->first();
 
@@ -117,12 +145,18 @@ class DashboardController extends Controller
             })
             ->count();
 
-        // 2. Siswa Belum PKL: students in this dept (active year) without internship
+        // 2. Siswa Belum PKL dan Sudah PKL
         $siswaBelumPkl = 0;
+        $siswaPlaced   = 0;
         if ($activeYear) {
             $siswaBelumPkl = Student::where('department_id', $deptId)
                 ->where('academic_year_id', $activeYear->id)
                 ->whereDoesntHave('internship')
+                ->count();
+
+            $siswaPlaced = Student::where('department_id', $deptId)
+                ->where('academic_year_id', $activeYear->id)
+                ->whereHas('internship')
                 ->count();
         }
 
@@ -153,6 +187,7 @@ class DashboardController extends Controller
             'activeYear',
             'waitingApproval',
             'siswaBelumPkl',
+            'siswaPlaced',
             'mitraAktif',
             'recentProposals'
         ));
@@ -164,47 +199,92 @@ class DashboardController extends Controller
     private function curriculumDashboard()
     {
         $activeYear = AcademicYear::where('is_active', true)->first();
-        
-        // 1. Total Guru Pembimbing (tanpa Kepala program): count users with role 'supervisor'
-        $totalSupervisors = User::role('supervisor')->count();
 
-        // 2. Total guru pembimbing yang sudah dialokasikan ke siswa (memiliki alokasi di tahun aktif)
-        $totalSupervisorsAllocated = SupervisorAllocation::where('academic_year_id', $activeYear->id)
-            ->where('quota', '>', 0)
-            ->distinct('supervisor_id')
-            ->count('supervisor_id');
+        $stats = Cache::remember('dashboard_curriculum_stats', 30 * 60, function () use ($activeYear) {
+            // 1. Total Guru Pembimbing
+            $totalSupervisors = User::role('supervisor')->count();
 
-        // 3. Total Indikator Penilaian
-        $totalIndicators = EvaluationIndicator::count();
+            // 2. Total guru pembimbing yang sudah dialokasikan
+            $totalSupervisorsAllocated = $activeYear
+                ? SupervisorAllocation::where('academic_year_id', $activeYear->id)
+                    ->where('quota', '>', 0)
+                    ->distinct('supervisor_id')
+                    ->count('supervisor_id')
+                : 0;
 
-        // 4. Total Students Allocated (Progress Kuota)
-        // We sum up the quota assigned to supervisors for the active year
-        $totalAllocatedQuota = 0;
-        $totalStudents = 0;
-        if ($activeYear) {
-            $totalAllocatedQuota = SupervisorAllocation::where('academic_year_id', $activeYear->id)
-                ->sum('quota');
-                $totalStudents = Student::where('academic_year_id', $activeYear->id)->count();
-        }
+            // 3. Total Indikator Penilaian
+            $totalIndicators = EvaluationIndicator::count();
 
+            // 4. Quota vs Students (progress)
+            $totalAllocatedQuota = 0;
+            $totalStudents       = 0;
+            if ($activeYear) {
+                $totalAllocatedQuota = SupervisorAllocation::where('academic_year_id', $activeYear->id)->sum('quota');
+                $totalStudents       = Student::where('academic_year_id', $activeYear->id)->count();
+            }
 
-        return view('dashboard.curriculum', compact(
-            'activeYear',
-            'totalSupervisors',
-            'totalSupervisorsAllocated',
-            'totalIndicators',
-            'totalAllocatedQuota',
-            'totalStudents'
+            // 5. Siswa yang belum ada nilai PKL
+            $studentsWithoutScores = 0;
+            if ($activeYear) {
+                $studentsWithoutScores = Internship::where('academic_year_id', $activeYear->id)
+                    ->whereDoesntHave('assessmentScores')
+                    ->count();
+            }
+
+            return compact(
+                'totalSupervisors',
+                'totalSupervisorsAllocated',
+                'totalIndicators',
+                'totalAllocatedQuota',
+                'totalStudents',
+                'studentsWithoutScores'
+            );
+        });
+
+        return view('dashboard.curriculum', array_merge(
+            $stats,
+            ['activeYear' => $activeYear]
         ));
     }
 
     /**
-     * Supervisor: placeholder.
+     * Supervisor: personal bimbingan statistics.
      */
     private function supervisorDashboard($user)
     {
-        return view('dashboard.supervisor', [
-            'user' => $user,
-        ]);
+        $data = Cache::remember('dashboard_supervisor_' . $user->id, 5 * 60, function () use ($user) {
+            $supervisor = Supervisor::where('user_id', $user->id)
+                ->with([
+                    'internships.dailyJournals',
+                    'internships.assessmentScores',
+                    'internships.student.user',
+                    'internships.industry',
+                ])
+                ->first();
+
+            $internships = $supervisor?->internships ?? collect();
+
+            $totalStudents = $internships->count();
+
+            $pendingJournals = $internships->sum(
+                fn($i) => $i->dailyJournals->where('verification_status', 'pending')->count()
+            );
+
+            $studentsUnassessed = $internships->filter(
+                fn($i) => $i->assessmentScores->isEmpty()
+            )->count();
+
+            return [
+                'totalStudents'      => $totalStudents,
+                'pendingJournals'    => $pendingJournals,
+                'studentsUnassessed' => $studentsUnassessed,
+                'internships'        => $internships,
+            ];
+        });
+
+        return view('dashboard.supervisor', array_merge(
+            $data,
+            ['user' => $user]
+        ));
     }
 }
