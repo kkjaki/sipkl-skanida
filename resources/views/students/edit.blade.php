@@ -81,6 +81,20 @@
                             Centang jika peserta didik lupa email dan ingin dikembalikan ke email sekolah.
                         </p>
                     </div>
+
+                    <!-- Reset Password Checkbox -->
+                    <div x-data="{ resetPassword: false }">
+                        <label class="inline-flex items-center cursor-pointer gap-2.5">
+                            <input type="checkbox" name="reset_password" value="1" x-model="resetPassword"
+                                   class="w-4 h-4 rounded border-gray-300 text-school-blue focus:ring-school-blue/20 dark:border-amoled-border dark:bg-amoled-input" />
+                            <span class="text-sm text-gray-600 dark:text-gray-400">
+                                Reset kata sandi ke NIS (<span class="font-mono text-xs">{{ $student->nis }}</span>)
+                            </span>
+                        </label>
+                        <p class="mt-1 text-xs text-gray-400 dark:text-gray-500">
+                            Centang jika peserta didik lupa kata sandi. Sandi akan di-reset menjadi NIS siswa.
+                        </p>
+                    </div>
                 </div>
 
                 <!-- Section: Data Sekolah -->

@@ -46,31 +46,37 @@
             </div>
 
             <!-- Filter Jurusan -->
-            <div class="relative sm:max-w-[220px]">
+            <div class="relative sm:min-w-[180px]">
                 <select
                     name="department"
                     onchange="this.form.submit()"
-                    class="h-11 w-full rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm text-gray-800 outline-none transition duration-150 focus:border-school-blue focus:ring-3 focus:ring-school-blue/10 dark:border-amoled-border dark:bg-amoled-surface dark:text-white/90 dark:focus:border-school-blue appearance-none cursor-pointer"
+                    class="h-11 w-full rounded-xl border border-gray-200 bg-white pl-4 pr-10 py-2.5 text-sm text-gray-800 outline-none transition duration-150 focus:border-school-blue focus:ring-3 focus:ring-school-blue/10 dark:border-amoled-border dark:bg-amoled-surface dark:text-white/90 dark:focus:border-school-blue appearance-none cursor-pointer"
                 >
                     <option value="" class="dark:bg-amoled-surface">Semua Jurusan</option>
                     @foreach($departments as $dept)
                         <option value="{{ $dept->name }}" {{ ($filterDept ?? '') === $dept->name ? 'selected' : '' }} class="dark:bg-amoled-surface">{{ $dept->name }}</option>
                     @endforeach
                 </select>
+                <span class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+                    <svg class="w-4 h-4 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                </span>
             </div>
 
             <!-- Filter Kelas -->
-            <div class="relative sm:max-w-[220px]">
+            <div class="relative sm:min-w-[160px]">
                 <select
                     name="class"
                     onchange="this.form.submit()"
-                    class="h-11 w-full rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm text-gray-800 outline-none transition duration-150 focus:border-school-blue focus:ring-3 focus:ring-school-blue/10 dark:border-amoled-border dark:bg-amoled-surface dark:text-white/90 dark:focus:border-school-blue appearance-none cursor-pointer"
+                    class="h-11 w-full rounded-xl border border-gray-200 bg-white pl-4 pr-10 py-2.5 text-sm text-gray-800 outline-none transition duration-150 focus:border-school-blue focus:ring-3 focus:ring-school-blue/10 dark:border-amoled-border dark:bg-amoled-surface dark:text-white/90 dark:focus:border-school-blue appearance-none cursor-pointer"
                 >
                     <option value="" class="dark:bg-amoled-surface">Semua Kelas</option>
                     @foreach($availableClasses as $class)
                         <option value="{{ $class }}" {{ ($filterClass ?? '') === $class ? 'selected' : '' }} class="dark:bg-amoled-surface">{{ $class }}</option>
                     @endforeach
                 </select>
+                <span class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+                    <svg class="w-4 h-4 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                </span>
             </div>
 
             <!-- Buttons -->

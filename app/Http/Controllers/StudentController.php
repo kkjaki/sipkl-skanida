@@ -167,10 +167,18 @@ class StudentController extends Controller
             }
 
             // Update User
-            $student->user->update([
+            $userData = [
                 'name'  => $validated['name'],
                 'email' => $email,
-            ]);
+            ];
+
+            // Reset password to NIS if requested
+            if ($request->boolean('reset_password')) {
+                $nis = $validated['nis'] ?? $student->nis;
+                $userData['password'] = Hash::make($nis);
+            }
+
+            $student->user->update($userData);
 
             // Update Student
             $student->update([
