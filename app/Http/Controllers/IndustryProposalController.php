@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Industry;
+use App\Models\Internship;
 use App\Http\Requests\StoreProposalRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
@@ -16,12 +17,17 @@ class IndustryProposalController extends Controller
      */
     public function index()
     {
-        $proposals = Industry::where('student_submitter_id', Auth::id())
+        $userId = Auth::id();
+
+        $proposals = Industry::where('student_submitter_id', $userId)
             ->latest()
             ->get();
 
+        // Block proposal if student already has a plotting (internship)
+        $hasPlotting = Internship::where('student_id', $userId)->exists();
+
         // Determine if student can propose again
-        $canPropose = !$proposals->contains(function ($p) {
+        $canPropose = !$hasPlotting && !$proposals->contains(function ($p) {
             // Block if pending (is_synced=false) or verified+open
             return !$p->is_synced || ($p->is_synced && $p->status === 'open');
         });
@@ -36,6 +42,14 @@ class IndustryProposalController extends Controller
     public function create()
     {
         $userId = Auth::id();
+
+        // Check: student already has a plotting (internship)
+        $hasPlotting = Internship::where('student_id', $userId)->exists();
+
+        if ($hasPlotting) {
+            return redirect()->route('student.proposals.index')
+                ->with('info', 'Anda sudah mendapatkan plotting PKL. Anda tidak dapat mengajukan lokasi baru.');
+        }
 
         // Check: student has a pending proposal (is_synced = false, NOT blacklisted)
         $hasPending = Industry::where('student_submitter_id', $userId)
@@ -70,6 +84,14 @@ class IndustryProposalController extends Controller
     {
         $validated = $request->validated();
         $userId = Auth::id();
+
+        // Double-check: block if student already has a plotting (internship)
+        $hasPlotting = Internship::where('student_id', $userId)->exists();
+
+        if ($hasPlotting) {
+            return redirect()->route('student.proposals.index')
+                ->with('info', 'Anda sudah mendapatkan plotting PKL. Anda tidak dapat mengajukan lokasi baru.');
+        }
 
         // Double-check: block if pending or verified exists
         $hasActive = Industry::where('student_submitter_id', $userId)

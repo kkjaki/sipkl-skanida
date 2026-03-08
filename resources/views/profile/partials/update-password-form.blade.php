@@ -1,48 +1,52 @@
-<section>
-    <header>
-        <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
-            {{ __('Update Password') }}
-        </h2>
-
-        <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
-            {{ __('Ensure your account is using a long, random password to stay secure.') }}
-        </p>
-    </header>
-
-    <form method="post" action="{{ route('password.update') }}" class="mt-6 space-y-6">
-        @csrf
-        @method('put')
-
-        <div>
-            <x-input-label for="update_password_current_password" :value="__('Current Password')" />
-            <x-text-input id="update_password_current_password" name="current_password" type="password" class="mt-1 block w-full" autocomplete="current-password" />
-            <x-input-error :messages="$errors->updatePassword->get('current_password')" class="mt-2" />
+<div class="rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-amoled-border dark:bg-amoled-surface">
+    <div class="p-5 sm:p-6">
+        <div class="mb-5">
+            <h2 class="text-base font-bold text-gray-900 dark:text-white">Ubah Password</h2>
+            <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Pastikan akun Anda menggunakan password yang panjang dan acak agar tetap aman.</p>
         </div>
 
-        <div>
-            <x-input-label for="update_password_password" :value="__('New Password')" />
-            <x-text-input id="update_password_password" name="password" type="password" class="mt-1 block w-full" autocomplete="new-password" />
-            <x-input-error :messages="$errors->updatePassword->get('password')" class="mt-2" />
-        </div>
+        <form method="post" action="{{ route('password.update') }}" class="space-y-5">
+            @csrf
+            @method('put')
 
-        <div>
-            <x-input-label for="update_password_password_confirmation" :value="__('Confirm Password')" />
-            <x-text-input id="update_password_password_confirmation" name="password_confirmation" type="password" class="mt-1 block w-full" autocomplete="new-password" />
-            <x-input-error :messages="$errors->updatePassword->get('password_confirmation')" class="mt-2" />
-        </div>
+            {{-- Current Password --}}
+            <div>
+                <label for="update_password_current_password" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1.5">Password Saat Ini</label>
+                <input id="update_password_current_password" name="current_password" type="password" autocomplete="current-password"
+                       class="w-full rounded-xl border border-gray-200 dark:border-amoled-border bg-gray-50 dark:bg-white/[0.03] text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 p-2.5 text-sm focus:ring-2 focus:ring-school-blue/20 focus:border-school-blue transition-colors">
+                @error('current_password', 'updatePassword')
+                    <p class="mt-1.5 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
+                @enderror
+            </div>
 
-        <div class="flex items-center gap-4">
-            <x-primary-button>{{ __('Save') }}</x-primary-button>
+            {{-- New Password --}}
+            <div>
+                <label for="update_password_password" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1.5">Password Baru</label>
+                <input id="update_password_password" name="password" type="password" autocomplete="new-password"
+                       class="w-full rounded-xl border border-gray-200 dark:border-amoled-border bg-gray-50 dark:bg-white/[0.03] text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 p-2.5 text-sm focus:ring-2 focus:ring-school-blue/20 focus:border-school-blue transition-colors">
+                @error('password', 'updatePassword')
+                    <p class="mt-1.5 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
+                @enderror
+            </div>
 
-            @if (session('status') === 'password-updated')
-                <p
-                    x-data="{ show: true }"
-                    x-show="show"
-                    x-transition
-                    x-init="setTimeout(() => show = false, 2000)"
-                    class="text-sm text-gray-600 dark:text-gray-400"
-                >{{ __('Saved.') }}</p>
-            @endif
-        </div>
-    </form>
-</section>
+            {{-- Confirm Password --}}
+            <div>
+                <label for="update_password_password_confirmation" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1.5">Konfirmasi Password</label>
+                <input id="update_password_password_confirmation" name="password_confirmation" type="password" autocomplete="new-password"
+                       class="w-full rounded-xl border border-gray-200 dark:border-amoled-border bg-gray-50 dark:bg-white/[0.03] text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 p-2.5 text-sm focus:ring-2 focus:ring-school-blue/20 focus:border-school-blue transition-colors">
+                @error('password_confirmation', 'updatePassword')
+                    <p class="mt-1.5 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
+                @enderror
+            </div>
+
+            {{-- Submit --}}
+            <div class="flex items-center gap-3 pt-1">
+                <button type="submit"
+                        class="inline-flex items-center justify-center gap-2 h-10 px-5 rounded-xl bg-school-blue hover:bg-school-blue/90 text-white font-bold text-sm transition-colors shadow-sm">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+                    Simpan
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
