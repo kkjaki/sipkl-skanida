@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->integer('max_score')->default(100);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

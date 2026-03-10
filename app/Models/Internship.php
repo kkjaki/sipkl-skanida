@@ -12,7 +12,7 @@ class Internship extends Model
     protected $fillable = [
         'student_id',
         'industry_id',
-        'teacher_id',
+        'supervisor_id',
         'academic_year_id',
         'start_date',
         'actual_end_date',
@@ -75,8 +75,8 @@ class Internship extends Model
     /**
      * Get the certificates for the internship.
      */
-    public function certificates()
+    public function certificate()
     {
-        return $this->hasMany(Certificate::class);
+        return $this->hasOne(Certificate::class);
     }
 }

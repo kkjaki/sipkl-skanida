@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::table('students', function (Blueprint $table) {
             $table->foreignId('academic_year_id')
-                  ->nullable()
                   ->after('department_id')
                   ->constrained('academic_years');
 

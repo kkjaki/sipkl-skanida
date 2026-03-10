@@ -21,7 +21,7 @@ class CertificateValidationController extends Controller
         }
 
         // Get the student's active internship with related data
-        $internship = Internship::with(['student.user', 'industry', 'certificates'])
+        $internship = Internship::with(['student.user', 'industry', 'certificate'])
             ->where('student_id', $student->user_id)
             ->latest()
             ->first();
@@ -33,7 +33,7 @@ class CertificateValidationController extends Controller
             $hasScores = $internship->assessmentScores()->exists();
 
             // Get or create the certificate
-            $certificate = $internship->certificates()->first();
+            $certificate = $internship->certificate;
 
             if (!$certificate) {
                 $certificate = Certificate::create([

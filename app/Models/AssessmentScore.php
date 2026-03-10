@@ -29,6 +29,6 @@ class AssessmentScore extends Model
      */
     public function indicator()
     {
-        return $this->belongsTo(EvaluationIndicator::class, 'indicator_id');
+        return $this->belongsTo(EvaluationIndicator::class, 'indicator_id')->withTrashed();
     }
 }
