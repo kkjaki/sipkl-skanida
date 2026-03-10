@@ -13,6 +13,7 @@
     candidates: @js($candidates),
     deleteMode: false,
     selectedInterns: [],
+    transferStartDate: '',
 
     openModal(industry) {
         this.selectedIndustry = industry;
@@ -27,6 +28,7 @@
 
     closeModal() {
         this.showModal = false;
+        this.transferStartDate = '';
         document.body.classList.remove('overflow-hidden');
     },
 
@@ -38,8 +40,21 @@
         }
     },
 
+    // Mode seleksi: 'none' | 'regular' | 'transfer'
+    // Begitu 1 siswa reguler dipilih → semua pindahan disabled, dan sebaliknya.
+    get selectionMode() {
+        if (this.selectedStudents.length === 0) return 'none';
+        const isTransfer = this.transferCandidates.some(s => s.user_id === this.selectedStudents[0]);
+        return isTransfer ? 'transfer' : 'regular';
+    },
+
     isDisabled(studentId) {
-        return this.selectedStudents.length >= this.limit && !this.selectedStudents.includes(studentId);
+        // Kuota penuh & belum dipilih
+        if (this.selectedStudents.length >= this.limit && !this.selectedStudents.includes(studentId)) return true;
+        // Mutual exclusivity: disable opposite group
+        if (this.selectionMode === 'regular' && this.transferCandidates.some(s => s.user_id === studentId)) return true;
+        if (this.selectionMode === 'transfer' && this.regularCandidates.some(s => s.user_id === studentId)) return true;
+        return false;
     },
 
     toggleInternDelete(internId) {
@@ -67,6 +82,20 @@
             s.user.name.toLowerCase().includes(q) ||
             s.nis.toLowerCase().includes(q) ||
             s.class_name.toLowerCase().includes(q)
+        );
+    },
+
+    get regularCandidates() {
+        return this.filteredCandidates.filter(s => !s.is_transfer);
+    },
+
+    get transferCandidates() {
+        return this.filteredCandidates.filter(s => s.is_transfer);
+    },
+
+    get hasSelectedTransfer() {
+        return this.selectedStudents.some(id =>
+            this.transferCandidates.some(s => s.user_id === id)
         );
     },
 
@@ -167,11 +196,17 @@
                 </div>
 
                 <div class="px-5 sm:px-6 py-3 sm:py-4 border-t border-gray-100 dark:border-amoled-border">
-                    <button @click="openModal(industry)"
-                            class="w-full py-2.5 sm:py-3 px-4 rounded-2xl bg-school-blue hover:bg-school-blue-dark text-white font-bold text-sm transition-all shadow-lg shadow-school-blue/10 flex items-center justify-center gap-2 group-hover:scale-[1.02] active:scale-[0.98]">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
-                        Kelola Plotting
-                    </button>
+                    <div :title="!industry.has_active_mou ? 'Industri ini tidak dapat di-plot karena tidak memiliki MoU aktif.' : ''">
+                        <button @click="industry.has_active_mou && openModal(industry)"
+                                :disabled="!industry.has_active_mou"
+                                :class="industry.has_active_mou
+                                    ? 'bg-school-blue hover:bg-school-blue-dark cursor-pointer group-hover:scale-[1.02] active:scale-[0.98]'
+                                    : 'bg-gray-300 dark:bg-white/10 text-gray-400 dark:text-gray-500 cursor-not-allowed'"
+                                class="w-full py-2.5 sm:py-3 px-4 rounded-2xl text-white font-bold text-sm transition-all shadow-lg shadow-school-blue/10 flex items-center justify-center gap-2">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
+                            <span x-text="industry.has_active_mou ? 'Kelola Plotting' : 'Tidak Ada MoU Aktif'"></span>
+                        </button>
+                    </div>
                 </div>
             </div>
         </template>
@@ -338,7 +373,12 @@
                         </div>
 
                         <div class="grid grid-cols-1 gap-2 sm:gap-3">
-                            <template x-for="student in filteredCandidates" :key="student.user_id">
+
+                            {{-- Siswa Reguler --}}
+                            <template x-if="regularCandidates.length > 0">
+                                <p class="text-[10px] font-black text-gray-400 dark:text-amoled-text uppercase tracking-[0.2em] px-1">Siswa Reguler</p>
+                            </template>
+                            <template x-for="student in regularCandidates" :key="student.user_id">
                                 <label class="relative flex items-center p-3 sm:p-4 rounded-2xl border transition-all cursor-pointer group/label"
                                        :class="[
                                            selectedStudents.includes(student.user_id)
@@ -346,13 +386,11 @@
                                                : 'border-gray-100 dark:border-amoled-border hover:border-school-blue/30 dark:hover:bg-white/[0.04]',
                                            isDisabled(student.user_id) ? 'opacity-30 cursor-not-allowed filter grayscale' : ''
                                        ]">
-                                    <input type="checkbox"
-                                           class="sr-only"
+                                    <input type="checkbox" class="sr-only"
                                            :value="student.user_id"
                                            :checked="selectedStudents.includes(student.user_id)"
                                            :disabled="isDisabled(student.user_id)"
                                            @change="toggleStudent(student.user_id)">
-
                                     <div class="flex items-center gap-3 sm:gap-4 flex-1 min-w-0">
                                         <div class="w-9 h-9 sm:w-11 sm:h-11 rounded-2xl bg-gray-100 dark:bg-white/5 flex items-center justify-center text-gray-500 dark:text-gray-400 font-black text-sm sm:text-base flex-shrink-0"
                                              :class="selectedStudents.includes(student.user_id) ? 'bg-school-blue/20 text-school-blue' : ''"
@@ -362,9 +400,50 @@
                                             <p class="text-[11px] font-medium text-gray-500 dark:text-gray-400 truncate" x-text="student.class_name + (student.address ? ' • ' + student.address : '')"></p>
                                         </div>
                                     </div>
-
                                     <div class="w-5 h-5 sm:w-6 sm:h-6 rounded-full border-2 flex items-center justify-center transition-all duration-300 flex-shrink-0"
                                          :class="selectedStudents.includes(student.user_id) ? 'bg-school-blue border-school-blue scale-110' : 'border-gray-300 dark:border-amoled-border group-hover/label:border-school-blue/50'">
+                                        <svg x-show="selectedStudents.includes(student.user_id)" class="w-3 h-3 sm:w-4 sm:h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
+                                    </div>
+                                </label>
+                            </template>
+
+                            {{-- Divider: Siswa Pindahan --}}
+                            <template x-if="transferCandidates.length > 0">
+                                <div class="flex items-center gap-3 py-1">
+                                    <div class="flex-1 h-px bg-amber-200 dark:bg-amber-500/30"></div>
+                                    <span class="text-[10px] font-black text-amber-600 dark:text-amber-400 uppercase tracking-[0.2em] flex items-center gap-1.5">
+                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>
+                                        Siswa Pindahan
+                                    </span>
+                                    <div class="flex-1 h-px bg-amber-200 dark:bg-amber-500/30"></div>
+                                </div>
+                            </template>
+                            <template x-for="student in transferCandidates" :key="student.user_id">
+                                <label class="relative flex items-center p-3 sm:p-4 rounded-2xl border transition-all cursor-pointer group/label"
+                                       :class="[
+                                           selectedStudents.includes(student.user_id)
+                                               ? 'border-amber-500 bg-amber-500/5 dark:bg-amber-500/10 ring-2 ring-amber-500/20'
+                                               : 'border-amber-200 dark:border-amber-500/20 hover:border-amber-400/50 dark:hover:bg-amber-500/5',
+                                           isDisabled(student.user_id) ? 'opacity-30 cursor-not-allowed filter grayscale' : ''
+                                       ]">
+                                    <input type="checkbox" class="sr-only"
+                                           :value="student.user_id"
+                                           :checked="selectedStudents.includes(student.user_id)"
+                                           :disabled="isDisabled(student.user_id)"
+                                           @change="toggleStudent(student.user_id)">
+                                    <div class="flex items-center gap-3 sm:gap-4 flex-1 min-w-0">
+                                        <div class="w-9 h-9 sm:w-11 sm:h-11 rounded-2xl bg-amber-100 dark:bg-amber-500/15 flex items-center justify-center text-amber-700 dark:text-amber-400 font-black text-sm sm:text-base flex-shrink-0"
+                                             x-text="student.user.name.charAt(0)"></div>
+                                        <div class="min-w-0">
+                                            <div class="flex items-center gap-2 flex-wrap">
+                                                <p class="text-sm font-bold text-gray-900 dark:text-white truncate" x-text="student.user.name"></p>
+                                                <span class="px-1.5 py-0.5 rounded text-[9px] font-black uppercase tracking-wider bg-amber-100 text-amber-700 dark:bg-amber-500/20 dark:text-amber-400 flex-shrink-0">Pindahan</span>
+                                            </div>
+                                            <p class="text-[11px] font-medium text-gray-500 dark:text-gray-400 truncate" x-text="student.class_name + (student.address ? ' • ' + student.address : '')"></p>
+                                        </div>
+                                    </div>
+                                    <div class="w-5 h-5 sm:w-6 sm:h-6 rounded-full border-2 flex items-center justify-center transition-all duration-300 flex-shrink-0"
+                                         :class="selectedStudents.includes(student.user_id) ? 'bg-amber-500 border-amber-500 scale-110' : 'border-amber-300 dark:border-amber-500/40 group-hover/label:border-amber-400'">
                                         <svg x-show="selectedStudents.includes(student.user_id)" class="w-3 h-3 sm:w-4 sm:h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
                                     </div>
                                 </label>
@@ -381,6 +460,25 @@
                                     <p class="text-sm text-gray-400 dark:text-gray-500 italic font-medium">Tidak ditemukan kandidat yang cocok.</p>
                                 </div>
                             </template>
+                        </div>
+
+                        {{-- Input tanggal mulai untuk siswa pindahan --}}
+                        <div x-show="hasSelectedTransfer" x-cloak
+                             x-transition:enter="transition ease-out duration-200"
+                             x-transition:enter-start="opacity-0 -translate-y-1"
+                             x-transition:enter-end="opacity-100 translate-y-0"
+                             class="mt-4 p-4 rounded-2xl bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/30">
+                            <label class="block text-xs font-black text-amber-700 dark:text-amber-400 uppercase tracking-[0.15em] mb-2">
+                                <svg class="inline w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                                Tanggal Mulai Pindahan
+                            </label>
+                            <input type="date" name="transfer_start_date"
+                                   x-model="transferStartDate"
+                                   max="{{ today()->toDateString() }}"
+                                   class="w-full px-3 py-2 text-sm rounded-xl border border-amber-200 dark:border-amber-500/30 bg-white dark:bg-amoled-surface text-gray-900 dark:text-white focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-colors">
+                            <p class="mt-1.5 text-[11px] text-amber-600 dark:text-amber-400/70">
+                                Jika dikosongkan, tanggal mulai akan diisi otomatis dengan waktu saat data disimpan.
+                            </p>
                         </div>
                     </div>
 
@@ -410,6 +508,9 @@
                         <template x-for="id in selectedStudents" :key="'form-'+id">
                             <input type="hidden" name="student_ids[]" :value="id">
                         </template>
+                        {{-- Mirror transferStartDate dari modal body ke form --}}
+                        <input type="hidden" name="transfer_start_date" :value="transferStartDate">
+                        {{-- transfer_start_date dibaca langsung dari input di body modal --}}
                         <button type="submit"
                                 :disabled="selectedStudents.length === 0"
                                 class="py-3 px-6 sm:py-4 sm:px-10 rounded-2xl bg-school-blue hover:bg-school-blue-dark text-white font-black text-xs sm:text-sm uppercase tracking-widest transition-all shadow-xl shadow-school-blue/20 disabled:opacity-30 disabled:cursor-not-allowed disabled:shadow-none hover:scale-[1.02] active:scale-[0.98]">

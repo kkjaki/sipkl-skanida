@@ -109,6 +109,15 @@ Route::middleware('auth')->group(function () {
     });
 
     // =========================================================
+    // SHARED: ADMIN + KAPROG — PKL Aktif
+    // Scope dikontrol oleh controller berdasarkan role aktif
+    // =========================================================
+    Route::middleware('role:admin|department_head')->group(function () {
+        Route::get('internships', [App\Http\Controllers\InternshipWithdrawalController::class, 'index'])->name('internships.index');
+        Route::patch('internships/{internship}/withdraw', [App\Http\Controllers\InternshipWithdrawalController::class, 'withdraw'])->name('internships.withdraw');
+    });
+
+    // =========================================================
     // STUDENT-ONLY ROUTES
     // =========================================================
     Route::middleware('role:student')->group(function () {

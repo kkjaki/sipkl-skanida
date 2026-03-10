@@ -41,6 +41,20 @@ class IndustryPartnershipController extends Controller
                 'mou_file_path' => $filePath,
                 'agreement_notes' => $validated['agreement_notes'] ?? null,
             ]);
+
+            // Auto-update student submitter's internship dates
+            if ($industry->student_submitter_id) {
+                $activeYear = \App\Models\AcademicYear::where('is_active', true)->first();
+                if ($activeYear) {
+                    \App\Models\Internship::where('student_id', $industry->student_submitter_id)
+                        ->where('industry_id', $industry->id)
+                        ->where('academic_year_id', $activeYear->id)
+                        ->update([
+                            'start_date' => $validated['start_date'],
+                            'actual_end_date' => $validated['end_date'],
+                        ]);
+                }
+            }
         });
 
         Cache::forget('dashboard_stats');
