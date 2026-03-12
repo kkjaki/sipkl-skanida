@@ -7,6 +7,7 @@ use App\Models\Department;
 use App\Models\Industry;
 use App\Models\IndustryAllocation;
 use App\Models\Internship;
+use App\Models\Certificate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -97,12 +98,17 @@ class IndustryPartnerController extends Controller
                     ->exists();
 
                 if (! $alreadyPlotted) {
-                    Internship::create([
+                    $internship = Internship::create([
                         'student_id'       => $industry->student_submitter_id,
                         'industry_id'      => $industry->id,
                         'academic_year_id' => $activeYear->id,
                         'start_date'       => now(),
                         'status'           => 'ongoing',
+                    ]);
+
+                    Certificate::create([
+                        'internship_id' => $internship->id,
+                        'status'        => 'draft',
                     ]);
                 }
             }

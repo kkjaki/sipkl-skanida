@@ -6,6 +6,7 @@ use App\Models\AcademicYear;
 use App\Models\Industry;
 use App\Models\Internship;
 use App\Models\Student;
+use App\Models\Certificate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -186,6 +187,27 @@ class PlacementController extends Controller
                 }
 
                 Internship::insert($placements);
+
+                // Fetch the newly inserted internships based on the same query criteria to create certificates
+                $newInternships = Internship::where('industry_id', $industryId)
+                    ->where('academic_year_id', $activeYear->id)
+                    ->whereIn('student_id', $validStudents->pluck('user_id'))
+                    ->whereDoesntHave('certificate')
+                    ->get(['id']);
+
+                $certificates = [];
+                foreach ($newInternships as $internship) {
+                    $certificates[] = [
+                        'internship_id' => $internship->id,
+                        'status'        => 'draft',
+                        'created_at'    => now(),
+                        'updated_at'    => now(),
+                    ];
+                }
+
+                if (!empty($certificates)) {
+                    Certificate::insert($certificates);
+                }
 
                 return redirect()->route('placements.index')
                     ->with('success', 'Siswa berhasil di-plot ke industri.');

@@ -21,9 +21,14 @@ class UpdateDailyJournalRequest extends FormRequest
             ->where('id', $journal->internship_id)
             ->firstOrFail();
 
+        $startDate = $internship->start_date->format('Y-m-d');
+        $maxDate   = min(now()->toDateString(), $internship->actual_end_date->format('Y-m-d'));
+
         return [
             'date'              => [
-                'required', 'date', 'before_or_equal:today',
+                'required', 'date',
+                "after_or_equal:{$startDate}",
+                "before_or_equal:{$maxDate}",
                 Rule::unique('daily_journals')
                     ->where('internship_id', $internship->id)
                     ->ignore($journal->id),
@@ -44,7 +49,8 @@ class UpdateDailyJournalRequest extends FormRequest
     {
         return [
             'date.required'              => 'Tanggal wajib diisi.',
-            'date.before_or_equal'       => 'Tanggal tidak boleh melebihi hari ini.',
+            'date.after_or_equal'        => 'Tanggal tidak boleh sebelum tanggal mulai PKL Anda.',
+            'date.before_or_equal'       => 'Tanggal tidak boleh melebihi hari ini atau tanggal akhir PKL.',
             'date.unique'                => 'Anda sudah mengisi jurnal untuk tanggal ini.',
             'status_attendance.required' => 'Status kehadiran wajib dipilih.',
             'activity.required_if'       => 'Kegiatan wajib diisi jika status hadir.',
