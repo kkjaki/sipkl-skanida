@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\Models\Supervisor;
 
 class UpdateSupervisorRequest extends FormRequest
 {
@@ -20,7 +21,23 @@ class UpdateSupervisorRequest extends FormRequest
             'email'         => ['nullable', 'email', 'max:255', 'unique:users,email,' . $supervisorId . ',id'],
             'nip'           => ['required', 'string', 'max:30', 'unique:supervisors,nip,' . $supervisorId . ',user_id'],
             'department_id' => ['required', 'exists:departments,id'],
-            'is_department_head' => ['nullable', 'boolean'],
+            'is_department_head' => [
+                'nullable', 
+                'boolean',
+                function ($attribute, $value, $fail) use ($supervisorId) {
+                    if ($value) {
+                        $exists = Supervisor::where('department_id', $this->department_id)
+                            ->where('user_id', '!=', $supervisorId)
+                            ->whereHas('user.roles', function ($q) {
+                                $q->where('name', 'department_head');
+                            })->exists();
+                            
+                        if ($exists) {
+                            $fail('Jurusan ini sudah memiliki Kepala Program.');
+                        }
+                    }
+                }
+            ],
         ];
     }
 
