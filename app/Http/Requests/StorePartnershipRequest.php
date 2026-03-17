@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\IndustryPartnership;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -13,6 +14,41 @@ class StorePartnershipRequest extends FormRequest
     public function authorize(): bool
     {
         return true;
+    }
+
+    /**
+     * Add custom validation: prevent overlapping MoU dates for the same industry.
+     */
+    public function withValidator($validator): void
+    {
+        $validator->after(function ($validator) {
+            if ($validator->errors()->hasAny(['start_date', 'end_date'])) {
+                return; // Skip if basic date validation already failed
+            }
+
+            $industry = $this->route('industry');
+            $startDate = $this->input('start_date');
+            $endDate = $this->input('end_date');
+
+            if (! $industry || ! $startDate || ! $endDate) {
+                return;
+            }
+
+            $overlap = IndustryPartnership::where('industry_id', $industry->id)
+                ->where('start_date', '<=', $endDate)
+                ->where('end_date', '>=', $startDate)
+                ->first();
+
+            if ($overlap) {
+                $validator->errors()->add(
+                    'start_date',
+                    'Periode MoU bertumpuk dengan MoU aktif ('
+                    . $overlap->start_date->format('d M Y') . ' – '
+                    . $overlap->end_date->format('d M Y')
+                    . '). Hapus MoU lama terlebih dahulu jika ingin menggantinya.'
+                );
+            }
+        });
     }
 
     /**
@@ -58,11 +94,10 @@ class StorePartnershipRequest extends FormRequest
     {
         throw new \Illuminate\Validation\ValidationException(
             $validator,
-            redirect()->back()
+            redirect()->route('partnerships.manage', $this->route('industry'))
                 ->withErrors($validator)
                 ->withInput()
                 ->with('openModal', true) // Flag to auto-open modal
-                ->with('activeTab', 'partnerships') // Auto-switch to partnerships tab
         );
     }
 }

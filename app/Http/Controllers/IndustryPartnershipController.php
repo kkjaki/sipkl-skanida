@@ -5,12 +5,113 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StorePartnershipRequest;
 use App\Models\Industry;
 use App\Models\IndustryPartnership;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class IndustryPartnershipController extends Controller
 {
+    /**
+     * Display the MoU overview page with status filters.
+     */
+    public function index(Request $request)
+    {
+        $filter = $request->input('filter', '');
+        $search = $request->input('search', '');
+
+        $query = Industry::where('is_synced', true)
+            ->with(['partnerships' => fn($q) => $q->orderBy('end_date', 'desc')])
+            ->withCount('partnerships');
+
+        // Search
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('city', 'like', "%{$search}%");
+            });
+        }
+
+        // Filter by MoU status
+        $now = now()->toDateString();
+
+        switch ($filter) {
+            case 'active':
+                $query->whereHas('partnerships', function ($q) use ($now) {
+                    $q->where('start_date', '<=', $now)
+                      ->where('end_date', '>=', $now);
+                });
+                break;
+
+            case 'expiring':
+                $thirtyDaysLater = now()->addDays(30)->toDateString();
+                $query->whereHas('partnerships', function ($q) use ($now, $thirtyDaysLater) {
+                    $q->where('start_date', '<=', $now)
+                      ->where('end_date', '>=', $now)
+                      ->where('end_date', '<=', $thirtyDaysLater);
+                });
+                break;
+
+            case 'expired':
+                // Has partnerships, but NONE are currently active
+                $query->has('partnerships')
+                    ->whereDoesntHave('partnerships', function ($q) use ($now) {
+                        $q->where('end_date', '>=', $now);
+                    });
+                break;
+
+            case 'none':
+                $query->doesntHave('partnerships');
+                break;
+        }
+
+        $industries = $query->orderBy('name')->paginate(20)->withQueryString();
+
+        // Count stats for filter badges
+        $baseQuery = Industry::where('is_synced', true);
+        if ($search) {
+            $baseQuery->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('city', 'like', "%{$search}%");
+            });
+        }
+
+        $totalSynced = (clone $baseQuery)->count();
+
+        $countActive = (clone $baseQuery)->whereHas('partnerships', function ($q) use ($now) {
+            $q->where('start_date', '<=', $now)->where('end_date', '>=', $now);
+        })->count();
+
+        $thirtyDaysLater = now()->addDays(30)->toDateString();
+        $countExpiring = (clone $baseQuery)->whereHas('partnerships', function ($q) use ($now, $thirtyDaysLater) {
+            $q->where('start_date', '<=', $now)
+              ->where('end_date', '>=', $now)
+              ->where('end_date', '<=', $thirtyDaysLater);
+        })->count();
+
+        $countExpired = (clone $baseQuery)->has('partnerships')
+            ->whereDoesntHave('partnerships', function ($q) use ($now) {
+                $q->where('end_date', '>=', $now);
+            })->count();
+
+        $countNone = (clone $baseQuery)->doesntHave('partnerships')->count();
+
+        return view('partnerships.index', compact(
+            'industries', 'filter', 'search',
+            'totalSynced', 'countActive', 'countExpiring', 'countExpired', 'countNone'
+        ));
+    }
+
+    /**
+     * Display the MoU management page for a specific industry.
+     */
+    public function manage(Industry $industry)
+    {
+        $industry->load(['partnerships' => fn($q) => $q->orderBy('end_date', 'desc')]);
+        
+        return view('partnerships.manage', compact('industry'));
+    }
+
     /**
      * Store a new partnership (MoU) for an industry.
      */
@@ -59,9 +160,8 @@ class IndustryPartnershipController extends Controller
 
         Cache::forget('dashboard_stats');
 
-        return redirect()->route('industries.show', $industry)
-            ->with('success', 'MoU berhasil diunggah dan disimpan.')
-            ->with('activeTab', 'partnerships'); // Auto-switch to partnerships tab
+        return redirect()->route('partnerships.manage', $industry)
+            ->with('success', 'MoU berhasil diunggah dan disimpan.');
     }
 
     /**
@@ -107,7 +207,7 @@ class IndustryPartnershipController extends Controller
 
         Cache::forget('dashboard_stats');
 
-        return redirect()->route('industries.show', $industryId)
+        return redirect()->route('partnerships.manage', $industryId)
             ->with('success', 'MoU berhasil dihapus.');
     }
 }

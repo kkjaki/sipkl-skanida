@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="flex flex-col gap-6" x-data="{
-        activeTab: '{{ session('activeTab', 'info') }}',
+        activeTab: '{{ request('tab', session('activeTab', 'info')) }}',
         showModal: {{ session('openModal') ? 'true' : 'false' }}
     }">
         <!-- Top Controls -->
@@ -476,18 +476,10 @@
                                             class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
                                             Tanggal Mulai <span class="text-red-500">*</span>
                                         </label>
-                                        <div class="relative">
-                                            <input type="date" name="start_date" id="start_date" required
-                                                min="2000-01-01" max="2099-12-31" onclick="this.showPicker()"
-                                                class="h-11 w-full rounded-lg border border-gray-300 bg-white dark:bg-amoled-input px-4 py-2.5 text-sm text-gray-800 dark:text-white/90 outline-none transition duration-150 focus:border-school-blue focus:ring-3 focus:ring-school-blue/10 dark:border-amoled-border dark:focus:border-school-blue cursor-pointer"
-                                                value="{{ old('start_date') }}" onkeydown="return false;">
-                                            <svg class="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none"
-                                                fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
-                                                </path>
-                                            </svg>
-                                        </div>
+                                        <input type="date" name="start_date" id="start_date" required
+                                            min="2000-01-01" max="2099-12-31" onclick="this.showPicker()"
+                                            class="h-11 w-full rounded-lg border border-gray-300 bg-white dark:bg-amoled-input px-4 py-2.5 text-sm text-gray-800 dark:text-white/90 outline-none transition duration-150 focus:border-school-blue focus:ring-3 focus:ring-school-blue/10 dark:border-amoled-border dark:focus:border-school-blue cursor-pointer"
+                                            value="{{ old('start_date') }}" onkeydown="return false;">
                                         @error('start_date')
                                             <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
                                         @enderror
@@ -497,18 +489,10 @@
                                             class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
                                             Tanggal Selesai <span class="text-red-500">*</span>
                                         </label>
-                                        <div class="relative">
-                                            <input type="date" name="end_date" id="end_date" required
-                                                min="2000-01-01" max="2099-12-31" onclick="this.showPicker()"
-                                                class="h-11 w-full rounded-lg border border-gray-300 bg-white dark:bg-amoled-input px-4 py-2.5 text-sm text-gray-800 dark:text-white/90 outline-none transition duration-150 focus:border-school-blue focus:ring-3 focus:ring-school-blue/10 dark:border-amoled-border dark:focus:border-school-blue cursor-pointer"
-                                                value="{{ old('end_date') }}" onkeydown="return false;">
-                                            <svg class="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none"
-                                                fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
-                                                </path>
-                                            </svg>
-                                        </div>
+                                        <input type="date" name="end_date" id="end_date" required
+                                            min="2000-01-01" max="2099-12-31" onclick="this.showPicker()"
+                                            class="h-11 w-full rounded-lg border border-gray-300 bg-white dark:bg-amoled-input px-4 py-2.5 text-sm text-gray-800 dark:text-white/90 outline-none transition duration-150 focus:border-school-blue focus:ring-3 focus:ring-school-blue/10 dark:border-amoled-border dark:focus:border-school-blue cursor-pointer"
+                                            value="{{ old('end_date') }}" onkeydown="return false;">
                                         @error('end_date')
                                             <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
                                         @enderror

@@ -12,6 +12,7 @@ use App\Http\Controllers\IndustryProposalController;
 use App\Http\Controllers\IndustryVerificationController;
 use App\Http\Controllers\JournalValidationController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\PartnershipOverviewController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\SupervisorAllocationController;
 use App\Http\Controllers\CertificateGenerationController;
@@ -73,12 +74,16 @@ Route::middleware('auth')->group(function () {
         Route::put('industries/{industry}/allocate', [IndustryController::class, 'storeAllocation'])->name('industries.storeAllocation');
 
         // Industry: Partnerships (MoU Management)
-        Route::post('industries/{industry}/partnerships', [IndustryPartnershipController::class, 'store'])->name('industries.partnerships.store');
+        Route::get('industries/{industry}/partnerships', [IndustryPartnershipController::class, 'manage'])->name('partnerships.manage');
+        Route::post('industries/{industry}/partnerships', [IndustryPartnershipController::class, 'store'])->name('partnerships.store');
         Route::get('partnerships/{partnership}/download', [IndustryPartnershipController::class, 'download'])->name('partnerships.download');
         Route::delete('partnerships/{partnership}', [IndustryPartnershipController::class, 'destroy'])->name('partnerships.destroy');
 
         // Industry: Admin CRUD
-        Route::resource('industries', IndustryController::class);
+        Route::resource('industries', IndustryController::class)->except(['show']);
+
+        // Partnership Overview (Kerjasama / MoU)
+        Route::get('partnerships', [IndustryPartnershipController::class, 'index'])->name('partnerships.index');
 
         // Certificate Generation (Cetak Sertifikat Massal)
         Route::get('certificates', [CertificateGenerationController::class, 'index'])->name('certificates.index');

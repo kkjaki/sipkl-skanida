@@ -213,20 +213,6 @@ class IndustryController extends Controller
     }
 
     /**
-     * Display the specified industry with partnerships (MoU).
-     */
-    public function show(Industry $industry)
-    {
-        $industry->load([
-            'partnerships' => fn ($q) => $q->latest(),
-            'allocations.department',
-            'studentSubmitter',
-        ]);
-
-        return view('industries.show', compact('industry'));
-    }
-
-    /**
      * Remove the specified resource from storage (Admin - Soft Delete).
      */
     public function destroy(string $id)
