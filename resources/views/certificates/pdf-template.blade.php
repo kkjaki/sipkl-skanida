@@ -206,7 +206,7 @@
                         <td class="sig-left">
                             <div class="sig-spacer"></div>
                             {{ $industry->pic_name ?? '-' }}
-                            @if($industry->nip)
+                            @if(trim($industry->nip) && trim($industry->nip) !== '-')
                                 <br>NIP. {{ $industry->nip }}
                             @endif
                         </td>

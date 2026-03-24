@@ -71,8 +71,8 @@
                             @error('pic_position')<p class="text-red-500 text-xs mt-1.5">{{ $message }}</p>@enderror
                         </div>
                         <div>
-                            <label for="nip" class="mb-1.5 block text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-widest">NIP <span class="text-red-500">*</span></label>
-                            <input type="text" id="nip" name="nip" value="{{ old('nip', $industry->nip) }}" placeholder="Nomor Induk Pegawai" required
+                            <label for="nip" class="mb-1.5 block text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-widest">NIP <span class="text-gray-400 text-[10px] lowercase normal-case">(opsional)</span></label>
+                            <input type="text" id="nip" name="nip" value="{{ old('nip', $industry->nip) }}" placeholder="Nomor Induk Pegawai"
                                    class="h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 outline-none transition duration-150 focus:border-school-blue focus:ring-3 focus:ring-school-blue/10 dark:border-amoled-border dark:bg-amoled-input dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-school-blue" />
                             @error('nip')<p class="text-red-500 text-xs mt-1.5">{{ $message }}</p>@enderror
                         </div>

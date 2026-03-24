@@ -98,7 +98,11 @@
                                     </div>
                                 </td>
                                 <td class="px-6 py-4">
-                                    {!! $partnership->status_badge !!}
+                                    @if ($partnership->start_date->startOfDay() > now()->startOfDay())
+                                        <span class="inline-block rounded-lg px-2.5 py-0.5 text-xs font-semibold border bg-blue-500/10 text-blue-600 border-blue-500/20 dark:bg-blue-500/20 dark:text-blue-400 dark:border-blue-500/30">Akan Datang</span>
+                                    @else
+                                        {!! $partnership->status_badge !!}
+                                    @endif
                                 </td>
                                 <td class="px-6 py-4">
                                     @if ($partnership->mou_file_path)

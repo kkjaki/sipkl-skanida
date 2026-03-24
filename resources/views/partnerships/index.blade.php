@@ -5,7 +5,7 @@
         <!-- Top Controls -->
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 min-h-[44px]">
             <div>
-                <h1 class="text-xl font-bold text-gray-800 dark:text-white">Kerjasama (MoU)</h1>
+                <h1 class="text-xl font-bold text-gray-800 dark:text-white">Manajemen Dokumen Kerjasama (MoU)</h1>
                 <p class="text-sm text-gray-500 dark:text-amoled-text mt-0.5">Kelola dokumen kerjasama seluruh industri mitra</p>
             </div>
         </div>
@@ -83,7 +83,8 @@
                     <tbody class="divide-y divide-gray-100 dark:divide-amoled-border">
                         @forelse($industries as $index => $industry)
                             @php
-                                $activePartnership = $industry->partnerships->first(fn($p) => now()->between($p->start_date, $p->end_date));
+                                $activePartnership = $industry->partnerships->first(fn($p) => now()->betweenIncluded($p->start_date->startOfDay(), $p->end_date->endOfDay()));
+                                $upcomingPartnership = $industry->partnerships->first(fn($p) => $p->start_date->startOfDay() > now()->startOfDay());
                                 $latestPartnership = $industry->partnerships->first();
                             @endphp
                             <tr class="hover:bg-gray-50 dark:hover:bg-white/[0.03] transition duration-150">
@@ -100,7 +101,11 @@
                                     {{ $industry->city }}
                                 </td>
                                 <td class="py-3 px-4">
-                                    @if($activePartnership)
+                                    @if($upcomingPartnership)
+                                        <span class="inline-block rounded-lg px-2.5 py-0.5 text-xs font-semibold border bg-blue-500/10 text-blue-600 border-blue-500/20 dark:bg-blue-500/20 dark:text-blue-400 dark:border-blue-500/30">
+                                            Akan Datang
+                                        </span>
+                                    @elseif($activePartnership)
                                         @if($activePartnership->is_expiring_soon)
                                             <span class="inline-block rounded-lg px-2.5 py-0.5 text-xs font-semibold border bg-amber-500/10 text-amber-600 border-amber-500/20 dark:bg-amber-500/20 dark:text-amber-400 dark:border-amber-500/30">
                                                 {{ $activePartnership->days_until_expiry }} hari lagi
@@ -121,7 +126,9 @@
                                     @endif
                                 </td>
                                 <td class="py-3 px-4 text-sm text-gray-600 dark:text-gray-300">
-                                    @if($activePartnership)
+                                    @if($upcomingPartnership)
+                                        <span class="text-blue-600 dark:text-blue-400">{{ $upcomingPartnership->start_date->format('d M Y') }} – {{ $upcomingPartnership->end_date->format('d M Y') }}</span>
+                                    @elseif($activePartnership)
                                         <span>{{ $activePartnership->start_date->format('d M Y') }} – {{ $activePartnership->end_date->format('d M Y') }}</span>
                                     @elseif($latestPartnership)
                                         <span class="text-gray-400 dark:text-gray-500 line-through">{{ $latestPartnership->start_date->format('d M Y') }} – {{ $latestPartnership->end_date->format('d M Y') }}</span>
@@ -174,7 +181,8 @@
         <div class="flex flex-col gap-3 sm:hidden">
             @forelse($industries as $industry)
                 @php
-                    $activePartnership = $industry->partnerships->first(fn($p) => now()->between($p->start_date, $p->end_date));
+                    $activePartnership = $industry->partnerships->first(fn($p) => now()->betweenIncluded($p->start_date->startOfDay(), $p->end_date->endOfDay()));
+                    $upcomingPartnership = $industry->partnerships->first(fn($p) => $p->start_date->startOfDay() > now()->startOfDay());
                     $latestPartnership = $industry->partnerships->first();
                 @endphp
                 <div class="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm dark:border-amoled-border dark:bg-amoled-surface">
@@ -183,7 +191,11 @@
                             <p class="text-sm font-semibold text-gray-800 dark:text-white">{{ $industry->name }}</p>
                             <p class="text-xs text-gray-400 dark:text-gray-500 mt-0.5">{{ $industry->city }}</p>
                         </div>
-                        @if($activePartnership)
+                        @if($upcomingPartnership)
+                            <span class="inline-block rounded-lg px-2.5 py-0.5 text-xs font-semibold border bg-blue-500/10 text-blue-600 border-blue-500/20 dark:bg-blue-500/20 dark:text-blue-400 dark:border-blue-500/30">
+                                Akan Datang
+                            </span>
+                        @elseif($activePartnership)
                             @if($activePartnership->is_expiring_soon)
                                 <span class="inline-block rounded-lg px-2.5 py-0.5 text-xs font-semibold border bg-amber-500/10 text-amber-600 border-amber-500/20 dark:bg-amber-500/20 dark:text-amber-400 dark:border-amber-500/30">
                                     {{ $activePartnership->days_until_expiry }} hari lagi
@@ -204,7 +216,9 @@
                         @endif
                     </div>
                     <div class="text-xs text-gray-500 dark:text-gray-400 mb-3">
-                        @if($activePartnership)
+                        @if($upcomingPartnership)
+                            <span class="text-blue-600 dark:text-blue-400">{{ $upcomingPartnership->start_date->format('d M Y') }} – {{ $upcomingPartnership->end_date->format('d M Y') }}</span>
+                        @elseif($activePartnership)
                             {{ $activePartnership->start_date->format('d M Y') }} – {{ $activePartnership->end_date->format('d M Y') }}
                         @elseif($latestPartnership)
                             <span class="line-through">{{ $latestPartnership->start_date->format('d M Y') }} – {{ $latestPartnership->end_date->format('d M Y') }}</span>

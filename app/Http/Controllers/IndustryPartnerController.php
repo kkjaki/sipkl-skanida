@@ -49,7 +49,7 @@ class IndustryPartnerController extends Controller
         $validated = $request->validate([
             'pic_name'     => ['required', 'string', 'max:255'],
             'pic_position' => ['required', 'string', 'max:255'],
-            'nip'          => ['required', 'string', 'max:255'],
+            'nip'          => ['nullable', 'string', 'max:255'],
             'quotas'       => ['required', 'array'],
             'quotas.*'     => ['nullable', 'integer', 'min:0'],
         ]);
