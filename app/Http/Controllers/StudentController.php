@@ -33,14 +33,20 @@ class StudentController extends Controller
         $search = $request->query('search');
         $filterDept = $request->query('department');
         $filterClass = $request->query('class');
+        
+        $activeYear = AcademicYear::where('is_active', true)->first();
+        $activeYearId = $activeYear?->id;
 
-        // Cache key includes search, filters, and page for proper caching.
+        // Cache key includes search, filters, active year, and page for proper caching.
         $page = $request->query('page', 1);
-        $cacheKey = 'students_list_' . md5(json_encode(compact('search', 'filterDept', 'filterClass', 'page')));
+        $cacheKey = 'students_list_' . md5(json_encode(compact('search', 'filterDept', 'filterClass', 'activeYearId', 'page')));
         $cacheTtl = $search || $filterDept || $filterClass ? 120 : 600;
 
-        $students = Cache::remember($cacheKey, $cacheTtl, function () use ($search, $filterDept, $filterClass) {
+        $students = Cache::remember($cacheKey, $cacheTtl, function () use ($search, $filterDept, $filterClass, $activeYearId) {
             return Student::with(['user', 'department', 'academicYear'])
+                ->when($activeYearId, function ($query, $activeYearId) {
+                    $query->where('academic_year_id', $activeYearId);
+                })
                 ->when($search, function ($query, $search) {
                     $query->where(function ($q) use ($search) {
                         $q->where('nis', 'like', "%{$search}%")

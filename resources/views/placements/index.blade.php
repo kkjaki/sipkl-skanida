@@ -9,6 +9,7 @@
     searchQuery: '',
     industrySearch: '',
     filterStatus: 'all',
+    filterCity: 'all',
     industries: @js($industries),
     candidates: @js($candidates),
     deleteMode: false,
@@ -99,6 +100,11 @@
         );
     },
 
+    get uniqueCities() {
+        const cities = new Set(this.industries.map(i => i.city).filter(Boolean));
+        return Array.from(cities).sort();
+    },
+
     get filteredIndustries() {
         let result = this.industries;
         if (this.industrySearch.trim()) {
@@ -113,6 +119,9 @@
             result = result.filter(i => i.remaining_quota > 0);
         } else if (this.filterStatus === 'full') {
             result = result.filter(i => i.remaining_quota <= 0);
+        }
+        if (this.filterCity !== 'all') {
+            result = result.filter(i => i.city === this.filterCity);
         }
         return result;
     }
@@ -154,10 +163,17 @@
                    class="h-11 w-full rounded-xl border border-gray-200 bg-white pl-10 pr-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 outline-none transition duration-150 focus:border-school-blue focus:ring-3 focus:ring-school-blue/10 dark:border-amoled-border dark:bg-amoled-surface dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-school-blue">
         </div>
         <select x-model="filterStatus"
-                class="h-11 rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm text-gray-800 outline-none transition duration-150 focus:border-school-blue focus:ring-3 focus:ring-school-blue/10 dark:border-amoled-border dark:bg-amoled-surface dark:text-white/90 dark:focus:border-school-blue appearance-none cursor-pointer min-w-[160px]">
+                class="h-11 rounded-xl border border-gray-200 bg-white pl-4 pr-10 py-2.5 text-sm text-gray-800 outline-none transition duration-150 focus:border-school-blue focus:ring-3 focus:ring-school-blue/10 dark:border-amoled-border dark:bg-amoled-surface dark:text-white/90 dark:focus:border-school-blue cursor-pointer min-w-[160px]">
             <option value="all">Semua Status</option>
             <option value="available">Tersedia</option>
             <option value="full">Penuh</option>
+        </select>
+        <select x-model="filterCity"
+                class="h-11 rounded-xl border border-gray-200 bg-white pl-4 pr-10 py-2.5 text-sm text-gray-800 outline-none transition duration-150 focus:border-school-blue focus:ring-3 focus:ring-school-blue/10 dark:border-amoled-border dark:bg-amoled-surface dark:text-white/90 dark:focus:border-school-blue cursor-pointer min-w-[160px]">
+            <option value="all">Semua Kota</option>
+            <template x-for="city in uniqueCities" :key="city">
+                <option :value="city" x-text="city"></option>
+            </template>
         </select>
     </div>
 

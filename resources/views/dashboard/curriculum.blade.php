@@ -4,7 +4,7 @@
     <div class="flex flex-col gap-6">
         {{-- Page Header --}}
         <div class="min-h-[44px]">
-            <h1 class="text-xl font-bold text-gray-800 dark:text-white">Dashboard Kurikulum</h1>
+            <h1 class="text-xl font-bold text-gray-800 dark:text-white">Dashboard</h1>
             <p class="text-sm text-gray-500 dark:text-amoled-text mt-1">
                 @if($activeYear)
                     Tahun Ajaran: <span class="font-semibold text-school-blue">{{ $activeYear->name }}</span>

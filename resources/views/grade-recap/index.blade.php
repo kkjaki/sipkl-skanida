@@ -41,10 +41,10 @@
             </div>
 
             {{-- Filter Kelas --}}
-            <div class="relative sm:max-w-[220px]">
+            <div class="relative sm:max-w-[220px] sm:min-w-[160px]">
                 <select
                     x-model="selectedClass"
-                    class="h-11 w-full rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm text-gray-800 outline-none transition duration-150 focus:border-school-blue focus:ring-3 focus:ring-school-blue/10 dark:border-amoled-border dark:bg-amoled-surface dark:text-white/90 dark:focus:border-school-blue appearance-none cursor-pointer"
+                    class="h-11 w-full rounded-xl border border-gray-200 bg-white pl-4 pr-10 py-2.5 text-sm text-gray-800 outline-none transition duration-150 focus:border-school-blue focus:ring-3 focus:ring-school-blue/10 dark:border-amoled-border dark:bg-amoled-surface dark:text-white/90 dark:focus:border-school-blue cursor-pointer"
                 >
                     <option value="" class="dark:bg-amoled-surface">Semua Kelas</option>
                     @foreach($availableClasses as $class)

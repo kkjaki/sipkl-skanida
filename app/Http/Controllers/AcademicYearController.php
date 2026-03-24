@@ -30,7 +30,14 @@ class AcademicYearController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255|unique:academic_years,name',
+            'name' => [
+                'required',
+                'string',
+                'regex:/^\d{4}\/\d{4}$/',
+                'unique:academic_years,name',
+            ],
+        ], [
+            'name.regex' => 'Format tahun ajaran harus YYYY/YYYY, contoh: 2023/2024.',
         ]);
 
         // Single Active Year Rule
@@ -61,7 +68,14 @@ class AcademicYearController extends Controller
     public function update(Request $request, AcademicYear $academicYear)
     {
         $request->validate([
-            'name' => 'required|string|max:255|unique:academic_years,name,' . $academicYear->id,
+            'name' => [
+                'required',
+                'string',
+                'regex:/^\d{4}\/\d{4}$/',
+                'unique:academic_years,name,' . $academicYear->id,
+            ],
+        ], [
+            'name.regex' => 'Format tahun ajaran harus YYYY/YYYY, contoh: 2023/2024.',
         ]);
 
         // Single Active Year Rule

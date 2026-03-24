@@ -2,7 +2,11 @@
     <div class="p-5 sm:p-6">
         <div class="mb-5">
             <h2 class="text-base font-bold text-gray-900 dark:text-white">Informasi Profil</h2>
-            <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Perbarui nama dan alamat email akun Anda.</p>
+            <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Perbarui alamat email akun Anda.</p>
+            <p class="mt-2 text-xs text-gray-400 dark:text-gray-500">
+                <svg class="w-3.5 h-3.5 inline-block -mt-0.5 mr-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                Data nama, program keahlian, dan kelas tidak dapat diubah sendiri. Hubungi Admin jika terdapat kesalahan.
+            </p>
         </div>
 
         <form id="send-verification" method="post" action="{{ route('verification.send') }}">
@@ -18,12 +22,29 @@
                 <label for="name" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1.5">Nama</label>
                 <input id="name" type="text" value="{{ $user->name }}" readonly
                        class="w-full rounded-xl border border-gray-200 dark:border-amoled-border bg-gray-100 dark:bg-white/[0.02] text-gray-500 dark:text-gray-400 p-2.5 text-sm cursor-not-allowed">
-                <p class="mt-1.5 text-xs text-gray-400 dark:text-gray-500">
-                    <svg class="w-3.5 h-3.5 inline-block -mt-0.5 mr-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                    Jika ada kesalahan nama atau gelar, silakan hubungi Admin.
-                </p>
             </div>
 
+            {{-- Jurusan & Kelas (role-based, read-only) --}}
+            @if($user->hasRole('student') && $user->student)
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1.5">Program Keahlian</label>
+                        <input type="text" value="{{ $user->student->department->name ?? '-' }}" readonly
+                               class="w-full rounded-xl border border-gray-200 dark:border-amoled-border bg-gray-100 dark:bg-white/[0.02] text-gray-500 dark:text-gray-400 p-2.5 text-sm cursor-not-allowed">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1.5">Kelas</label>
+                        <input type="text" value="{{ $user->student->class_name ?? '-' }}" readonly
+                               class="w-full rounded-xl border border-gray-200 dark:border-amoled-border bg-gray-100 dark:bg-white/[0.02] text-gray-500 dark:text-gray-400 p-2.5 text-sm cursor-not-allowed">
+                    </div>
+                </div>
+            @elseif($user->hasRole('supervisor') && $user->supervisor)
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1.5">Program Keahlian</label>
+                    <input type="text" value="{{ $user->supervisor->department->name ?? '-' }}" readonly
+                           class="w-full rounded-xl border border-gray-200 dark:border-amoled-border bg-gray-100 dark:bg-white/[0.02] text-gray-500 dark:text-gray-400 p-2.5 text-sm cursor-not-allowed">
+                </div>
+            @endif
 
             {{-- Email --}}
             <div>

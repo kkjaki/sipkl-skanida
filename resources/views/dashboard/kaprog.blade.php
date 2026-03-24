@@ -4,7 +4,7 @@
     <div class="flex flex-col gap-6">
         {{-- Page Header --}}
         <div class="min-h-[44px]">
-            <h1 class="text-xl font-bold text-gray-800 dark:text-white">Dashboard Kaprog</h1>
+            <h1 class="text-xl font-bold text-gray-800 dark:text-white">Dashboard</h1>
             <p class="text-sm text-gray-500 dark:text-amoled-text mt-1">
                 {{ $department->name }} (<span class="font-semibold text-school-blue">{{ $department->code }}</span>)
                 @if($activeYear)
@@ -23,7 +23,7 @@
         @endif
 
         {{-- Stats Cards Row 1 --}}
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
             {{-- Card 1: Menunggu Verifikasi --}}
             <a href="{{ route('verification.index') }}" class="block group">
                 <div class="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm dark:border-amoled-border dark:bg-amoled-surface transition hover:border-amber-300 dark:hover:border-amber-500/40 hover:shadow-md">

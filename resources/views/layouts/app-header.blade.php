@@ -30,8 +30,9 @@
             </button>
 
             {{-- Logo (mobile only) --}}
-            <a href="/" class="lg:hidden flex flex-col items-center">
-                <span class="text-lg font-bold text-school-blue dark:text-white tracking-widest">SIM-PKL</span>
+            <a href="{{ route('dashboard') }}" class="lg:hidden flex flex-col items-center leading-tight">
+                <span class="text-base font-extrabold text-gray-900 dark:text-white tracking-tight">SIM-PKL</span>
+                <span class="text-[10px] font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider">SMKN 2 Magelang</span>
             </a>
 
             {{-- Application Menu Toggle (mobile only) --}}
