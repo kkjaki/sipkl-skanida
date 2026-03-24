@@ -102,7 +102,7 @@
                         {{-- Date --}}
                         <div>
                             <label for="date" class="block text-sm font-semibold text-gray-900 dark:text-white mb-1.5">Tanggal</label>
-                            <input type="date" id="date" name="date" value="{{ old('date', now()->format('Y-m-d')) }}" min="{{ $internship->start_date->format('Y-m-d') }}" max="{{ min(now()->format('Y-m-d'), $internship->actual_end_date->format('Y-m-d')) }}"
+                            <input type="date" id="date" name="date" value="{{ old('date', now()->format('Y-m-d')) }}" min="{{ $internship->start_date?->format('Y-m-d') ?? now()->format('Y-m-d') }}" max="{{ min(now()->format('Y-m-d'), $internship->actual_end_date?->format('Y-m-d') ?? now()->format('Y-m-d')) }}"
                                    class="h-11 w-full rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm text-gray-800 outline-none transition duration-150 focus:border-school-blue focus:ring-3 focus:ring-school-blue/10 dark:border-amoled-border dark:bg-amoled-input dark:text-white/90 dark:focus:border-school-blue">
                             @error('date')
                                 <p class="mt-1.5 text-xs text-red-500 dark:text-red-400">{{ $message }}</p>

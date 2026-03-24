@@ -114,7 +114,7 @@ class DashboardController extends Controller
 
         $internship       = $student?->internship;
         $totalJournals    = $internship?->dailyJournals->count() ?? 0;
-        $verifiedJournals = $internship?->dailyJournals->where('verification_status', 'approved')->count() ?? 0;
+        $verifiedJournals = $internship?->dailyJournals->where('verification_status', 'verified')->count() ?? 0;
         $pendingJournals  = $internship?->dailyJournals->where('verification_status', 'pending')->count() ?? 0;
 
         return view('dashboard.student', [
@@ -252,7 +252,7 @@ class DashboardController extends Controller
      */
     private function supervisorDashboard($user)
     {
-        $data = Cache::remember('dashboard_supervisor_' . $user->id, 5 * 60, function () use ($user) {
+        $data = Cache::remember('dashboard_supervisor_' . $user->id, 60, function () use ($user) {
             $supervisor = Supervisor::where('user_id', $user->id)
                 ->with([
                     'internships.dailyJournals',

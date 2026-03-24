@@ -22,7 +22,7 @@ class StoreDailyJournalRequest extends FormRequest
 
         $startDate = $internship?->start_date?->format('Y-m-d') ?? now()->toDateString();
         $maxDate   = $internship
-            ? min(now()->toDateString(), $internship->actual_end_date->format('Y-m-d'))
+            ? min(now()->toDateString(), $internship->actual_end_date?->format('Y-m-d') ?? now()->toDateString())
             : now()->toDateString();
 
         return [

@@ -21,8 +21,8 @@ class UpdateDailyJournalRequest extends FormRequest
             ->where('id', $journal->internship_id)
             ->firstOrFail();
 
-        $startDate = $internship->start_date->format('Y-m-d');
-        $maxDate   = min(now()->toDateString(), $internship->actual_end_date->format('Y-m-d'));
+        $startDate = $internship->start_date?->format('Y-m-d') ?? now()->toDateString();
+        $maxDate   = min(now()->toDateString(), $internship->actual_end_date?->format('Y-m-d') ?? now()->toDateString());
 
         return [
             'date'              => [

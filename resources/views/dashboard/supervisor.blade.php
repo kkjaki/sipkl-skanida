@@ -4,7 +4,7 @@
     <div class="flex flex-col gap-6">
         {{-- Page Header --}}
         <div class="min-h-[44px]">
-            <h1 class="text-xl font-bold text-gray-800 dark:text-white">Dashboard Pembimbing</h1>
+            <h1 class="text-xl font-bold text-gray-800 dark:text-white">Dashboard</h1>
             <p class="text-sm text-gray-500 dark:text-amoled-text mt-1">
                 Selamat datang kembali, <span class="font-semibold text-school-blue">{{ $user->name }}</span>
             </p>
@@ -35,7 +35,7 @@
                         <div>
                             <p class="text-sm font-medium text-gray-500 dark:text-amoled-text">Jurnal Pending</p>
                             <h3 class="mt-2 text-3xl font-bold {{ $pendingJournals > 0 ? 'text-amber-500' : 'text-gray-400 dark:text-gray-500' }}">{{ $pendingJournals }}</h3>
-                            <p class="mt-1 text-xs text-gray-400 dark:text-gray-500">menunggu verifikasi</p>
+                            <p class="mt-1 text-xs text-gray-400 dark:text-gray-500">menunggu validasi</p>
                         </div>
                         <div class="flex h-12 w-12 items-center justify-center rounded-xl {{ $pendingJournals > 0 ? 'bg-amber-500/10 dark:bg-amber-500/20' : 'bg-gray-100 dark:bg-white/[0.06]' }} shrink-0">
                             <svg class="w-6 h-6 {{ $pendingJournals > 0 ? 'text-amber-500' : 'text-gray-400 dark:text-gray-500' }}" width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -104,8 +104,13 @@
                                             <span class="inline-flex items-center gap-1 rounded-full bg-amber-500/10 px-2 py-0.5 text-xs font-medium text-amber-600 dark:text-amber-400">
                                                 {{ $pending }} pending
                                             </span>
+                                        @elseif($total > 0)
+                                            <span class="inline-flex items-center gap-1 rounded-full bg-emerald-500/10 px-2 py-0.5 text-xs font-medium text-emerald-600 dark:text-emerald-400">
+                                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+                                                Sudah Tervalidasi
+                                            </span>
                                         @else
-                                            <span class="text-xs text-gray-400 dark:text-gray-500">{{ $total }} jurnal</span>
+                                            <span class="text-xs text-gray-400 dark:text-gray-500">Belum ada jurnal</span>
                                         @endif
                                     </td>
                                     <td class="py-3.5 px-6 sm:px-8 text-right">
@@ -132,6 +137,7 @@
                     @foreach($internships as $internship)
                         @php
                             $pending = $internship->dailyJournals->where('verification_status', 'pending')->count();
+                            $total   = $internship->dailyJournals->count();
                         @endphp
                         <div class="p-4 space-y-2">
                             <div class="flex items-start justify-between gap-3">
@@ -154,6 +160,8 @@
                                 {{ $internship->industry->name ?? '-' }}
                                 @if($pending > 0)
                                     &bull; <span class="text-amber-500">{{ $pending }} jurnal pending</span>
+                                @elseif($total > 0)
+                                    &bull; <span class="text-emerald-500">Semua jurnal tervalidasi</span>
                                 @endif
                             </p>
                         </div>
