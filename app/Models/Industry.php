@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -37,6 +38,16 @@ class Industry extends Model
     protected $casts = [
         'is_synced' => 'boolean',
     ];
+
+    /**
+     * Normalize: email selalu lowercase.
+     */
+    protected function email(): Attribute
+    {
+        return Attribute::make(
+            set: fn (?string $value) => $value ? strtolower(trim($value)) : null,
+        );
+    }
 
     /**
      * Get the student who proposed/submitted this industry.
