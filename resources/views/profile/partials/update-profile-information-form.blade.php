@@ -24,7 +24,7 @@
                        class="w-full rounded-xl border border-gray-200 dark:border-amoled-border bg-gray-100 dark:bg-white/[0.02] text-gray-500 dark:text-gray-400 p-2.5 text-sm cursor-not-allowed">
             </div>
 
-            {{-- Jurusan & Kelas (role-based, read-only) --}}
+            {{-- Program keahlian & Kelas (role-based, read-only) --}}
             @if($user->hasRole('student') && $user->student)
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>

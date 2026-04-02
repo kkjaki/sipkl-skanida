@@ -164,7 +164,7 @@ class SupervisorPlacementController extends Controller
                     ->get();
 
                 if ($internships->count() !== count($request->internship_ids)) {
-                    throw new \Exception('Beberapa penempatan tidak ditemukan atau bukan milik jurusan Anda.');
+                    throw new \Exception('Beberapa penempatan tidak ditemukan atau bukan milik program keahlian Anda.');
                 }
 
                 Internship::whereIn('id', $internships->pluck('id'))->update([

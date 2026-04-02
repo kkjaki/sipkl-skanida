@@ -37,7 +37,7 @@ class DepartmentController extends Controller
         Department::create($request->all());
 
         return redirect()->route('departments.index')
-            ->with('success', 'Jurusan berhasil ditambahkan.');
+            ->with('success', 'Program keahlian berhasil ditambahkan.');
     }
 
     /**
@@ -61,7 +61,7 @@ class DepartmentController extends Controller
         $department->update($request->all());
 
         return redirect()->route('departments.index')
-            ->with('success', 'Jurusan berhasil diupdate.');
+            ->with('success', 'Program keahlian berhasil diupdate.');
     }
 
     /**
@@ -72,6 +72,6 @@ class DepartmentController extends Controller
         $department->delete();
 
         return redirect()->route('departments.index')
-            ->with('success', 'Jurusan berhasil dihapus.');
+            ->with('success', 'Program keahlian berhasil dihapus.');
     }
 }

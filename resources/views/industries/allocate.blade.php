@@ -69,7 +69,7 @@
                 @method('PUT')
 
                 <div class="border-b border-gray-200 dark:border-amoled-border py-4 px-6 sm:px-8">
-                    <h3 class="text-sm font-semibold text-gray-500 dark:text-amoled-text">Alokasi Kuota per Jurusan</h3>
+                    <h3 class="text-sm font-semibold text-gray-500 dark:text-amoled-text">Alokasi Kuota per Program Keahlian</h3>
                     <p class="text-xs text-gray-400 dark:text-gray-500 mt-0.5">Hubungi industri untuk mengetahui berapa siswa yang dapat diterima. Minimal total kuota harus 1.</p>
                 </div>
                 <div class="p-6 sm:p-8 space-y-4 border-b border-gray-200 dark:border-amoled-border">

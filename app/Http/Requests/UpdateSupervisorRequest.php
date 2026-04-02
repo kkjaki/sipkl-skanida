@@ -33,7 +33,7 @@ class UpdateSupervisorRequest extends FormRequest
                             })->exists();
                             
                         if ($exists) {
-                            $fail('Jurusan ini sudah memiliki Kepala Program.');
+                            $fail('Program keahlian ini sudah memiliki Kepala Program.');
                         }
                     }
                 }

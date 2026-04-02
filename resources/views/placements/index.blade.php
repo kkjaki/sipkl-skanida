@@ -235,7 +235,7 @@
                 <svg class="w-10 h-10 sm:w-12 sm:h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0H5m14 0h2m-16 0H3m2 0V5m12 0v16m-5-14h.01M9 7h.01M9 11h.01M12 11h.01M9 15h.01M12 15h.01"/></svg>
             </div>
             <h3 class="text-lg font-bold text-gray-900 dark:text-white">Tidak Ada Industri</h3>
-            <p class="text-sm text-gray-500 dark:text-gray-400 max-w-xs text-center">Belum ada industri yang dialokasikan untuk jurusan Anda di tahun ajaran ini.</p>
+            <p class="text-sm text-gray-500 dark:text-gray-400 max-w-xs text-center">Belum ada industri yang dialokasikan untuk program keahlian Anda di tahun ajaran ini.</p>
         </div>
     </template>
 
