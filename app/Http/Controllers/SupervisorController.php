@@ -20,6 +20,8 @@ class SupervisorController extends Controller
     public function index(Request $request)
     {
         $search = $request->query('search');
+        $filterDept = $request->query('department');
+        $filterRole = $request->query('role');
 
         $supervisors = Supervisor::with(['user', 'department'])
             ->when($search, function ($query, $search) {
@@ -32,11 +34,25 @@ class SupervisorController extends Controller
                           $q->where('name', 'like', "%{$search}%");
                       });
             })
+            ->when($filterDept, function ($query, $filterDept) {
+                $query->where('department_id', $filterDept);
+            })
+            ->when($filterRole, function ($query, $filterRole) {
+                $query->whereHas('user', function ($q) use ($filterRole) {
+                    if ($filterRole === 'department_head') {
+                        $q->role('department_head');
+                    } else {
+                        $q->role('supervisor')->withoutRole('department_head');
+                    }
+                });
+            })
             ->latest('user_id')
             ->paginate(10)
             ->withQueryString();
 
-        return view('supervisors.index', compact('supervisors', 'search'));
+        $departments = Department::orderBy('name')->get();
+
+        return view('supervisors.index', compact('supervisors', 'search', 'departments', 'filterDept', 'filterRole'));
     }
 
     /**
