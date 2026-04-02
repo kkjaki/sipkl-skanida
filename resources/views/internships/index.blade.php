@@ -91,10 +91,10 @@
         </div>
 
         @if ($departmentId === null)
-        {{-- Filter Jurusan (Admin only) --}}
+        {{-- Filter Program keahlian (Admin only) --}}
         <select x-model="departmentId"
                 class="px-4 py-2.5 text-sm rounded-2xl border border-gray-200 dark:border-amoled-border bg-gray-50 dark:bg-amoled-input text-gray-900 dark:text-white focus:ring-2 focus:ring-school-blue/30 focus:border-school-blue transition-colors">
-            <option value="">Semua Jurusan</option>
+            <option value="">Semua Program Keahlian</option>
             @foreach ($departments as $dept)
                 <option value="{{ $dept->id }}">
                     {{ $dept->name }}
@@ -144,7 +144,7 @@
                         <tr class="border-b border-gray-100 dark:border-amoled-border">
                             <th class="px-5 py-4 text-left text-[11px] font-black text-gray-400 dark:text-amoled-text uppercase tracking-[0.15em]">Siswa</th>
                             @if ($departmentId === null)
-                            <th class="px-5 py-4 text-left text-[11px] font-black text-gray-400 dark:text-amoled-text uppercase tracking-[0.15em]">Jurusan</th>
+                            <th class="px-5 py-4 text-left text-[11px] font-black text-gray-400 dark:text-amoled-text uppercase tracking-[0.15em]">Program Keahlian</th>
                             @endif
                             <th class="px-5 py-4 text-left text-[11px] font-black text-gray-400 dark:text-amoled-text uppercase tracking-[0.15em]">Industri</th>
                             <th class="px-5 py-4 text-left text-[11px] font-black text-gray-400 dark:text-amoled-text uppercase tracking-[0.15em] hidden lg:table-cell">Alamat Industri</th>
@@ -170,9 +170,17 @@
                             </td>
 
                             @if ($departmentId === null)
-                            {{-- Jurusan --}}
+                            {{-- Program keahlian --}}
                             <td class="px-5 py-4">
-                                <span class="px-2.5 py-1 rounded-lg bg-gray-100 dark:bg-white/5 text-gray-700 dark:text-gray-300 text-xs font-bold" x-text="internship.student?.department?.name || '-'">
+                                <span class="px-2.5 py-1 rounded-lg text-xs font-bold border"
+                                      :class="{
+                                          'bg-blue-500/10 text-blue-600 border-blue-500/20 dark:bg-blue-500/20 dark:text-blue-400': (internship.student?.department?.code || '').toUpperCase() === 'PPLG',
+                                          'bg-amber-500/10 text-amber-600 border-amber-500/20 dark:bg-amber-500/20 dark:text-amber-400': (internship.student?.department?.code || '').toUpperCase() === 'AKL',
+                                          'bg-purple-500/10 text-purple-600 border-purple-500/20 dark:bg-purple-500/20 dark:text-purple-400': (internship.student?.department?.code || '').toUpperCase() === 'MPLB',
+                                          'bg-emerald-500/10 text-emerald-600 border-emerald-500/20 dark:bg-emerald-500/20 dark:text-emerald-400': (internship.student?.department?.code || '').toUpperCase() === 'PM',
+                                          'bg-gray-100 text-gray-600 border-gray-200 dark:bg-white/[0.06] dark:text-gray-300 dark:border-amoled-border': !['PPLG','AKL','MPLB','PM'].includes((internship.student?.department?.code || '').toUpperCase()),
+                                      }"
+                                      x-text="internship.student?.department?.code || '-'">
                                 </span>
                             </td>
                             @endif

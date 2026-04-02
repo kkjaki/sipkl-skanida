@@ -129,7 +129,7 @@
             </div>
             <select x-model="filterDepartment"
                     class="h-11 rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm text-gray-800 outline-none transition duration-150 focus:border-school-blue focus:ring-3 focus:ring-school-blue/10 dark:border-amoled-border dark:bg-amoled-surface dark:text-white/90 dark:focus:border-school-blue appearance-none cursor-pointer min-w-[180px]">
-                <option value="all">Semua Jurusan</option>
+                <option value="all">Semua Program Keahlian</option>
                 @foreach($departments as $dept)
                     <option value="{{ $dept->id }}">{{ $dept->name }}</option>
                 @endforeach
@@ -160,7 +160,7 @@
                             <tr>
                                 <th class="px-6 py-4 font-semibold w-16">No</th>
                                 <th class="px-6 py-4 font-semibold">Nama Guru Pembimbing</th>
-                                <th class="px-6 py-4 font-semibold w-64">Jurusan</th>
+                                <th class="px-6 py-4 font-semibold w-64">Program Keahlian</th>
                                 <th class="px-6 py-4 font-semibold w-40 text-center">Kuota Siswa</th>
                             </tr>
                         </thead>
@@ -183,9 +183,7 @@
                                     </td>
                                     <td class="px-6 py-4">
                                         @if($supervisor->department)
-                                            <span class="inline-flex items-center rounded-md bg-gray-100 px-2.5 py-1 text-sm font-medium text-gray-600 dark:bg-white/[0.08] dark:text-gray-300">
-                                                {{ $supervisor->department->name }} ({{ $supervisor->department->code }})
-                                            </span>
+                                            <x-department-badge :code="$supervisor->department->code" />
                                         @else
                                             <span class="text-gray-400 italic">-</span>
                                         @endif

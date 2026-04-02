@@ -29,20 +29,63 @@
             </div>
         @endif
 
-        <!-- Search -->
-        <form method="GET" action="{{ route('supervisors.index') }}" class="flex items-center gap-3">
-            <div class="relative flex-1">
-                <span class="absolute left-3 top-1/2 -translate-y-1/2">
-                    <svg class="w-4 h-4 text-gray-400" width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <!-- Search & Filters -->
+        <form method="GET" action="{{ route('supervisors.index') }}" class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+            <!-- Search -->
+            <div class="relative flex-1 sm:max-w-md">
+                <span class="absolute inset-y-0 left-0 flex items-center pl-3.5">
+                    <svg class="w-5 h-5 text-gray-400 dark:text-gray-500" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                     </svg>
                 </span>
-                <input type="text" name="search" value="{{ $search }}" placeholder="Cari nama atau NIP..."
+                <input type="text" name="search" value="{{ $search ?? '' }}" placeholder="Cari nama atau NIP..."
                        class="h-11 w-full rounded-xl border border-gray-200 bg-white pl-10 pr-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 outline-none transition duration-150 focus:border-school-blue focus:ring-3 focus:ring-school-blue/10 dark:border-amoled-border dark:bg-amoled-surface dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-school-blue" />
             </div>
-            <button type="submit" class="inline-flex items-center justify-center rounded-xl bg-school-blue py-2.5 px-5 text-sm font-medium text-white hover:bg-school-blue/90 transition duration-150 shadow-sm">
+
+            <!-- Filter Program Keahlian -->
+            <div class="relative sm:min-w-[180px]">
+                <select name="department" onchange="this.form.submit()"
+                    class="h-11 w-full rounded-xl border border-gray-200 bg-white pl-4 pr-10 py-2.5 text-sm text-gray-800 outline-none transition duration-150 focus:border-school-blue focus:ring-3 focus:ring-school-blue/10 dark:border-amoled-border dark:bg-amoled-surface dark:text-white/90 dark:focus:border-school-blue appearance-none cursor-pointer">
+                    <option value="" class="dark:bg-amoled-surface">Semua Program Keahlian</option>
+                    @foreach($departments as $dept)
+                        <option value="{{ $dept->id }}" {{ ($filterDept ?? '') == $dept->id ? 'selected' : '' }} class="dark:bg-amoled-surface">{{ $dept->name }}</option>
+                    @endforeach
+                </select>
+                <span class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+                    <svg class="w-4 h-4 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                </span>
+            </div>
+
+            <!-- Filter Jabatan -->
+            <div class="relative sm:min-w-[160px]">
+                <select name="role" onchange="this.form.submit()"
+                    class="h-11 w-full rounded-xl border border-gray-200 bg-white pl-4 pr-10 py-2.5 text-sm text-gray-800 outline-none transition duration-150 focus:border-school-blue focus:ring-3 focus:ring-school-blue/10 dark:border-amoled-border dark:bg-amoled-surface dark:text-white/90 dark:focus:border-school-blue appearance-none cursor-pointer">
+                    <option value="" class="dark:bg-amoled-surface">Semua Jabatan</option>
+                    <option value="department_head" {{ ($filterRole ?? '') === 'department_head' ? 'selected' : '' }} class="dark:bg-amoled-surface">Kaprog</option>
+                    <option value="supervisor" {{ ($filterRole ?? '') === 'supervisor' ? 'selected' : '' }} class="dark:bg-amoled-surface">Pembimbing</option>
+                </select>
+                <span class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+                    <svg class="w-4 h-4 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                </span>
+            </div>
+
+            <!-- Buttons -->
+            <button type="submit" class="inline-flex items-center justify-center rounded-xl bg-school-blue py-2.5 px-5 text-sm font-medium text-white hover:bg-school-blue/90 transition duration-150 shadow-sm h-11">
                 Cari
             </button>
+            @if($search || $filterDept || $filterRole)
+                <a href="{{ route('supervisors.index') }}" class="inline-flex items-center justify-center gap-1.5 rounded-xl border border-gray-200 dark:border-amoled-border py-2.5 px-4 text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/[0.06] transition duration-150 h-11">
+                    <svg class="w-4 h-4" width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                    Reset
+                </a>
+            @endif
+
+            <!-- Counter Badge -->
+            <span class="text-xs text-gray-400 dark:text-gray-500 sm:ml-auto self-center whitespace-nowrap">
+                Total: {{ $supervisors->total() }} guru
+            </span>
         </form>
 
         <!-- Table (Desktop) -->
@@ -72,8 +115,8 @@
                                 <td class="py-3 px-4 text-sm text-gray-600 dark:text-gray-300 font-mono">
                                     {{ $supervisor->nip }}
                                 </td>
-                                <td class="py-3 px-4 text-sm text-gray-600 dark:text-gray-300">
-                                    {{ $supervisor->department->name ?? '-' }}
+                                <td class="py-3 px-4">
+                                    <x-department-badge :code="$supervisor->department->code ?? ''" />
                                 </td>
                                 <td class="py-3 px-4">
                                     @if($supervisor->user->hasRole('department_head'))
@@ -135,7 +178,7 @@
                             </span>
                         @endif
                     </div>
-                    <p class="text-xs text-gray-500 dark:text-gray-400">{{ $supervisor->department->name ?? '-' }}</p>
+                    <x-department-badge :code="$supervisor->department->code ?? ''" />
                     <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">{{ $supervisor->user->email }}</p>
                     <div class="flex items-center gap-2 mt-3 pt-3 border-t border-gray-100 dark:border-amoled-border">
                         <a href="{{ route('supervisors.edit', $supervisor->user_id) }}" class="inline-flex items-center gap-1.5 text-xs font-medium text-school-blue hover:underline">

@@ -134,24 +134,30 @@
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                         @foreach($stats['students_per_dept'] as $dept)
                             @php
-                                $badgeConfig = match(strtoupper($dept->code)) {
-                                    'PPLG' => ['icon_bg' => 'bg-blue-500/10 dark:bg-blue-500/20',    'text' => 'text-blue-500'],
-                                    'TKJ'  => ['icon_bg' => 'bg-red-500/10 dark:bg-red-500/20',     'text' => 'text-red-500'],
-                                    'AKL'  => ['icon_bg' => 'bg-amber-500/10 dark:bg-amber-500/20',   'text' => 'text-amber-500'],
-                                    'MPLB' => ['icon_bg' => 'bg-purple-500/10 dark:bg-purple-500/20',  'text' => 'text-purple-500'],
-                                    'PM'   => ['icon_bg' => 'bg-emerald-500/10 dark:bg-emerald-500/20', 'text' => 'text-emerald-500'],
-                                    default => ['icon_bg' => 'bg-gray-100 dark:bg-white/[0.06]',      'text' => 'text-gray-500 dark:text-gray-400'],
+                                $iconBg = match(strtoupper($dept->code)) {
+                                    'PPLG' => 'bg-blue-500/10 dark:bg-blue-500/20',
+                                    'AKL'  => 'bg-amber-500/10 dark:bg-amber-500/20',
+                                    'MPLB' => 'bg-purple-500/10 dark:bg-purple-500/20',
+                                    'PM'   => 'bg-emerald-500/10 dark:bg-emerald-500/20',
+                                    default => 'bg-gray-100 dark:bg-white/[0.06]',
+                                };
+                                $textColor = match(strtoupper($dept->code)) {
+                                    'PPLG' => 'text-blue-500',
+                                    'AKL'  => 'text-amber-500',
+                                    'MPLB' => 'text-purple-500',
+                                    'PM'   => 'text-emerald-500',
+                                    default => 'text-gray-500 dark:text-gray-400',
                                 };
                             @endphp
                             <div class="flex items-center gap-4 rounded-xl border border-gray-100 dark:border-amoled-border p-4 transition hover:bg-gray-50 dark:hover:bg-white/[0.03]">
-                                <div class="flex h-10 w-10 items-center justify-center rounded-lg {{ $badgeConfig['icon_bg'] }} shrink-0">
-                                    <span class="text-sm font-bold {{ $badgeConfig['text'] }}">{{ $dept->code }}</span>
+                                <div class="flex h-10 w-10 items-center justify-center rounded-lg {{ $iconBg }} shrink-0">
+                                    <span class="text-sm font-bold {{ $textColor }}">{{ $dept->code }}</span>
                                 </div>
                                 <div class="min-w-0 flex-1">
                                     <p class="text-sm font-medium text-gray-800 dark:text-white truncate">{{ $dept->name }}</p>
                                     <p class="text-xs text-gray-400 dark:text-gray-500">{{ $dept->total }} peserta didik</p>
                                 </div>
-                                <span class="text-lg font-bold {{ $badgeConfig['text'] }}">{{ $dept->total }}</span>
+                                <span class="text-lg font-bold {{ $textColor }}">{{ $dept->total }}</span>
                             </div>
                         @endforeach
                     </div>

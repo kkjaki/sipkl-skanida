@@ -45,14 +45,14 @@
                 />
             </div>
 
-            <!-- Filter Jurusan -->
+            <!-- Filter Program keahlian -->
             <div class="relative sm:min-w-[180px]">
                 <select
                     name="department"
                     onchange="this.form.submit()"
                     class="h-11 w-full rounded-xl border border-gray-200 bg-white pl-4 pr-10 py-2.5 text-sm text-gray-800 outline-none transition duration-150 focus:border-school-blue focus:ring-3 focus:ring-school-blue/10 dark:border-amoled-border dark:bg-amoled-surface dark:text-white/90 dark:focus:border-school-blue appearance-none cursor-pointer"
                 >
-                    <option value="" class="dark:bg-amoled-surface">Semua Jurusan</option>
+                    <option value="" class="dark:bg-amoled-surface">Semua Program Keahlian</option>
                     @foreach($departments as $dept)
                         <option value="{{ $dept->name }}" {{ ($filterDept ?? '') === $dept->name ? 'selected' : '' }} class="dark:bg-amoled-surface">{{ $dept->name }}</option>
                     @endforeach
@@ -145,19 +145,7 @@
                                     <span class="text-sm text-gray-600 dark:text-gray-300">{{ $student->class_name }}</span>
                                 </td>
                                 <td class="py-4 px-4">
-                                    @php
-                                        $deptCode = $student->department->code ?? '';
-                                        $badgeColors = match(strtoupper($deptCode)) {
-                                            'PPLG' => 'bg-blue-500/10 text-blue-500 border-blue-500/20',
-                                            'PM'  => 'bg-red-500/10 text-red-500 border-red-500/20',
-                                            'AKL'  => 'bg-amber-500/10 text-amber-500 border-amber-500/20',
-                                            'MPLB' => 'bg-purple-500/10 text-purple-500 border-purple-500/20',
-                                            default => 'bg-gray-100 text-gray-600 border-gray-200 dark:bg-white/[0.06] dark:text-gray-300 dark:border-amoled-border',
-                                        };
-                                    @endphp
-                                    <span class="inline-block rounded-lg px-2.5 py-0.5 text-xs font-semibold border {{ $badgeColors }}">
-                                        {{ $student->department->name ?? '-' }}
-                                    </span>
+                                    <x-department-badge :code="$student->department->code ?? ''" />
                                 </td>
                                 <td class="py-4 px-4">
                                     <span class="text-sm text-gray-500 dark:text-amoled-text">{{ $student->user->email }}</span>
@@ -205,17 +193,7 @@
                                 <h5 class="font-semibold text-gray-800 dark:text-white text-sm">{{ $student->user->name }}</h5>
                                 <p class="text-xs text-gray-500 dark:text-amoled-text mt-0.5 font-mono">{{ $student->nis }}</p>
                             </div>
-                            @php
-                                $deptCode = $student->department->code ?? '';
-                                $badgeColors = match(strtoupper($deptCode)) {
-                                    'PPLG' => 'bg-blue-500/10 text-blue-500 border-blue-500/20',
-                                    'PM'  => 'bg-red-500/10 text-red-500 border-red-500/20',
-                                    'AKL'  => 'bg-amber-500/10 text-amber-500 border-amber-500/20',
-                                    'MPLB' => 'bg-purple-500/10 text-purple-500 border-purple-500/20',
-                                    default => 'bg-gray-100 text-gray-600 border-gray-200 dark:bg-white/[0.06] dark:text-gray-300 dark:border-amoled-border',
-                                };
-                            @endphp
-                            <span class="text-xs px-2.5 py-0.5 rounded-lg border font-semibold ml-2 whitespace-nowrap {{ $badgeColors }}">{{ $student->department->code ?? '-' }}</span>
+                            <x-department-badge :code="$student->department->code ?? ''" class="ml-2" />
                         </div>
                         <div class="flex items-center gap-4 text-xs text-gray-500 dark:text-amoled-text mb-1">
                             <span>{{ $student->class_name }}</span>

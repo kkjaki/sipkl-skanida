@@ -6,7 +6,7 @@
         <div class="min-h-[44px]">
             <h1 class="text-xl font-bold text-gray-800 dark:text-white">Dashboard</h1>
             <p class="text-sm text-gray-500 dark:text-amoled-text mt-1">
-                {{ $department->name }} (<span class="font-semibold text-school-blue">{{ $department->code }}</span>)
+                {{ $department->name }} <x-department-badge :code="$department->code" class="ml-1" />
                 @if($activeYear)
                     — Tahun Ajaran: <span class="font-semibold text-school-blue">{{ $activeYear->name }}</span>
                 @endif

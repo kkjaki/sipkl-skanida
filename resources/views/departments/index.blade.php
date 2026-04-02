@@ -53,9 +53,7 @@
                                     <h5 class="font-medium text-gray-800 dark:text-white text-sm">{{ $department->name }}</h5>
                                 </td>
                                 <td class="py-4 px-4">
-                                    <span class="inline-block bg-gray-100 dark:bg-white/[0.06] text-gray-600 dark:text-gray-300 rounded-lg px-2.5 py-0.5 text-xs font-semibold border border-gray-200 dark:border-amoled-border">
-                                        {{ $department->code }}
-                                    </span>
+                                    <x-department-badge :code="$department->code" />
                                 </td>
                                 <td class="py-4 px-4 pr-8 xl:pr-8 text-right">
                                     <div class="flex items-center justify-end space-x-3">
@@ -64,7 +62,7 @@
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
                                             </svg>
                                         </a>
-                                        <form action="{{ route('departments.destroy', $department) }}" method="POST" class="inline-flex items-center" onsubmit="return confirm('Apakah Anda yakin ingin menghapus jurusan ini?');">
+                                        <form action="{{ route('departments.destroy', $department) }}" method="POST" class="inline-flex items-center" onsubmit="return confirm('Apakah Anda yakin ingin menghapus program keahlian ini?');">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="text-gray-400 hover:text-danger transition duration-150 flex items-center" title="Delete">
@@ -93,14 +91,14 @@
                     <div class="p-4">
                         <div class="flex items-start justify-between mb-3">
                              <h5 class="font-semibold text-gray-800 dark:text-white text-sm">{{ $department->name }}</h5>
-                             <span class="text-xs px-2.5 py-0.5 rounded-lg bg-gray-100 dark:bg-white/[0.06] border border-gray-200 dark:border-amoled-border font-medium text-gray-600 dark:text-gray-300 ml-2 whitespace-nowrap">{{ $department->code }}</span>
+                             <x-department-badge :code="$department->code" class="ml-2" />
                         </div>
                          <div class="flex items-center justify-end gap-4 mt-2">
                              <a href="{{ route('departments.edit', $department) }}" class="text-sm font-medium text-school-blue hover:text-school-blue/80 flex items-center gap-1">
                                 <svg class="w-4 h-4" width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
                                 Edit
                             </a>
-                            <form action="{{ route('departments.destroy', $department) }}" method="POST" class="inline-flex items-center" onsubmit="return confirm('Apakah Anda yakin ingin menghapus jurusan ini?');">
+                            <form action="{{ route('departments.destroy', $department) }}" method="POST" class="inline-flex items-center" onsubmit="return confirm('Apakah Anda yakin ingin menghapus program keahlian ini?');">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="text-sm font-medium text-danger hover:text-danger/80 flex items-center gap-1">
