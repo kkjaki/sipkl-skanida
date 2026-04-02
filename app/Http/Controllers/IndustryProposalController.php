@@ -32,7 +32,7 @@ class IndustryProposalController extends Controller
             return !$p->is_synced || ($p->is_synced && $p->status === 'open');
         });
 
-        return view('industries.my-proposals', compact('proposals', 'canPropose'));
+        return view('industries.my-proposals', compact('proposals', 'canPropose', 'hasPlotting'));
     }
 
     /**

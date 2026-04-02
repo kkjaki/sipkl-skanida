@@ -114,13 +114,25 @@
             <!-- Empty State -->
             <div class="rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-amoled-border dark:bg-amoled-surface">
                 <div class="flex flex-col items-center justify-center py-14 px-6 text-center">
-                    <div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-gray-100 dark:bg-white/[0.06] mb-4">
-                        <svg class="w-7 h-7 text-gray-400 dark:text-gray-500" width="28" height="28" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0H5m14 0h2m-16 0H3"></path>
-                        </svg>
-                    </div>
-                    <h3 class="text-sm font-semibold text-gray-800 dark:text-white">Belum ada pengajuan</h3>
-                    <p class="text-xs text-gray-400 dark:text-gray-500 mt-1 max-w-xs">Anda belum mengajukan lokasi PKL. Klik tombol di atas untuk memulai pengajuan.</p>
+                    @if($hasPlotting)
+                        {{-- Siswa sudah di-plot, tidak pernah mengajukan sendiri --}}
+                        <div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-500/10 dark:bg-emerald-500/20 mb-4">
+                            <svg class="w-7 h-7 text-emerald-500" width="28" height="28" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-sm font-semibold text-gray-800 dark:text-white">Anda sudah ditempatkan PKL</h3>
+                        <p class="text-xs text-gray-400 dark:text-gray-500 mt-1 max-w-xs">Anda telah ditempatkan di lokasi PKL oleh Kepala Program. Tidak perlu mengajukan lokasi baru.</p>
+                    @else
+                        {{-- Siswa belum di-plot dan belum pernah mengajukan --}}
+                        <div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-gray-100 dark:bg-white/[0.06] mb-4">
+                            <svg class="w-7 h-7 text-gray-400 dark:text-gray-500" width="28" height="28" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0H5m14 0h2m-16 0H3"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-sm font-semibold text-gray-800 dark:text-white">Belum ada pengajuan</h3>
+                        <p class="text-xs text-gray-400 dark:text-gray-500 mt-1 max-w-xs">Anda belum mengajukan lokasi PKL. Klik tombol di atas untuk memulai pengajuan.</p>
+                    @endif
                 </div>
             </div>
         @endforelse
