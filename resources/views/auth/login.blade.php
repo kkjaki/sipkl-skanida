@@ -45,12 +45,12 @@
 
                 {{-- ================================================
                      PLACEHOLDER LOGO SEKOLAH
-                     Letakkan file logo di: public/images/logo-smkn2.png
+                     Letakkan file logo di: public/images/logo-smkn2.webp
                      ================================================ --}}
                 <div class="mb-4 flex h-16 w-16 items-center justify-center overflow-hidden rounded-2xl
                             bg-gray-100 dark:bg-amoled-surface border border-gray-200 dark:border-amoled-border">
                     <img
-                        src="{{ asset('images/logo-smkn2.png') }}"
+                        src="{{ asset('images/logo-smkn2.webp') }}"
                         alt="Logo SMKN 2 Magelang"
                         width="64" height="64"
                         class="h-full w-full object-contain p-1.5"
@@ -236,7 +236,7 @@
             <div class="mb-6 flex h-24 w-24 items-center justify-center overflow-hidden rounded-3xl
                         bg-white dark:bg-amoled border border-gray-200 dark:border-amoled-border shadow-xl">
                 <img
-                    src="{{ asset('images/logo-smkn2.png') }}"
+                    src="{{ asset('images/logo-smkn2.webp') }}"
                     alt="Logo SMKN 2 Magelang"
                     width="96" height="96"
                     class="h-full w-full object-contain p-2"

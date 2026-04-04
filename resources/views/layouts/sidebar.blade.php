@@ -13,7 +13,7 @@
     <!-- Logo -->
     <div class="flex items-center justify-center px-6 py-5 h-[72px] border-b border-gray-200 dark:border-amoled-border">
         <a href="{{ route('dashboard') }}" class="flex items-center gap-3">
-            <img src="{{ asset('images/logo-smkn2.png') }}" alt="Logo SMKN 2 Magelang" class="w-10 h-10 object-contain flex-shrink-0" width="40" height="40">
+            <img src="{{ asset('images/logo-smkn2.webp') }}" alt="Logo SMKN 2 Magelang" class="w-10 h-10 object-contain flex-shrink-0" width="40" height="40">
             <template x-if="$store.sidebar.isExpanded || $store.sidebar.isHovered || $store.sidebar.isMobileOpen">
                 <div class="flex flex-col leading-tight">
                     <span class="text-base font-extrabold text-gray-900 dark:text-white tracking-tight">SIM-PKL</span>

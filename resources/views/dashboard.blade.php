@@ -4,9 +4,9 @@
     <div class="flex flex-col gap-6">
         <!-- Page Header -->
         <div class="min-h-[44px]">
-            <h2 class="text-xl font-bold text-gray-800 dark:text-white">
+            <h1 class="text-xl font-bold text-gray-800 dark:text-white">
                 Dashboard
-            </h2>
+            </h1>
             @if($activeYear)
                 <p class="text-sm text-gray-500 dark:text-amoled-text mt-1">
                     Tahun Ajaran Aktif: <span class="font-semibold text-school-blue">{{ $activeYear->name }}</span>
@@ -35,9 +35,9 @@
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-sm font-medium text-gray-500 dark:text-amoled-text">Total Peserta Didik</p>
-                        <h3 class="mt-2 text-3xl font-bold text-gray-800 dark:text-white">
+                        <h2 class="mt-2 text-3xl font-bold text-gray-800 dark:text-white">
                             {{ number_format($stats['total_students']) }}
-                        </h3>
+                        </h2>
                         <p class="mt-1 text-xs text-gray-400 dark:text-gray-500">
                             {{ $stats['active_year'] ?? '-' }}
                         </p>
@@ -55,9 +55,9 @@
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-sm font-medium text-gray-500 dark:text-amoled-text">Tahun Ajaran Aktif</p>
-                        <h3 class="mt-2 text-3xl font-bold text-gray-800 dark:text-white">
+                        <h2 class="mt-2 text-3xl font-bold text-gray-800 dark:text-white">
                             {{ $stats['active_year'] ?? '-' }}
-                        </h3>
+                        </h2>
                         <p class="mt-1 text-xs text-gray-400 dark:text-gray-500">
                             periode berjalan
                         </p>
@@ -75,9 +75,9 @@
         @if($stats['students_per_dept']->count() > 0)
             <div class="rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-amoled-border dark:bg-amoled-surface">
                 <div class="border-b border-gray-200 dark:border-amoled-border py-4 px-6 sm:px-8">
-                    <h3 class="text-sm font-semibold text-gray-500 dark:text-amoled-text">
+                    <h2 class="text-sm font-semibold text-gray-500 dark:text-amoled-text">
                         Peserta Didik per Program Keahlian — {{ $stats['active_year'] }}
-                    </h3>
+                    </h2>
                 </div>
 
                 <div class="p-6 sm:p-8">

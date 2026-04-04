@@ -44,7 +44,7 @@
 
             <!-- Filter Program Keahlian -->
             <div class="relative sm:min-w-[180px]">
-                <select name="department" onchange="this.form.submit()"
+                <select name="department" onchange="this.form.submit()" aria-label="Filter Program Keahlian"
                     class="h-11 w-full rounded-xl border border-gray-200 bg-white pl-4 pr-10 py-2.5 text-sm text-gray-800 outline-none transition duration-150 focus:border-school-blue focus:ring-3 focus:ring-school-blue/10 dark:border-amoled-border dark:bg-amoled-surface dark:text-white/90 dark:focus:border-school-blue appearance-none cursor-pointer">
                     <option value="" class="dark:bg-amoled-surface">Semua Program Keahlian</option>
                     @foreach($departments as $dept)
@@ -58,7 +58,7 @@
 
             <!-- Filter Jabatan -->
             <div class="relative sm:min-w-[160px]">
-                <select name="role" onchange="this.form.submit()"
+                <select name="role" onchange="this.form.submit()" aria-label="Filter Jabatan"
                     class="h-11 w-full rounded-xl border border-gray-200 bg-white pl-4 pr-10 py-2.5 text-sm text-gray-800 outline-none transition duration-150 focus:border-school-blue focus:ring-3 focus:ring-school-blue/10 dark:border-amoled-border dark:bg-amoled-surface dark:text-white/90 dark:focus:border-school-blue appearance-none cursor-pointer">
                     <option value="" class="dark:bg-amoled-surface">Semua Jabatan</option>
                     <option value="department_head" {{ ($filterRole ?? '') === 'department_head' ? 'selected' : '' }} class="dark:bg-amoled-surface">Kaprog</option>
@@ -134,13 +134,13 @@
                                 </td>
                                 <td class="py-3 px-4">
                                     <div class="flex items-center justify-center gap-2">
-                                        <a href="{{ route('supervisors.edit', $supervisor->user_id) }}" class="inline-flex items-center justify-center w-8 h-8 rounded-lg text-gray-500 hover:bg-gray-100 hover:text-school-blue dark:text-gray-400 dark:hover:bg-white/[0.06] dark:hover:text-blue-400 transition duration-150" title="Edit">
+                                        <a href="{{ route('supervisors.edit', $supervisor->user_id) }}" class="inline-flex items-center justify-center w-8 h-8 rounded-lg text-gray-500 hover:bg-gray-100 hover:text-school-blue dark:text-gray-400 dark:hover:bg-white/[0.06] dark:hover:text-blue-400 transition duration-150" title="Edit" aria-label="Edit {{ $supervisor->user->name }}">
                                             <svg class="w-4 h-4" width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
                                         </a>
                                         <form action="{{ route('supervisors.destroy', $supervisor->user_id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus guru pembimbing ini?')">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="inline-flex items-center justify-center w-8 h-8 rounded-lg text-gray-500 hover:bg-red-50 hover:text-red-500 dark:text-gray-400 dark:hover:bg-red-500/10 dark:hover:text-red-400 transition duration-150" title="Hapus">
+                                            <button type="submit" class="inline-flex items-center justify-center w-8 h-8 rounded-lg text-gray-500 hover:bg-red-50 hover:text-red-500 dark:text-gray-400 dark:hover:bg-red-500/10 dark:hover:text-red-400 transition duration-150" title="Hapus" aria-label="Hapus {{ $supervisor->user->name }}">
                                                 <svg class="w-4 h-4" width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                                             </button>
                                         </form>
@@ -181,14 +181,14 @@
                     <x-department-badge :code="$supervisor->department->code ?? ''" />
                     <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">{{ $supervisor->user->email }}</p>
                     <div class="flex items-center gap-2 mt-3 pt-3 border-t border-gray-100 dark:border-amoled-border">
-                        <a href="{{ route('supervisors.edit', $supervisor->user_id) }}" class="inline-flex items-center gap-1.5 text-xs font-medium text-school-blue hover:underline">
+                        <a href="{{ route('supervisors.edit', $supervisor->user_id) }}" class="inline-flex items-center gap-1.5 text-xs font-medium text-school-blue hover:underline" aria-label="Edit {{ $supervisor->user->name }}">
                             <svg class="w-3.5 h-3.5" width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
                             Edit
                         </a>
                         <form action="{{ route('supervisors.destroy', $supervisor->user_id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus guru pembimbing ini?')">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="inline-flex items-center gap-1.5 text-xs font-medium text-red-500 hover:underline">
+                            <button type="submit" class="inline-flex items-center gap-1.5 text-xs font-medium text-red-500 hover:underline" aria-label="Hapus {{ $supervisor->user->name }}">
                                 <svg class="w-3.5 h-3.5" width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                                 Hapus
                             </button>

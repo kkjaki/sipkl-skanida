@@ -36,7 +36,7 @@
             </a>
 
             {{-- Application Menu Toggle (mobile only) --}}
-            <button @click="toggleApplicationMenu()"
+            <button @click="toggleApplicationMenu()" aria-label="Toggle Application Menu"
                 class="flex items-center justify-center w-10 h-10 text-gray-700 rounded-xl dark:text-gray-400 dark:hover:bg-white/[0.06] lg:hidden">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                     <path fill-rule="evenodd" clip-rule="evenodd" d="M12 8a2 2 0 100-4 2 2 0 000 4zm0 6a2 2 0 100-4 2 2 0 000 4zm0 6a2 2 0 100-4 2 2 0 000 4z" fill="currentColor"/>
@@ -48,7 +48,7 @@
         <div class="hidden lg:flex items-center gap-4 py-4 shrink-0">
             <div class="flex items-center gap-2">
                 {{-- Theme Toggle --}}
-                <button
+                <button aria-label="Toggle Theme"
                     class="relative flex items-center justify-center text-gray-500 transition-colors bg-white border border-gray-200 rounded-xl hover:text-gray-900 h-10 w-10 hover:bg-gray-100 dark:border-amoled-border dark:bg-amoled-surface dark:text-gray-400 dark:hover:bg-white/[0.06] dark:hover:text-white"
                     @click="$store.theme.toggle()">
                     <svg class="hidden dark:block" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -67,7 +67,7 @@
             class="lg:hidden flex items-center justify-between w-full gap-4 px-5 py-4 shadow-theme-md bg-white dark:bg-amoled-surface">
             <div class="flex items-center gap-2">
                 {{-- Theme Toggle --}}
-                <button
+                <button aria-label="Toggle Theme"
                     class="relative flex items-center justify-center text-gray-500 transition-colors bg-white border border-gray-200 rounded-xl hover:text-gray-900 h-10 w-10 hover:bg-gray-100 dark:border-amoled-border dark:bg-amoled-surface dark:text-gray-400 dark:hover:bg-white/[0.06] dark:hover:text-white"
                     @click="$store.theme.toggle()">
                     <svg class="hidden dark:block" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">

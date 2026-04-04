@@ -48,7 +48,7 @@
                 <div class="w-20 h-20 bg-school-blue/10 dark:bg-white/10 rounded-2xl flex items-center justify-center p-2 mb-2">
                      <!-- Logo SMKN 2 Magelang -->
                      <img 
-                        src="{{ asset('images/logo-smkn2.png') }}" 
+                        src="{{ asset('images/logo-smkn2.webp') }}" 
                         alt="Logo SMKN 2 Magelang" 
                         class="h-full w-full object-contain p-1"
                         onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"

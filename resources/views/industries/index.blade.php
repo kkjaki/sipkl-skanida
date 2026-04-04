@@ -197,7 +197,7 @@
                                     <div class="flex items-center justify-center gap-2">
                                         <a href="{{ route('industries.edit', $industry->id) }}"
                                             class="inline-flex items-center justify-center w-8 h-8 rounded-lg text-gray-500 hover:bg-gray-100 hover:text-school-blue dark:text-gray-400 dark:hover:bg-white/[0.06] dark:hover:text-blue-400 transition duration-150"
-                                            title="Edit">
+                                            title="Edit" aria-label="Edit {{ $industry->name }}">
                                             <svg class="w-4 h-4" width="16" height="16" fill="none"
                                                 stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -219,7 +219,7 @@
                                             }" class="relative">
                                                 <button @click="copyLink" type="button"
                                                     class="inline-flex items-center justify-center w-8 h-8 rounded-lg text-gray-500 hover:bg-emerald-50 hover:text-emerald-600 dark:text-gray-400 dark:hover:bg-emerald-500/10 dark:hover:text-emerald-400 transition duration-150"
-                                                    title="Copy Link Akses Mitra">
+                                                    title="Copy Link Akses Mitra" aria-label="Copy Link Akses Mitra {{ $industry->name }}">
                                                     <svg x-show="!copied" class="w-4 h-4" width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path>
                                                     </svg>
@@ -243,7 +243,7 @@
                                             @method('DELETE')
                                             <button type="submit"
                                                 class="inline-flex items-center justify-center w-8 h-8 rounded-lg text-gray-500 hover:bg-red-50 hover:text-red-500 dark:text-gray-400 dark:hover:bg-red-500/10 dark:hover:text-red-400 transition duration-150"
-                                                title="Hapus">
+                                                title="Hapus" aria-label="Hapus {{ $industry->name }}">
                                                 <svg class="w-4 h-4" width="16" height="16" fill="none"
                                                     stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -319,7 +319,7 @@
                     @endif
                     <div class="flex items-center gap-2 mt-3 pt-3 border-t border-gray-100 dark:border-amoled-border">
                         <a href="{{ route('industries.edit', $industry->id) }}"
-                            class="inline-flex items-center gap-1.5 text-xs font-medium text-school-blue hover:underline">
+                            class="inline-flex items-center gap-1.5 text-xs font-medium text-school-blue hover:underline" aria-label="Edit {{ $industry->name }}">
                             <svg class="w-3.5 h-3.5" width="14" height="14" fill="none" stroke="currentColor"
                                 viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -341,7 +341,7 @@
                                 }
                             }" class="flex items-center">
                                 <button @click="copyLink" type="button"
-                                    class="inline-flex items-center gap-1.5 text-xs font-medium text-emerald-600 hover:underline">
+                                    class="inline-flex items-center gap-1.5 text-xs font-medium text-emerald-600 hover:underline" aria-label="Copy Link Akses Mitra {{ $industry->name }}">
                                     <svg x-show="!copied" class="w-3.5 h-3.5" width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path>
                                     </svg>
@@ -358,7 +358,7 @@
                             @csrf
                             @method('DELETE')
                             <button type="submit"
-                                class="inline-flex items-center gap-1.5 text-xs font-medium text-red-500 hover:underline">
+                                class="inline-flex items-center gap-1.5 text-xs font-medium text-red-500 hover:underline" aria-label="Hapus {{ $industry->name }}">
                                 <svg class="w-3.5 h-3.5" width="14" height="14" fill="none"
                                     stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

@@ -49,7 +49,7 @@
             <div class="relative sm:min-w-[180px]">
                 <select
                     name="department"
-                    onchange="this.form.submit()"
+                    onchange="this.form.submit()" aria-label="Filter Program Keahlian"
                     class="h-11 w-full rounded-xl border border-gray-200 bg-white pl-4 pr-10 py-2.5 text-sm text-gray-800 outline-none transition duration-150 focus:border-school-blue focus:ring-3 focus:ring-school-blue/10 dark:border-amoled-border dark:bg-amoled-surface dark:text-white/90 dark:focus:border-school-blue appearance-none cursor-pointer"
                 >
                     <option value="" class="dark:bg-amoled-surface">Semua Program Keahlian</option>
@@ -66,7 +66,7 @@
             <div class="relative sm:min-w-[160px]">
                 <select
                     name="class"
-                    onchange="this.form.submit()"
+                    onchange="this.form.submit()" aria-label="Filter Kelas"
                     class="h-11 w-full rounded-xl border border-gray-200 bg-white pl-4 pr-10 py-2.5 text-sm text-gray-800 outline-none transition duration-150 focus:border-school-blue focus:ring-3 focus:ring-school-blue/10 dark:border-amoled-border dark:bg-amoled-surface dark:text-white/90 dark:focus:border-school-blue appearance-none cursor-pointer"
                 >
                     <option value="" class="dark:bg-amoled-surface">Semua Kelas</option>
@@ -152,7 +152,7 @@
                                 </td>
                                 <td class="py-4 px-4 pr-8 xl:pr-8 text-right">
                                     <div class="flex items-center justify-end space-x-3">
-                                        <a href="{{ route('students.edit', $student->user_id) }}" class="text-gray-400 hover:text-school-blue transition duration-150 flex items-center" title="Edit">
+                                        <a href="{{ route('students.edit', $student->user_id) }}" class="text-gray-400 hover:text-school-blue transition duration-150 flex items-center" title="Edit" aria-label="Edit {{ $student->user->name }}">
                                             <svg class="w-5 h-5" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
                                             </svg>
@@ -160,7 +160,7 @@
                                         <form action="{{ route('students.destroy', $student->user_id) }}" method="POST" class="inline-flex items-center" onsubmit="return confirm('Apakah Anda yakin ingin menghapus peserta didik ini?');">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="text-gray-400 hover:text-danger transition duration-150 flex items-center" title="Hapus">
+                                            <button type="submit" class="text-gray-400 hover:text-danger transition duration-150 flex items-center" title="Hapus" aria-label="Hapus {{ $student->user->name }}">
                                                 <svg class="w-5 h-5" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
                                                 </svg>
@@ -208,14 +208,14 @@
                             <div class="mb-3"></div>
                         @endif
                         <div class="flex items-center justify-end gap-4 mt-2">
-                             <a href="{{ route('students.edit', $student->user_id) }}" class="text-sm font-medium text-school-blue hover:text-school-blue/80 flex items-center gap-1">
+                             <a href="{{ route('students.edit', $student->user_id) }}" class="text-sm font-medium text-school-blue hover:text-school-blue/80 flex items-center gap-1" aria-label="Edit {{ $student->user->name }}">
                                 <svg class="w-4 h-4" width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
                                 Edit
                             </a>
                             <form action="{{ route('students.destroy', $student->user_id) }}" method="POST" class="inline-flex items-center" onsubmit="return confirm('Apakah Anda yakin ingin menghapus peserta didik ini?');">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="text-sm font-medium text-danger hover:text-danger/80 flex items-center gap-1">
+                                <button type="submit" class="text-sm font-medium text-danger hover:text-danger/80 flex items-center gap-1" aria-label="Hapus {{ $student->user->name }}">
                                     <svg class="w-4 h-4" width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                                     Hapus
                                 </button>

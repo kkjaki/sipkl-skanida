@@ -80,14 +80,14 @@
         {{-- Desktop: filters left, actions right --}}
         <div class="hidden sm:flex items-center justify-between gap-4">
             <form method="GET" action="{{ route('supervisor.journal-validations.show', $internship) }}" class="flex items-center gap-2">
-                <select name="status" onchange="this.form.submit()"
+                <select name="status" onchange="this.form.submit()" aria-label="Filter Status"
                         class="h-9 min-w-[10rem] rounded-lg border border-gray-200 bg-gray-50 px-3 pr-8 text-sm text-gray-700 outline-none focus:border-school-blue focus:ring-2 focus:ring-school-blue/10 dark:border-amoled-border dark:bg-white/[0.03] dark:text-white/90 appearance-none cursor-pointer">
                     <option value="all" {{ $status === 'all' ? 'selected' : '' }}>Semua Status</option>
                     <option value="pending" {{ $status === 'pending' ? 'selected' : '' }}>Pending</option>
                     <option value="verified" {{ $status === 'verified' ? 'selected' : '' }}>Tervalidasi</option>
                     <option value="rejected" {{ $status === 'rejected' ? 'selected' : '' }}>Ditolak</option>
                 </select>
-                <select name="sort" onchange="this.form.submit()"
+                <select name="sort" onchange="this.form.submit()" aria-label="Urutkan"
                         class="h-9 min-w-[8rem] rounded-lg border border-gray-200 bg-gray-50 px-3 pr-8 text-sm text-gray-700 outline-none focus:border-school-blue focus:ring-2 focus:ring-school-blue/10 dark:border-amoled-border dark:bg-white/[0.03] dark:text-white/90 appearance-none cursor-pointer">
                     <option value="date_desc" {{ $sort === 'date_desc' ? 'selected' : '' }}>Terbaru</option>
                     <option value="date_asc" {{ $sort === 'date_asc' ? 'selected' : '' }}>Terlama</option>
@@ -121,14 +121,14 @@
         {{-- Mobile: stacked --}}
         <div class="sm:hidden flex flex-col gap-2">
             <form method="GET" action="{{ route('supervisor.journal-validations.show', $internship) }}" class="grid grid-cols-2 gap-2">
-                <select name="status" onchange="this.form.submit()"
+                <select name="status" onchange="this.form.submit()" aria-label="Filter Status"
                         class="h-10 rounded-lg border border-gray-200 bg-gray-50 px-3 text-sm text-gray-700 outline-none focus:border-school-blue dark:border-amoled-border dark:bg-white/[0.03] dark:text-white/90 appearance-none cursor-pointer">
                     <option value="all" {{ $status === 'all' ? 'selected' : '' }}>Semua Status</option>
                     <option value="pending" {{ $status === 'pending' ? 'selected' : '' }}>Pending</option>
                     <option value="verified" {{ $status === 'verified' ? 'selected' : '' }}>Tervalidasi</option>
                     <option value="rejected" {{ $status === 'rejected' ? 'selected' : '' }}>Ditolak</option>
                 </select>
-                <select name="sort" onchange="this.form.submit()"
+                <select name="sort" onchange="this.form.submit()" aria-label="Urutkan"
                         class="h-10 rounded-lg border border-gray-200 bg-gray-50 px-3 text-sm text-gray-700 outline-none focus:border-school-blue dark:border-amoled-border dark:bg-white/[0.03] dark:text-white/90 appearance-none cursor-pointer">
                     <option value="date_desc" {{ $sort === 'date_desc' ? 'selected' : '' }}>Terbaru</option>
                     <option value="date_asc" {{ $sort === 'date_asc' ? 'selected' : '' }}>Terlama</option>
