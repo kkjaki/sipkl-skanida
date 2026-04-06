@@ -84,6 +84,7 @@ class DashboardController extends Controller
             $totalSyncedIndustries = Industry::where('is_synced', true)->count();
 
             $studentsPlaced = Internship::where('academic_year_id', $activeYear->id)
+                ->whereIn('status', ['ongoing', 'finished'])
                 ->distinct('student_id')
                 ->count('student_id');
 
@@ -108,11 +109,20 @@ class DashboardController extends Controller
      */
     private function studentDashboard($user)
     {
+        $activeYear = AcademicYear::where('is_active', true)->first();
+
         $student = Student::where('user_id', $user->id)
-            ->with(['internship.industry', 'internship.dailyJournals'])
+            ->with(['internships' => function ($q) use ($activeYear) {
+                if ($activeYear) {
+                    $q->where('academic_year_id', $activeYear->id);
+                }
+                $q->orderByRaw("FIELD(status, 'ongoing', 'finished', 'withdrawn')");
+                $q->orderByDesc('created_at');
+                $q->with(['industry', 'dailyJournals']);
+            }])
             ->first();
 
-        $internship       = $student?->internship;
+        $internship       = $student?->internships->first();
         $totalJournals    = $internship?->dailyJournals->count() ?? 0;
         $verifiedJournals = $internship?->dailyJournals->where('verification_status', 'verified')->count() ?? 0;
         $pendingJournals  = $internship?->dailyJournals->where('verification_status', 'pending')->count() ?? 0;
@@ -151,12 +161,18 @@ class DashboardController extends Controller
         if ($activeYear) {
             $siswaBelumPkl = Student::where('department_id', $deptId)
                 ->where('academic_year_id', $activeYear->id)
-                ->whereDoesntHave('internship')
+                ->whereDoesntHave('internships', function($q) use ($activeYear) {
+                    $q->where('academic_year_id', $activeYear->id)
+                      ->whereIn('status', ['ongoing', 'finished']);
+                })
                 ->count();
 
             $siswaPlaced = Student::where('department_id', $deptId)
                 ->where('academic_year_id', $activeYear->id)
-                ->whereHas('internship')
+                ->whereHas('internships', function($q) use ($activeYear) {
+                    $q->where('academic_year_id', $activeYear->id)
+                      ->whereIn('status', ['ongoing', 'finished']);
+                })
                 ->count();
         }
 
@@ -253,12 +269,21 @@ class DashboardController extends Controller
     private function supervisorDashboard($user)
     {
         $data = Cache::remember('dashboard_supervisor_' . $user->id, 60, function () use ($user) {
+            $activeYear = AcademicYear::where('is_active', true)->first();
+
             $supervisor = Supervisor::where('user_id', $user->id)
                 ->with([
-                    'internships.dailyJournals',
-                    'internships.assessmentScores',
-                    'internships.student.user',
-                    'internships.industry',
+                    'internships' => function ($q) use ($activeYear) {
+                        if ($activeYear) {
+                            $q->where('academic_year_id', $activeYear->id);
+                        }
+                        $q->with([
+                            'dailyJournals',
+                            'assessmentScores',
+                            'student.user',
+                            'industry'
+                        ]);
+                    }
                 ])
                 ->first();
 

@@ -47,15 +47,11 @@
             <div class="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm dark:border-amoled-border dark:bg-amoled-surface">
                 <div class="flex items-center justify-between">
                     <div>
-                        <p class="text-sm font-medium text-gray-500 dark:text-amoled-text">Persentase Kuota Pembimbing</p>
+                        <p class="text-sm font-medium text-gray-500 dark:text-amoled-text">Kuota Pembimbing Tersedia</p>
                         <h3 class="mt-2 text-3xl font-bold text-emerald-500">
-                            @if($totalStudents > 0)
-                                {{ round(($totalAllocatedQuota / $totalStudents) * 100, 1) }}%
-                            @else
-                                0%
-                            @endif
+                            {{ $totalAllocatedQuota }} <span class="text-base font-medium text-gray-400 dark:text-gray-500">/ {{ $totalStudents }}</span>
                         </h3>
-                        <p class="mt-1 text-xs text-gray-400 dark:text-gray-500">kuota tersedia dibanding jumlah siswa</p>
+                        <p class="mt-1 text-xs text-gray-400 dark:text-gray-500">kuota pembimbing vs total siswa</p>
                     </div>
                     <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-500/10 dark:bg-emerald-500/20 shrink-0">
                         <svg class="w-6 h-6 text-emerald-500" width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
