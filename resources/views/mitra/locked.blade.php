@@ -37,7 +37,7 @@
             <p class="text-sm text-gray-600 dark:text-gray-400">
                 Ada kesalahan pengetikan? Silakan hubungi admin Humas kami untuk revisi:
             </p>
-            <a href="https://wa.me/6281226162312?text=Halo%20Admin%20Hubin%20Skanida,%20saya%20dari%20{{ urlencode($industry->name) }}%20ingin%20merevisi%20data%20PIC/Kuota%20PKL." 
+            <a href="https://wa.me/6285747887499?text=Halo%20Admin%20Hubin,%20saya%20dari%20Industri%20{{ urlencode($industry->name) }}.%20Kami%20ingin%20mengajukan%20revisi%20atau%20update%20terkait%20data%20PIC/kuota%20PKL%20kami." 
                target="_blank"
                class="inline-flex items-center justify-center gap-3 rounded-xl bg-[#25D366] py-3.5 px-8 text-sm font-bold text-white hover:bg-[#20ba59] hover:shadow-lg hover:shadow-green-500/20 transition-all duration-200">
                 <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">

@@ -2,11 +2,13 @@
     <div class="p-5 sm:p-6">
         <div class="mb-5">
             <h2 class="text-base font-bold text-gray-900 dark:text-white">Informasi Profil</h2>
-            <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Perbarui alamat email akun Anda.</p>
-            <p class="mt-2 text-xs text-gray-400 dark:text-gray-500">
-                <svg class="w-3.5 h-3.5 inline-block -mt-0.5 mr-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                Data nama, program keahlian, dan kelas tidak dapat diubah sendiri. Hubungi Admin jika terdapat kesalahan.
-            </p>
+            <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Perbarui informasi profil dan alamat email akun Anda.</p>
+            @if($user->hasRole('student'))
+                <p class="mt-2 text-xs text-gray-400 dark:text-gray-500">
+                    <svg class="w-3.5 h-3.5 inline-block -mt-0.5 mr-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    Data nama, program keahlian, dan kelas tidak dapat diubah sendiri oleh siswa. Hubungi Admin jika terdapat kesalahan.
+                </p>
+            @endif
         </div>
 
         <form id="send-verification" method="post" action="{{ route('verification.send') }}">
@@ -20,8 +22,16 @@
             {{-- Name --}}
             <div>
                 <label for="name" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1.5">Nama</label>
-                <input id="name" type="text" value="{{ $user->name }}" readonly
-                       class="w-full rounded-xl border border-gray-200 dark:border-amoled-border bg-gray-100 dark:bg-white/[0.02] text-gray-500 dark:text-gray-400 p-2.5 text-sm cursor-not-allowed">
+                @if($user->hasRole('student'))
+                    <input id="name" type="text" value="{{ $user->name }}" readonly
+                           class="w-full rounded-xl border border-gray-200 dark:border-amoled-border bg-gray-100 dark:bg-white/[0.02] text-gray-500 dark:text-gray-400 p-2.5 text-sm cursor-not-allowed">
+                @else
+                    <input id="name" name="name" type="text" value="{{ old('name', $user->name) }}" required
+                           class="w-full rounded-xl border border-gray-200 dark:border-amoled-border bg-gray-50 dark:bg-white/[0.03] text-gray-900 dark:text-white p-2.5 text-sm focus:ring-2 focus:ring-school-blue/20 focus:border-school-blue transition-colors">
+                    @error('name')
+                        <p class="mt-1.5 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
+                    @enderror
+                @endif
             </div>
 
             {{-- Program keahlian & Kelas (role-based, read-only) --}}
