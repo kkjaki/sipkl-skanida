@@ -4,37 +4,29 @@ namespace Database\Seeders;
 
 use App\Models\AcademicYear;
 use App\Models\Department;
+use App\Models\Student;
 use App\Models\Supervisor;
 use App\Models\SupervisorAllocation;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
-class TestingStaffSeeder extends Seeder
+class UserSeeder extends Seeder
 {
     /**
-     * 4 Kepala Program + 8 Guru Pembimbing testing.
-     *
-     * KAPROG (4 akun):
-     *   Email: {kode_departemen}@smkn2magelang.sch.id (pplg@, akl@, mplb@, pm@)
-     *   Role: department_head
-     *
-     * GURU PEMBIMBING (8 akun, 2 state × 4 program keahlian):
-     *   NIP scheme: 19701{99XX}
-     *   Email: 99XX@smkn2magelang.sch.id
-     *   STATE 1 (seq 01-04): Guru dengan jurnal pending → membimbing siswa STATE 1
-     *   STATE 2 (seq 05-08): Guru dengan penilaian belum lengkap → membimbing siswa STATE 3
+     * Run the database seeds.
      */
     public function run(): void
     {
         $passwordHash = Hash::make('password');
-        $activeYear = AcademicYear::where('is_active', true)->firstOrFail();
+        $activeAcademicYear = AcademicYear::where('is_active', true)->firstOrFail();
         $departments = Department::all()->keyBy('code');
+        $faker = \Faker\Factory::create('id_ID');
 
         // =================================================================
         // ADMIN & KURIKULUM
         // =================================================================
-        $adminUser = User::firstOrCreate(
+        $admin = User::firstOrCreate(
             ['email' => 'admin@smkn2magelang.sch.id'],
             [
                 'name' => 'Admin Humas',
@@ -42,11 +34,11 @@ class TestingStaffSeeder extends Seeder
                 'role' => 'admin',
             ]
         );
-        if (!$adminUser->hasRole('admin')) {
-            $adminUser->assignRole('admin');
+        if (! $admin->hasRole('admin')) {
+            $admin->assignRole('admin');
         }
 
-        $curriculumUser = User::firstOrCreate(
+        $curriculum = User::firstOrCreate(
             ['email' => 'curriculum@smkn2magelang.sch.id'],
             [
                 'name' => 'WKS Kurikulum',
@@ -54,15 +46,12 @@ class TestingStaffSeeder extends Seeder
                 'role' => 'curriculum',
             ]
         );
-        if (!$curriculumUser->hasRole('curriculum')) {
-            $curriculumUser->assignRole('curriculum');
+        if (! $curriculum->hasRole('curriculum')) {
+            $curriculum->assignRole('curriculum');
         }
-
-        $this->command->info('✅ TestingStaffSeeder: Admin + Kurikulum seeded.');
 
         // =================================================================
         // KEPALA PROGRAM (4 akun — 1 per program keahlian)
-        // Login: {kode_departemen}@smkn2magelang.sch.id / password
         // =================================================================
         $kaprogConfig = [
             ['dept' => 'PPLG', 'name' => 'Drs. Bambang Sudarsono, M.Kom', 'nip' => '197019801'],
@@ -73,11 +62,11 @@ class TestingStaffSeeder extends Seeder
 
         foreach ($kaprogConfig as $config) {
             $department = $departments[$config['dept']] ?? null;
-            if (!$department) {
+            if (! $department) {
                 continue;
             }
 
-            $email = strtolower($config['dept']) . '@smkn2magelang.sch.id';
+            $email = strtolower($config['dept']).'@smkn2magelang.sch.id';
 
             $user = User::firstOrCreate(
                 ['email' => $email],
@@ -88,7 +77,7 @@ class TestingStaffSeeder extends Seeder
                 ]
             );
 
-            if (!$user->hasRole('department_head')) {
+            if (! $user->hasRole('department_head')) {
                 $user->assignRole('department_head');
             }
 
@@ -101,20 +90,17 @@ class TestingStaffSeeder extends Seeder
             );
         }
 
-        $this->command->info('✅ TestingStaffSeeder: 4 Kaprog seeded.');
-
         // =================================================================
         // GURU PEMBIMBING (8 akun — 2 state × 4 program keahlian)
-        // Login: 99XX@smkn2magelang.sch.id / password
         // =================================================================
         $supervisorConfig = [
-            // STATE 1: Guru dengan Jurnal Pending (seq 01-04)
+            // STATE 1: membimbing siswa STATE 1 (seq 01-04)
             ['seq' => '01', 'dept' => 'PPLG', 'name' => 'Drs. Agus Widodo, M.Pd'],
             ['seq' => '02', 'dept' => 'AKL',  'name' => 'Hj. Ratna Dewi, S.Pd'],
             ['seq' => '03', 'dept' => 'MPLB', 'name' => 'Ir. Hendra Saputra, M.T'],
             ['seq' => '04', 'dept' => 'PM',   'name' => 'Dra. Siti Aminah, M.M'],
 
-            // STATE 2: Guru dengan Penilaian Belum Lengkap (seq 05-08)
+            // STATE 2: membimbing siswa STATE 3 (seq 05-08)
             ['seq' => '05', 'dept' => 'PPLG', 'name' => 'Wahyu Prasetyo, S.Kom'],
             ['seq' => '06', 'dept' => 'AKL',  'name' => 'Nur Hidayati, S.E'],
             ['seq' => '07', 'dept' => 'MPLB', 'name' => 'Bambang Kurniawan, S.Pd'],
@@ -122,14 +108,14 @@ class TestingStaffSeeder extends Seeder
         ];
 
         foreach ($supervisorConfig as $config) {
-            $emailShort = '99' . $config['seq'];
-            $nip = '19701' . $emailShort;
-            $email = $emailShort . '@smkn2magelang.sch.id';
-
             $department = $departments[$config['dept']] ?? null;
-            if (!$department) {
+            if (! $department) {
                 continue;
             }
+
+            $emailShort = '99'.$config['seq'];
+            $email = $emailShort.'@smkn2magelang.sch.id';
+            $nip = '19701'.$emailShort;
 
             $user = User::firstOrCreate(
                 ['email' => $email],
@@ -140,7 +126,7 @@ class TestingStaffSeeder extends Seeder
                 ]
             );
 
-            if (!$user->hasRole('supervisor')) {
+            if (! $user->hasRole('supervisor')) {
                 $user->assignRole('supervisor');
             }
 
@@ -155,12 +141,66 @@ class TestingStaffSeeder extends Seeder
             SupervisorAllocation::firstOrCreate(
                 [
                     'supervisor_id' => $user->id,
-                    'academic_year_id' => $activeYear->id,
+                    'academic_year_id' => $activeAcademicYear->id,
                 ],
-                ['quota' => 10]
+                ['quota' => 16]
             );
         }
 
-        $this->command->info('✅ TestingStaffSeeder: 8 guru (2 state × 4 program keahlian) seeded.');
+        // =================================================================
+        // STUDENTS (64 siswa): 4 state × 4 jurusan × 4 siswa
+        // NIS scheme: 9SSDD (SS=state, DD=urutan global 01-16 per state)
+        // =================================================================
+        $deptOrder = ['PPLG', 'AKL', 'MPLB', 'PM'];
+        $stateClasses = [
+            1 => ['PPLG' => 'XII PPLG 1', 'AKL' => 'XII AKL 1', 'MPLB' => 'XII MPLB 1', 'PM' => 'XII PM 1'],
+            2 => ['PPLG' => 'XII PPLG 2', 'AKL' => 'XII AKL 2', 'MPLB' => 'XII MPLB 2', 'PM' => 'XII PM 2'],
+            3 => ['PPLG' => 'XII PPLG 3', 'AKL' => 'XII AKL 3', 'MPLB' => 'XII MPLB 3', 'PM' => 'XII PM 1'],
+            4 => ['PPLG' => 'XII PPLG 1', 'AKL' => 'XII AKL 1', 'MPLB' => 'XII MPLB 1', 'PM' => 'XII PM 1'],
+        ];
+
+        for ($state = 1; $state <= 4; $state++) {
+            foreach ($deptOrder as $deptIndex => $deptCode) {
+                $department = $departments[$deptCode] ?? null;
+                if (! $department) {
+                    continue;
+                }
+
+                $orderStart = ($deptIndex * 4) + 1;
+
+                for ($i = 0; $i < 4; $i++) {
+                    $order = $orderStart + $i;
+                    $nis = sprintf('9%02d%02d', $state, $order);
+                    $email = $nis.'@smkn2magelang.sch.id';
+
+                    $user = User::firstOrCreate(
+                        ['email' => $email],
+                        [
+                            'name' => $faker->firstName.' '.$faker->lastName,
+                            'password' => $passwordHash,
+                            'role' => 'student',
+                        ]
+                    );
+
+                    if (! $user->hasRole('student')) {
+                        $user->assignRole('student');
+                    }
+
+                    Student::firstOrCreate(
+                        ['user_id' => $user->id],
+                        [
+                            'department_id' => $department->id,
+                            'academic_year_id' => $activeAcademicYear->id,
+                            'nis' => $nis,
+                            'place_of_birth' => $faker->city,
+                            'date_of_birth' => $faker->dateTimeBetween('-18 years', '-16 years')->format('Y-m-d'),
+                            'class_name' => $stateClasses[$state][$deptCode],
+                            'address' => $faker->address,
+                            'phone' => $faker->phoneNumber,
+                        ]
+                    );
+                }
+            }
+        }
     }
 }
