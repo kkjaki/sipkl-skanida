@@ -130,6 +130,9 @@ Route::middleware('auth')->group(function () {
             Route::get('/', [IndustryProposalController::class, 'index'])->name('index');
             Route::get('/create', [IndustryProposalController::class, 'create'])->name('create');
             Route::post('/', [IndustryProposalController::class, 'store'])->name('store');
+            Route::get('/{proposal}/edit', [IndustryProposalController::class, 'edit'])->name('edit');
+            Route::put('/{proposal}', [IndustryProposalController::class, 'update'])->name('update');
+            Route::delete('/{proposal}', [IndustryProposalController::class, 'destroy'])->name('destroy');
         });
 
         Route::prefix('student/journals')->name('student.journals.')->group(function () {

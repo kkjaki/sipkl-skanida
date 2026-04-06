@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Industry;
 use App\Models\Internship;
 use App\Http\Requests\StoreProposalRequest;
+use App\Http\Requests\UpdateProposalRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
@@ -138,5 +139,79 @@ class IndustryProposalController extends Controller
 
         return redirect()->route('student.proposals.index')
             ->with('success', 'Pengajuan lokasi PKL berhasil dikirim. Admin akan segera memverifikasi data Anda.');
+    }
+
+    /**
+     * Show the form for editing the specified proposal.
+     */
+    public function edit(Industry $proposal)
+    {
+        $userId = Auth::id();
+
+        if ($proposal->student_submitter_id !== $userId) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        if ($proposal->is_synced) {
+            return redirect()->route('student.proposals.index')
+                ->with('info', 'Proposal sudah diverifikasi dan tidak dapat diubah.');
+        }
+
+        return view('industries.edit-propose', compact('proposal'));
+    }
+
+    /**
+     * Update the specified proposal in storage.
+     */
+    public function update(UpdateProposalRequest $request, Industry $proposal)
+    {
+        $userId = Auth::id();
+
+        if ($proposal->student_submitter_id !== $userId) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        if ($proposal->is_synced) {
+            return redirect()->route('student.proposals.index')
+                ->with('info', 'Proposal sudah diverifikasi dan tidak dapat diubah.');
+        }
+
+        $validated = $request->validated();
+
+        $proposal->update([
+            'name'                     => $validated['name'],
+            'address'                  => $validated['address'],
+            'city'                     => $validated['city'],
+            'contact_person'           => $validated['contact_person'] ?? null,
+            'email'                    => $validated['email'] ?? null,
+            'phone'                    => $validated['phone'] ?? null,
+        ]);
+
+        return redirect()->route('student.proposals.index')
+            ->with('success', 'Pengajuan lokasi PKL berhasil diperbarui.');
+    }
+
+    /**
+     * Remove the specified proposal from storage.
+     */
+    public function destroy(Industry $proposal)
+    {
+        $userId = Auth::id();
+
+        if ($proposal->student_submitter_id !== $userId) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        if ($proposal->is_synced) {
+            return redirect()->route('student.proposals.index')
+                ->with('info', 'Proposal sudah diverifikasi dan tidak dapat dihapus.');
+        }
+
+        $proposal->delete();
+
+        Cache::forget('dashboard_stats');
+
+        return redirect()->route('student.proposals.index')
+            ->with('success', 'Pengajuan lokasi PKL berhasil dibatalkan dan dihapus.');
     }
 }

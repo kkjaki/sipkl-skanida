@@ -46,7 +46,7 @@
                             </p>
                             @if($internship->start_date)
                                 <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">
-                                    Mulai: {{ $internship->start_date->format('d M Y') }}
+                                    Mulai: {{ $internship->start_date->format('d M Y') }} <span class="mx-1">&bull;</span> Akhir: {{ $internship->industry->active_partnership?->end_date?->format('d M Y') ?? '-' }}
                                 </p>
                             @endif
                         </div>
