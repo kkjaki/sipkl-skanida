@@ -16,8 +16,15 @@ class GradeRecapController extends Controller
      */
     public function index()
     {
-        $internships = Cache::remember('grade_recap', 1800, function () {
+        $activeYear = \App\Models\AcademicYear::where('is_active', true)->first();
+        $cacheKey = 'grade_recap_' . ($activeYear ? $activeYear->id : 'all');
+
+        $internships = Cache::remember($cacheKey, 1800, function () use ($activeYear) {
             return Internship::with(['student.user', 'industry'])
+                ->whereIn('status', ['ongoing', 'finished'])
+                ->when($activeYear, function ($q) use ($activeYear) {
+                    $q->where('academic_year_id', $activeYear->id);
+                })
                 ->withAvg('assessmentScores as avg_industry', 'score_industry')
                 ->withAvg('assessmentScores as avg_school', 'score_school')
                 ->orderBy(
