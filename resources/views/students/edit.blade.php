@@ -74,7 +74,7 @@
                             <input type="checkbox" name="reset_email" value="1" x-model="resetEmail"
                                    class="w-4 h-4 rounded border-gray-300 text-school-blue focus:ring-school-blue/20 dark:border-amoled-border dark:bg-amoled-input" />
                             <span class="text-sm text-gray-600 dark:text-gray-400">
-                                Reset email ke pola default (<span class="font-mono text-xs">NIS@siswa.smk.sch.id</span>)
+                                Reset email ke pola default (<span class="font-mono text-xs">NIS@smkn2magelang.sch.id</span>)
                             </span>
                         </label>
                         <p class="mt-1 text-xs text-gray-400 dark:text-gray-500">
