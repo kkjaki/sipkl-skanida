@@ -18,7 +18,12 @@ class JournalValidationController extends Controller
     {
         $supervisorId = Auth::id();
 
+        $activeYear = \App\Models\AcademicYear::where('is_active', true)->first();
+
         $internships = Internship::where('supervisor_id', $supervisorId)
+            ->when($activeYear, function ($q) use ($activeYear) {
+                $q->where('academic_year_id', $activeYear->id);
+            })
             ->with(['student.user', 'industry'])
             ->withCount(['dailyJournals as pending_count' => function ($q) {
                 $q->where('verification_status', 'pending');

@@ -18,17 +18,26 @@ class DailyJournalController extends Controller
     {
         $userId = Auth::id();
 
+        $activeYear = \App\Models\AcademicYear::where('is_active', true)->first();
+
         $internship = Internship::where('student_id', $userId)
             ->where('status', 'ongoing')
+            ->when($activeYear, function ($q) use ($activeYear) {
+                $q->where('academic_year_id', $activeYear->id);
+            })
             ->first();
 
-        $journals = collect();
+        // Load journals from ALL their internships this year so they don't lose old history
+        $allInternshipIds = Internship::where('student_id', $userId)
+            ->when($activeYear, function ($q) use ($activeYear) {
+                $q->where('academic_year_id', $activeYear->id);
+            })
+            ->pluck('id');
 
-        if ($internship) {
-            $journals = DailyJournal::where('internship_id', $internship->id)
-                ->orderByDesc('date')
-                ->paginate(10);
-        }
+        $journals = DailyJournal::whereIn('internship_id', $allInternshipIds)
+            ->with('internship.industry') // Allows view to show industry name if they moved
+            ->orderByDesc('date')
+            ->paginate(10);
 
         return view('journals.index', compact('internship', 'journals'));
     }
@@ -40,8 +49,13 @@ class DailyJournalController extends Controller
     {
         $userId = Auth::id();
 
+        $activeYear = \App\Models\AcademicYear::where('is_active', true)->first();
+
         $internship = Internship::where('student_id', $userId)
             ->where('status', 'ongoing')
+            ->when($activeYear, function ($q) use ($activeYear) {
+                $q->where('academic_year_id', $activeYear->id);
+            })
             ->firstOrFail();
 
         $validated = $request->validated();
