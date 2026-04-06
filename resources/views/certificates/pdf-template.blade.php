@@ -134,11 +134,16 @@
                 ? \Carbon\Carbon::parse($internship->actual_end_date)->locale('id')->translatedFormat('d F Y')
                 : '-';
             $issuedDate = \Carbon\Carbon::parse($cert->issued_date)->locale('id')->translatedFormat('d F Y');
+            $imagePath = '/home/sipklska/domains/sipkl-smkn2mgl.web.id/public_html/images/certificate-background.png';
+            $base64Data = '';
+            if (!file_exists($imagePath)) {
+                dd('File gambar tidak ditemukan di server pada jalur: ' . $imagePath);
+            }
+            $base64Data = 'data:image/png;base64,' . base64_encode(file_get_contents($imagePath));
         @endphp
         <div class="page">
             {{-- Background Image --}}
-            <img src="{{ public_path('images/certificate-background.png') }}" class="bg-img" />
-
+            <img src="{{ $base64Data }}" class="bg-img" />
             {{-- Main Content --}}
             <div class="content">
                 {{-- Nomor Surat --}}
