@@ -20,7 +20,13 @@ class AssessmentController extends Controller
 
         $totalIndicators = EvaluationIndicator::count();
 
+        $activeYear = \App\Models\AcademicYear::where('is_active', true)->first();
+
         $internships = Internship::where('supervisor_id', $supervisorId)
+            ->whereIn('status', ['ongoing', 'finished'])
+            ->when($activeYear, function ($q) use ($activeYear) {
+                $q->where('academic_year_id', $activeYear->id);
+            })
             ->with(['student.user', 'industry'])
             ->withCount('assessmentScores as scored_count')
             ->get();
@@ -36,6 +42,11 @@ class AssessmentController extends Controller
         // Security: pastikan internship milik supervisor yang login
         if ($internship->supervisor_id !== Auth::id()) {
             abort(403, 'Anda tidak memiliki akses ke data ini.');
+        }
+
+        if ($internship->status === 'withdrawn') {
+            return redirect()->route('supervisor.assessments.index')
+                ->with('error', 'Siswa telah ditarik dari industri ini. Penilaian ditutup.');
         }
 
         $internship->load(['student.user', 'industry']);
@@ -57,6 +68,11 @@ class AssessmentController extends Controller
         // Security: pastikan internship milik supervisor yang login
         if ($internship->supervisor_id !== Auth::id()) {
             abort(403, 'Anda tidak memiliki akses ke data ini.');
+        }
+
+        if ($internship->status === 'withdrawn') {
+            return redirect()->route('supervisor.assessments.index')
+                ->with('error', 'Siswa telah ditarik dari industri ini. Penilaian ditutup.');
         }
 
         $request->validate([
