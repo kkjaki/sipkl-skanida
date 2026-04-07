@@ -23,19 +23,25 @@
 
         @if ($industry->is_synced)
             <!-- Magic Link Access (Admin Only) -->
-            <div class="rounded-xl bg-emerald-500/5 border border-emerald-500/10 p-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div
+                class="rounded-xl bg-emerald-500/5 border border-emerald-500/10 p-4 flex flex-col sm:flex-row items-center justify-between gap-4">
                 <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-full bg-emerald-100 dark:bg-emerald-500/10 flex items-center justify-center shrink-0">
-                        <svg class="w-5 h-5 text-emerald-600 dark:text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z"></path>
+                    <div
+                        class="w-10 h-10 rounded-full bg-emerald-100 dark:bg-emerald-500/10 flex items-center justify-center shrink-0">
+                        <svg class="w-5 h-5 text-emerald-600 dark:text-emerald-400" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z">
+                            </path>
                         </svg>
                     </div>
                     <div>
                         <h4 class="text-sm font-bold text-gray-800 dark:text-white">Link Akses Mandiri Mitra</h4>
-                        <p class="text-xs text-gray-500 dark:text-amoled-text">Berikan link ini ke pihak industri agar mereka bisa update data PIC & kuota secara mandiri.</p>
+                        <p class="text-xs text-gray-500 dark:text-amoled-text">Berikan link ini ke pihak industri agar
+                            mereka bisa update data PIC & kuota secara mandiri.</p>
                     </div>
                 </div>
-                <div x-data="{ 
+                <div x-data="{
                     copied: false,
                     copyLink() {
                         const link = '{{ URL::temporarySignedRoute('mitra.confirm', now()->addDays(14), ['industry' => $industry->id]) }}';
@@ -45,12 +51,16 @@
                     }
                 }">
                     <button @click="copyLink" type="button"
-                            class="inline-flex items-center justify-center gap-2.5 rounded-xl bg-emerald-600 py-2.5 px-6 text-center text-sm font-medium text-white hover:bg-emerald-700 transition duration-150 ease-in-out shadow-sm w-full sm:w-auto">
+                        class="inline-flex items-center justify-center gap-2.5 rounded-xl bg-emerald-600 py-2.5 px-6 text-center text-sm font-medium text-white hover:bg-emerald-700 transition duration-150 ease-in-out shadow-sm w-full sm:w-auto">
                         <svg x-show="!copied" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3">
+                            </path>
                         </svg>
-                        <svg x-show="copied" x-cloak class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path>
+                        <svg x-show="copied" x-cloak class="w-4 h-4" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7">
+                            </path>
                         </svg>
                         <span x-text="copied ? 'Link Berhasil Disalin!' : 'Salin Link Akses Mitra'"></span>
                     </button>
@@ -218,15 +228,20 @@
                         <dd class="mt-0.5 text-sm text-gray-700 dark:text-gray-300">{{ $industry->phone ?? '-' }}</dd>
                     </div>
                     <div>
-                        <dt class="text-xs font-medium text-gray-400 dark:text-gray-500 uppercase tracking-wide">Penanggung Jawab (PIC)</dt>
-                        <dd class="mt-0.5 text-sm font-medium text-gray-800 dark:text-white">{{ $industry->pic_name ?? '-' }}</dd>
+                        <dt class="text-xs font-medium text-gray-400 dark:text-gray-500 uppercase tracking-wide">Penanggung
+                            Jawab (PIC)</dt>
+                        <dd class="mt-0.5 text-sm font-medium text-gray-800 dark:text-white">
+                            {{ $industry->pic_name ?? '-' }}</dd>
                     </div>
                     <div>
-                        <dt class="text-xs font-medium text-gray-400 dark:text-gray-500 uppercase tracking-wide">Jabatan PIC</dt>
-                        <dd class="mt-0.5 text-sm text-gray-700 dark:text-gray-300">{{ $industry->pic_position ?? '-' }}</dd>
+                        <dt class="text-xs font-medium text-gray-400 dark:text-gray-500 uppercase tracking-wide">Jabatan
+                            PIC</dt>
+                        <dd class="mt-0.5 text-sm text-gray-700 dark:text-gray-300">{{ $industry->pic_position ?? '-' }}
+                        </dd>
                     </div>
                     <div>
-                        <dt class="text-xs font-medium text-gray-400 dark:text-gray-500 uppercase tracking-wide">NIP PIC</dt>
+                        <dt class="text-xs font-medium text-gray-400 dark:text-gray-500 uppercase tracking-wide">NIP PIC
+                        </dt>
                         <dd class="mt-0.5 text-sm text-gray-700 dark:text-gray-300">{{ $industry->nip ?? '-' }}</dd>
                     </div>
                     <div>
@@ -461,7 +476,7 @@
                                         Nomor Dokumen <span class="text-gray-400 text-xs">(Opsional)</span>
                                     </label>
                                     <input type="text" name="document_number" id="document_number"
-                                        placeholder="Contoh: 001/MOU/SKANIDA/2026"
+                                        placeholder="Contoh: 001/MOU/281/2026"
                                         class="h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 outline-none transition duration-150 focus:border-school-blue focus:ring-3 focus:ring-school-blue/10 dark:border-amoled-border dark:bg-amoled-input dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-school-blue"
                                         value="{{ old('document_number') }}">
                                     @error('document_number')
@@ -489,8 +504,8 @@
                                             class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
                                             Tanggal Selesai <span class="text-red-500">*</span>
                                         </label>
-                                        <input type="date" name="end_date" id="end_date" required
-                                            min="2000-01-01" max="2099-12-31" onclick="this.showPicker()"
+                                        <input type="date" name="end_date" id="end_date" required min="2000-01-01"
+                                            max="2099-12-31" onclick="this.showPicker()"
                                             class="h-11 w-full rounded-lg border border-gray-300 bg-white dark:bg-amoled-input px-4 py-2.5 text-sm text-gray-800 dark:text-white/90 outline-none transition duration-150 focus:border-school-blue focus:ring-3 focus:ring-school-blue/10 dark:border-amoled-border dark:focus:border-school-blue cursor-pointer"
                                             value="{{ old('end_date') }}" onkeydown="return false;">
                                         @error('end_date')
@@ -562,53 +577,53 @@
             </div>
         </div>
 
-    @push('scripts')
-        <script>
-            // Date validation for MoU form
-            document.addEventListener('DOMContentLoaded', function() {
-                const startDateInput = document.getElementById('start_date');
-                const endDateInput = document.getElementById('end_date');
+        @push('scripts')
+            <script>
+                // Date validation for MoU form
+                document.addEventListener('DOMContentLoaded', function() {
+                    const startDateInput = document.getElementById('start_date');
+                    const endDateInput = document.getElementById('end_date');
 
-                if (startDateInput && endDateInput) {
-                    // Prevent manual keyboard input
-                    [startDateInput, endDateInput].forEach(input => {
-                        input.addEventListener('keydown', function(e) {
-                            e.preventDefault();
-                            return false;
+                    if (startDateInput && endDateInput) {
+                        // Prevent manual keyboard input
+                        [startDateInput, endDateInput].forEach(input => {
+                            input.addEventListener('keydown', function(e) {
+                                e.preventDefault();
+                                return false;
+                            });
+
+                            // Validate date on change
+                            input.addEventListener('change', function() {
+                                const value = this.value;
+                                if (value) {
+                                    const year = parseInt(value.split('-')[0]);
+                                    if (year < 2000 || year > 2099) {
+                                        this.value = '';
+                                        alert('Tahun harus antara 2000-2099');
+                                    }
+                                }
+                            });
                         });
 
-                        // Validate date on change
-                        input.addEventListener('change', function() {
-                            const value = this.value;
-                            if (value) {
-                                const year = parseInt(value.split('-')[0]);
-                                if (year < 2000 || year > 2099) {
-                                    this.value = '';
-                                    alert('Tahun harus antara 2000-2099');
-                                }
+                        // Validate end date is after start date
+                        endDateInput.addEventListener('change', function() {
+                            const startDate = new Date(startDateInput.value);
+                            const endDate = new Date(this.value);
+
+                            if (startDateInput.value && this.value && endDate <= startDate) {
+                                alert('Tanggal selesai harus lebih dari tanggal mulai');
+                                this.value = '';
                             }
                         });
-                    });
 
-                    // Validate end date is after start date
-                    endDateInput.addEventListener('change', function() {
-                        const startDate = new Date(startDateInput.value);
-                        const endDate = new Date(this.value);
-
-                        if (startDateInput.value && this.value && endDate <= startDate) {
-                            alert('Tanggal selesai harus lebih dari tanggal mulai');
-                            this.value = '';
-                        }
-                    });
-
-                    // Update min date for end_date when start_date changes
-                    startDateInput.addEventListener('change', function() {
-                        if (this.value) {
-                            endDateInput.min = this.value;
-                        }
-                    });
-                }
-            });
-        </script>
-    @endpush
-@endsection
+                        // Update min date for end_date when start_date changes
+                        startDateInput.addEventListener('change', function() {
+                            if (this.value) {
+                                endDateInput.min = this.value;
+                            }
+                        });
+                    }
+                });
+            </script>
+        @endpush
+    @endsection

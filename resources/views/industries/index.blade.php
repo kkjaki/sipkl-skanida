@@ -310,7 +310,7 @@
                         @elseif($industry->status === 'blacklisted')
                             <span
                                 class="inline-block rounded-lg px-2.5 py-0.5 text-xs font-semibold border bg-red-900/10 text-red-600 border-red-900/20 dark:bg-red-900/20 dark:text-red-400 dark:border-red-900/30">Ditolak/Blacklist
-                                </span>
+                            </span>
                         @elseif($industry->is_synced && $industry->total_quota === 0)
                             <span
                                 class="inline-block rounded-lg px-2.5 py-0.5 text-xs font-semibold border bg-cyan-500/10 text-cyan-600 border-cyan-500/20 dark:bg-cyan-500/20 dark:text-cyan-400 dark:border-cyan-500/30">Menunggu

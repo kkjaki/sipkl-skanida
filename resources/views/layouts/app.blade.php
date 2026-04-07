@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -26,23 +27,19 @@
     @vite(['resources/css/app.css'])
 
     <style>
-        [x-cloak] { display: none !important; }
+        [x-cloak] {
+            display: none !important;
+        }
     </style>
 </head>
+
 <body x-data class="font-sans antialiased bg-gray-50 dark:bg-amoled text-gray-800 dark:text-gray-100">
     <!-- Screen overlay for mobile sidebar -->
-    <div
-        x-show="$store.sidebar.isMobileOpen"
-        @click="$store.sidebar.setMobileOpen(false)"
-        x-transition:enter="transition ease-out duration-300"
-        x-transition:enter-start="opacity-0"
-        x-transition:enter-end="opacity-100"
-        x-transition:leave="transition ease-in duration-200"
-        x-transition:leave-start="opacity-100"
-        x-transition:leave-end="opacity-0"
-        class="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm lg:hidden"
-        style="display: none;"
-    ></div>
+    <div x-show="$store.sidebar.isMobileOpen" @click="$store.sidebar.setMobileOpen(false)"
+        x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0"
+        x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-200"
+        x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
+        class="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm lg:hidden" style="display: none;"></div>
 
     <div class="flex h-screen overflow-hidden">
         <!-- Sidebar -->
@@ -71,7 +68,8 @@
             Alpine.store('theme', {
                 init() {
                     const savedTheme = localStorage.getItem('theme');
-                    const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+                    const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' :
+                        'light';
                     this.theme = savedTheme || systemTheme;
                     this.updateTheme();
                 },
@@ -123,4 +121,5 @@
 
     @stack('scripts')
 </body>
+
 </html>

@@ -2,7 +2,10 @@
 
 namespace Database\Seeders;
 
+use App\Models\AcademicYear;
+use App\Models\Department;
 use App\Models\Industry;
+use App\Models\IndustryAllocation;
 use Illuminate\Database\Seeder;
 
 class IndustrySeeder extends Seeder
@@ -75,5 +78,39 @@ class IndustrySeeder extends Seeder
                 'status' => 'open',
             ]
         );
+
+        $activeYear = AcademicYear::where('is_active', true)->first();
+        $departments = Department::orderBy('code')->get();
+
+        if (! $activeYear || $departments->isEmpty()) {
+            return;
+        }
+
+        $quotaByCode = [
+            'PPLG' => 5,
+            'AKL' => 5,
+            'MPLB' => 5,
+            'PM' => 3,
+        ];
+
+        $verifiedIndustries = Industry::where('is_synced', true)->get();
+        foreach ($verifiedIndustries as $industry) {
+            foreach ($departments as $department) {
+                $quota = $quotaByCode[$department->code] ?? 0;
+
+                if ($quota <= 0) {
+                    continue;
+                }
+
+                IndustryAllocation::updateOrCreate(
+                    [
+                        'industry_id' => $industry->id,
+                        'department_id' => $department->id,
+                        'academic_year_id' => $activeYear->id,
+                    ],
+                    ['quota' => $quota]
+                );
+            }
+        }
     }
 }

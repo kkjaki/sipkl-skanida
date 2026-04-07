@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Industry extends Model
 {
     use HasFactory, SoftDeletes;
-    
+
     protected static function booted()
     {
         static::deleting(function ($industry) {

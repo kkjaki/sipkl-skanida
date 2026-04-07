@@ -21,6 +21,7 @@ class Student extends Model
 
     // user_id is the primary key and foreign key to users
     protected $primaryKey = 'user_id';
+
     public $incrementing = false;
 
     protected $fillable = [

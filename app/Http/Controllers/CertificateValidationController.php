@@ -16,7 +16,7 @@ class CertificateValidationController extends Controller
     {
         $student = Auth::user()->student;
 
-        if (!$student) {
+        if (! $student) {
             abort(403, 'Anda belum terdaftar sebagai siswa.');
         }
 
@@ -35,7 +35,7 @@ class CertificateValidationController extends Controller
             // Get or create the certificate
             $certificate = $internship->certificate;
 
-            if (!$certificate) {
+            if (! $certificate) {
                 $certificate = Certificate::create([
                     'internship_id' => $internship->id,
                     'status' => 'draft',
@@ -56,7 +56,7 @@ class CertificateValidationController extends Controller
         // Ensure this certificate belongs to the logged-in student
         $internship = $certificate->internship;
 
-        if (!$internship || $internship->student_id !== $student->user_id) {
+        if (! $internship || $internship->student_id !== $student->user_id) {
             abort(403, 'Anda tidak memiliki akses ke sertifikat ini.');
         }
 

@@ -14,7 +14,7 @@ class ApproveProposalRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'quotas'   => ['required', 'array'],
+            'quotas' => ['required', 'array'],
             'quotas.*' => ['nullable', 'integer', 'min:0'],
         ];
     }
@@ -40,9 +40,9 @@ class ApproveProposalRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'quotas.required'  => 'Data alokasi kuota wajib diisi.',
+            'quotas.required' => 'Data alokasi kuota wajib diisi.',
             'quotas.*.integer' => 'Kuota harus berupa angka.',
-            'quotas.*.min'     => 'Kuota minimal 0.',
+            'quotas.*.min' => 'Kuota minimal 0.',
         ];
     }
 }

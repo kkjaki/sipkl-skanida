@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Industry;
-use App\Models\Student;
 use App\Models\AcademicYear;
+use App\Models\EvaluationIndicator;
+use App\Models\Industry;
 use App\Models\IndustryAllocation;
 use App\Models\Internship;
+use App\Models\Student;
 use App\Models\Supervisor;
-use App\Models\EvaluationIndicator;
 use App\Models\SupervisorAllocation;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -60,15 +60,15 @@ class DashboardController extends Controller
         $activeYear = AcademicYear::where('is_active', true)->first();
 
         $stats = Cache::remember('dashboard_admin_stats', 60 * 60, function () use ($activeYear) {
-            if (!$activeYear) {
+            if (! $activeYear) {
                 return [
-                    'active_year'             => null,
-                    'total_students'          => 0,
-                    'students_per_dept'       => collect(),
+                    'active_year' => null,
+                    'total_students' => 0,
+                    'students_per_dept' => collect(),
                     'total_synced_industries' => 0,
-                    'students_placed'         => 0,
-                    'students_unplaced'       => 0,
-                    'active_supervisors'      => 0,
+                    'students_placed' => 0,
+                    'students_unplaced' => 0,
+                    'active_supervisors' => 0,
                 ];
             }
 
@@ -91,13 +91,13 @@ class DashboardController extends Controller
             $activeSupervisors = User::role('supervisor')->count();
 
             return [
-                'active_year'             => $activeYear->name,
-                'total_students'          => $totalStudents,
-                'students_per_dept'       => $studentsPerDept,
+                'active_year' => $activeYear->name,
+                'total_students' => $totalStudents,
+                'students_per_dept' => $studentsPerDept,
                 'total_synced_industries' => $totalSyncedIndustries,
-                'students_placed'         => $studentsPlaced,
-                'students_unplaced'       => max(0, $totalStudents - $studentsPlaced),
-                'active_supervisors'      => $activeSupervisors,
+                'students_placed' => $studentsPlaced,
+                'students_unplaced' => max(0, $totalStudents - $studentsPlaced),
+                'active_supervisors' => $activeSupervisors,
             ];
         });
 
@@ -122,18 +122,18 @@ class DashboardController extends Controller
             }])
             ->first();
 
-        $internship       = $student?->internships->first();
-        $totalJournals    = $internship?->dailyJournals->count() ?? 0;
+        $internship = $student?->internships->first();
+        $totalJournals = $internship?->dailyJournals->count() ?? 0;
         $verifiedJournals = $internship?->dailyJournals->where('verification_status', 'verified')->count() ?? 0;
-        $pendingJournals  = $internship?->dailyJournals->where('verification_status', 'pending')->count() ?? 0;
+        $pendingJournals = $internship?->dailyJournals->where('verification_status', 'pending')->count() ?? 0;
 
         return view('dashboard.student', [
-            'user'             => $user,
-            'student'          => $student,
-            'internship'       => $internship,
-            'totalJournals'    => $totalJournals,
+            'user' => $user,
+            'student' => $student,
+            'internship' => $internship,
+            'totalJournals' => $totalJournals,
             'verifiedJournals' => $verifiedJournals,
-            'pendingJournals'  => $pendingJournals,
+            'pendingJournals' => $pendingJournals,
         ]);
     }
 
@@ -142,7 +142,7 @@ class DashboardController extends Controller
      */
     private function kaprogDashboard($user)
     {
-        $deptId     = $user->supervisor->department_id;
+        $deptId = $user->supervisor->department_id;
         $department = $user->supervisor->department;
         $activeYear = AcademicYear::where('is_active', true)->first();
 
@@ -151,27 +151,27 @@ class DashboardController extends Controller
             ->where('status', '!=', 'blacklisted')
             ->whereNotNull('student_submitter_id')
             ->whereHas('studentSubmitter', function ($q) use ($deptId) {
-                $q->whereHas('student', fn($s) => $s->where('department_id', $deptId));
+                $q->whereHas('student', fn ($s) => $s->where('department_id', $deptId));
             })
             ->count();
 
         // 2. Siswa Belum PKL dan Sudah PKL
         $siswaBelumPkl = 0;
-        $siswaPlaced   = 0;
+        $siswaPlaced = 0;
         if ($activeYear) {
             $siswaBelumPkl = Student::where('department_id', $deptId)
                 ->where('academic_year_id', $activeYear->id)
-                ->whereDoesntHave('internships', function($q) use ($activeYear) {
+                ->whereDoesntHave('internships', function ($q) use ($activeYear) {
                     $q->where('academic_year_id', $activeYear->id)
-                      ->whereIn('status', ['ongoing', 'finished']);
+                        ->whereIn('status', ['ongoing', 'finished']);
                 })
                 ->count();
 
             $siswaPlaced = Student::where('department_id', $deptId)
                 ->where('academic_year_id', $activeYear->id)
-                ->whereHas('internships', function($q) use ($activeYear) {
+                ->whereHas('internships', function ($q) use ($activeYear) {
                     $q->where('academic_year_id', $activeYear->id)
-                      ->whereIn('status', ['ongoing', 'finished']);
+                        ->whereIn('status', ['ongoing', 'finished']);
                 })
                 ->count();
         }
@@ -191,7 +191,7 @@ class DashboardController extends Controller
             ->where('status', '!=', 'blacklisted')
             ->whereNotNull('student_submitter_id')
             ->whereHas('studentSubmitter', function ($q) use ($deptId) {
-                $q->whereHas('student', fn($s) => $s->where('department_id', $deptId));
+                $q->whereHas('student', fn ($s) => $s->where('department_id', $deptId));
             })
             ->with('studentSubmitter')
             ->latest()
@@ -233,10 +233,10 @@ class DashboardController extends Controller
 
             // 4. Quota vs Students (progress)
             $totalAllocatedQuota = 0;
-            $totalStudents       = 0;
+            $totalStudents = 0;
             if ($activeYear) {
                 $totalAllocatedQuota = SupervisorAllocation::where('academic_year_id', $activeYear->id)->sum('quota');
-                $totalStudents       = Student::where('academic_year_id', $activeYear->id)->count();
+                $totalStudents = Student::where('academic_year_id', $activeYear->id)->count();
             }
 
             // 5. Siswa yang belum ada nilai PKL
@@ -268,7 +268,7 @@ class DashboardController extends Controller
      */
     private function supervisorDashboard($user)
     {
-        $data = Cache::remember('dashboard_supervisor_' . $user->id, 60, function () use ($user) {
+        $data = Cache::remember('dashboard_supervisor_'.$user->id, 60, function () use ($user) {
             $activeYear = AcademicYear::where('is_active', true)->first();
 
             $supervisor = Supervisor::where('user_id', $user->id)
@@ -281,9 +281,9 @@ class DashboardController extends Controller
                             'dailyJournals',
                             'assessmentScores',
                             'student.user',
-                            'industry'
+                            'industry',
                         ]);
-                    }
+                    },
                 ])
                 ->first();
 
@@ -292,18 +292,18 @@ class DashboardController extends Controller
             $totalStudents = $internships->count();
 
             $pendingJournals = $internships->sum(
-                fn($i) => $i->dailyJournals->where('verification_status', 'pending')->count()
+                fn ($i) => $i->dailyJournals->where('verification_status', 'pending')->count()
             );
 
             $studentsUnassessed = $internships->filter(
-                fn($i) => $i->assessmentScores->isEmpty()
+                fn ($i) => $i->assessmentScores->isEmpty()
             )->count();
 
             return [
-                'totalStudents'      => $totalStudents,
-                'pendingJournals'    => $pendingJournals,
+                'totalStudents' => $totalStudents,
+                'pendingJournals' => $pendingJournals,
                 'studentsUnassessed' => $studentsUnassessed,
-                'internships'        => $internships,
+                'internships' => $internships,
             ];
         });
 

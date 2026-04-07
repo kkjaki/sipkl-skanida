@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Supervisor;
-use App\Models\User;
-use App\Models\Department;
 use App\Http\Requests\StoreSupervisorRequest;
 use App\Http\Requests\UpdateSupervisorRequest;
+use App\Models\Department;
+use App\Models\Supervisor;
+use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Http\Request;
 
 class SupervisorController extends Controller
 {
@@ -26,13 +26,13 @@ class SupervisorController extends Controller
         $supervisors = Supervisor::with(['user', 'department'])
             ->when($search, function ($query, $search) {
                 $query->where('nip', 'like', "%{$search}%")
-                      ->orWhereHas('user', function ($q) use ($search) {
-                          $q->where('name', 'like', "%{$search}%")
+                    ->orWhereHas('user', function ($q) use ($search) {
+                        $q->where('name', 'like', "%{$search}%")
                             ->orWhere('email', 'like', "%{$search}%");
-                      })
-                      ->orWhereHas('department', function ($q) use ($search) {
-                          $q->where('name', 'like', "%{$search}%");
-                      });
+                    })
+                    ->orWhereHas('department', function ($q) use ($search) {
+                        $q->where('name', 'like', "%{$search}%");
+                    });
             })
             ->when($filterDept, function ($query, $filterDept) {
                 $query->where('department_id', $filterDept);
@@ -61,6 +61,7 @@ class SupervisorController extends Controller
     public function create()
     {
         $departments = Department::orderBy('name')->get();
+
         return view('supervisors.create', compact('departments'));
     }
 
@@ -73,16 +74,16 @@ class SupervisorController extends Controller
 
         DB::transaction(function () use ($validated, $request) {
             // Auto-generate email if empty
-            $email = !empty($validated['email'])
+            $email = ! empty($validated['email'])
                 ? $validated['email']
-                : $validated['nip'] . '@smkn2magelang.sch.id';
+                : $validated['nip'].'@smkn2magelang.sch.id';
 
             // Create User
             $user = User::create([
-                'name'     => $validated['name'],
-                'email'    => $email,
+                'name' => $validated['name'],
+                'email' => $email,
                 'password' => Hash::make($validated['nip']),
-                'role'     => 'supervisor',
+                'role' => 'supervisor',
             ]);
 
             // Assign roles
@@ -93,8 +94,8 @@ class SupervisorController extends Controller
 
             // Create Supervisor profile
             Supervisor::create([
-                'user_id'       => $user->id,
-                'nip'           => $validated['nip'],
+                'user_id' => $user->id,
+                'nip' => $validated['nip'],
                 'department_id' => $validated['department_id'],
             ]);
         });
@@ -126,13 +127,13 @@ class SupervisorController extends Controller
 
         DB::transaction(function () use ($validated, $supervisor, $request) {
             // Update email
-            $email = !empty($validated['email'])
+            $email = ! empty($validated['email'])
                 ? $validated['email']
                 : $supervisor->user->email;
 
             // Update User
             $supervisor->user->update([
-                'name'  => $validated['name'],
+                'name' => $validated['name'],
                 'email' => $email,
             ]);
 
@@ -145,7 +146,7 @@ class SupervisorController extends Controller
 
             // Update Supervisor
             $supervisor->update([
-                'nip'           => $validated['nip'],
+                'nip' => $validated['nip'],
                 'department_id' => $validated['department_id'],
             ]);
         });

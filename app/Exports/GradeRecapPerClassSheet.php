@@ -11,9 +11,10 @@ use Maatwebsite\Excel\Concerns\WithStyles;
 use Maatwebsite\Excel\Concerns\WithTitle;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
-class GradeRecapPerClassSheet implements FromCollection, WithTitle, WithHeadings, WithMapping, WithStyles, ShouldAutoSize
+class GradeRecapPerClassSheet implements FromCollection, ShouldAutoSize, WithHeadings, WithMapping, WithStyles, WithTitle
 {
     private string $className;
+
     private int $rowNumber = 0;
 
     public function __construct(string $className)
@@ -56,7 +57,7 @@ class GradeRecapPerClassSheet implements FromCollection, WithTitle, WithHeadings
     {
         return [
             ['REKAPITULASI NILAI PRAKTIK KERJA LAPANGAN (PKL)'],
-            ['Kelas: ' . $this->className],
+            ['Kelas: '.$this->className],
             [''],
             ['No', 'NIS', 'Nama Siswa', 'Lokasi Praktik', 'Rerata Nilai Industri', 'Rerata Nilai Sekolah', 'NILAI AKHIR'],
         ];

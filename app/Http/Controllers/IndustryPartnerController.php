@@ -3,11 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\AcademicYear;
+use App\Models\Certificate;
 use App\Models\Department;
 use App\Models\Industry;
 use App\Models\IndustryAllocation;
 use App\Models\Internship;
-use App\Models\Certificate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -47,11 +47,11 @@ class IndustryPartnerController extends Controller
         }
 
         $validated = $request->validate([
-            'pic_name'     => ['required', 'string', 'max:255'],
+            'pic_name' => ['required', 'string', 'max:255'],
             'pic_position' => ['required', 'string', 'max:255'],
-            'nip'          => ['nullable', 'string', 'max:255'],
-            'quotas'       => ['required', 'array'],
-            'quotas.*'     => ['nullable', 'integer', 'min:0'],
+            'nip' => ['nullable', 'string', 'max:255'],
+            'quotas' => ['required', 'array'],
+            'quotas.*' => ['nullable', 'integer', 'min:0'],
         ]);
 
         // Validasi: Total kuota harus > 0
@@ -63,10 +63,10 @@ class IndustryPartnerController extends Controller
         DB::transaction(function () use ($validated, $industry, $activeYear) {
             // Update industry profile
             $industry->update([
-                'pic_name'     => $validated['pic_name'],
+                'pic_name' => $validated['pic_name'],
                 'pic_position' => $validated['pic_position'],
-                'nip'          => $validated['nip'],
-                'status'       => 'open',
+                'nip' => $validated['nip'],
+                'status' => 'open',
             ]);
 
             // Sync allocations
@@ -76,16 +76,16 @@ class IndustryPartnerController extends Controller
                 if ($quota > 0) {
                     IndustryAllocation::updateOrCreate(
                         [
-                            'industry_id'      => $industry->id,
-                            'department_id'    => $deptId,
+                            'industry_id' => $industry->id,
+                            'department_id' => $deptId,
                             'academic_year_id' => $activeYear->id,
                         ],
                         ['quota' => $quota]
                     );
                 } else {
                     IndustryAllocation::where([
-                        'industry_id'      => $industry->id,
-                        'department_id'    => $deptId,
+                        'industry_id' => $industry->id,
+                        'department_id' => $deptId,
                         'academic_year_id' => $activeYear->id,
                     ])->delete();
                 }
@@ -99,16 +99,16 @@ class IndustryPartnerController extends Controller
 
                 if (! $alreadyPlotted) {
                     $internship = Internship::create([
-                        'student_id'       => $industry->student_submitter_id,
-                        'industry_id'      => $industry->id,
+                        'student_id' => $industry->student_submitter_id,
+                        'industry_id' => $industry->id,
                         'academic_year_id' => $activeYear->id,
-                        'start_date'       => now(),
-                        'status'           => 'ongoing',
+                        'start_date' => now(),
+                        'status' => 'ongoing',
                     ]);
 
                     Certificate::create([
                         'internship_id' => $internship->id,
-                        'status'        => 'draft',
+                        'status' => 'draft',
                     ]);
                 }
             }

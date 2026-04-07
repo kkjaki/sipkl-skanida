@@ -2,20 +2,19 @@
 
 use App\Http\Controllers\AcademicYearController;
 use App\Http\Controllers\AssessmentController;
+use App\Http\Controllers\CertificateGenerationController;
+use App\Http\Controllers\DailyJournalController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DepartmentController;
+use App\Http\Controllers\EvaluationIndicatorController;
 use App\Http\Controllers\IndustryController;
 use App\Http\Controllers\IndustryPartnershipController;
-use App\Http\Controllers\DailyJournalController;
-use App\Http\Controllers\EvaluationIndicatorController;
 use App\Http\Controllers\IndustryProposalController;
 use App\Http\Controllers\IndustryVerificationController;
 use App\Http\Controllers\JournalValidationController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\PartnershipOverviewController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\SupervisorAllocationController;
-use App\Http\Controllers\CertificateGenerationController;
 use App\Http\Controllers\SupervisorController;
 use App\Http\Controllers\SupervisorPlacementController;
 use Illuminate\Support\Facades\Route;

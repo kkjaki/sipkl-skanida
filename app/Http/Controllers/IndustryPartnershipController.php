@@ -21,14 +21,14 @@ class IndustryPartnershipController extends Controller
         $search = $request->input('search', '');
 
         $query = Industry::where('is_synced', true)
-            ->with(['partnerships' => fn($q) => $q->orderBy('end_date', 'desc')])
+            ->with(['partnerships' => fn ($q) => $q->orderBy('end_date', 'desc')])
             ->withCount('partnerships');
 
         // Search
         if ($search) {
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('city', 'like', "%{$search}%");
+                    ->orWhere('city', 'like', "%{$search}%");
             });
         }
 
@@ -39,7 +39,7 @@ class IndustryPartnershipController extends Controller
             case 'active':
                 $query->whereHas('partnerships', function ($q) use ($now) {
                     $q->where('start_date', '<=', $now)
-                      ->where('end_date', '>=', $now);
+                        ->where('end_date', '>=', $now);
                 });
                 break;
 
@@ -47,8 +47,8 @@ class IndustryPartnershipController extends Controller
                 $thirtyDaysLater = now()->addDays(30)->toDateString();
                 $query->whereHas('partnerships', function ($q) use ($now, $thirtyDaysLater) {
                     $q->where('start_date', '<=', $now)
-                      ->where('end_date', '>=', $now)
-                      ->where('end_date', '<=', $thirtyDaysLater);
+                        ->where('end_date', '>=', $now)
+                        ->where('end_date', '<=', $thirtyDaysLater);
                 });
                 break;
 
@@ -72,7 +72,7 @@ class IndustryPartnershipController extends Controller
         if ($search) {
             $baseQuery->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('city', 'like', "%{$search}%");
+                    ->orWhere('city', 'like', "%{$search}%");
             });
         }
 
@@ -85,8 +85,8 @@ class IndustryPartnershipController extends Controller
         $thirtyDaysLater = now()->addDays(30)->toDateString();
         $countExpiring = (clone $baseQuery)->whereHas('partnerships', function ($q) use ($now, $thirtyDaysLater) {
             $q->where('start_date', '<=', $now)
-              ->where('end_date', '>=', $now)
-              ->where('end_date', '<=', $thirtyDaysLater);
+                ->where('end_date', '>=', $now)
+                ->where('end_date', '<=', $thirtyDaysLater);
         })->count();
 
         $countExpired = (clone $baseQuery)->has('partnerships')
@@ -107,8 +107,8 @@ class IndustryPartnershipController extends Controller
      */
     public function manage(Industry $industry)
     {
-        $industry->load(['partnerships' => fn($q) => $q->orderBy('end_date', 'desc')]);
-        
+        $industry->load(['partnerships' => fn ($q) => $q->orderBy('end_date', 'desc')]);
+
         return view('partnerships.manage', compact('industry'));
     }
 

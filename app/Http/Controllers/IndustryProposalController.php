@@ -2,14 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Industry;
-use App\Models\Internship;
 use App\Http\Requests\StoreProposalRequest;
 use App\Http\Requests\UpdateProposalRequest;
+use App\Models\Industry;
+use App\Models\Internship;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Http\Request;
 
 class IndustryProposalController extends Controller
 {
@@ -28,9 +27,9 @@ class IndustryProposalController extends Controller
         $hasPlotting = Internship::where('student_id', $userId)->exists();
 
         // Determine if student can propose again
-        $canPropose = !$hasPlotting && !$proposals->contains(function ($p) {
+        $canPropose = ! $hasPlotting && ! $proposals->contains(function ($p) {
             // Block if pending (is_synced=false) or verified+open
-            return !$p->is_synced || ($p->is_synced && $p->status === 'open');
+            return ! $p->is_synced || ($p->is_synced && $p->status === 'open');
         });
 
         return view('industries.my-proposals', compact('proposals', 'canPropose', 'hasPlotting'));
@@ -98,12 +97,12 @@ class IndustryProposalController extends Controller
         $hasActive = Industry::where('student_submitter_id', $userId)
             ->where(function ($q) {
                 $q->where(function ($q1) {
-                      $q1->where('is_synced', false)
-                          ->where('status', '!=', 'blacklisted'); // pending but not rejected
-                  })
-                  ->orWhere(function ($q2) {
-                      $q2->where('is_synced', true)->where('status', 'open'); // verified
-                  });
+                    $q1->where('is_synced', false)
+                        ->where('status', '!=', 'blacklisted'); // pending but not rejected
+                })
+                    ->orWhere(function ($q2) {
+                        $q2->where('is_synced', true)->where('status', 'open'); // verified
+                    });
             })
             ->exists();
 
@@ -123,15 +122,15 @@ class IndustryProposalController extends Controller
 
         DB::transaction(function () use ($validated, $userId) {
             Industry::create([
-                'name'                     => $validated['name'],
-                'address'                  => $validated['address'],
-                'city'                     => $validated['city'],
-                'contact_person'           => $validated['contact_person'] ?? null,
-                'email'                    => $validated['email'] ?? null,
-                'phone'                    => $validated['phone'] ?? null,
-                'student_submitter_id'     => $userId,
-                'status'                   => 'open',
-                'is_synced'                => false,
+                'name' => $validated['name'],
+                'address' => $validated['address'],
+                'city' => $validated['city'],
+                'contact_person' => $validated['contact_person'] ?? null,
+                'email' => $validated['email'] ?? null,
+                'phone' => $validated['phone'] ?? null,
+                'student_submitter_id' => $userId,
+                'status' => 'open',
+                'is_synced' => false,
             ]);
         });
 
@@ -179,12 +178,12 @@ class IndustryProposalController extends Controller
         $validated = $request->validated();
 
         $proposal->update([
-            'name'                     => $validated['name'],
-            'address'                  => $validated['address'],
-            'city'                     => $validated['city'],
-            'contact_person'           => $validated['contact_person'] ?? null,
-            'email'                    => $validated['email'] ?? null,
-            'phone'                    => $validated['phone'] ?? null,
+            'name' => $validated['name'],
+            'address' => $validated['address'],
+            'city' => $validated['city'],
+            'contact_person' => $validated['contact_person'] ?? null,
+            'email' => $validated['email'] ?? null,
+            'phone' => $validated['phone'] ?? null,
         ]);
 
         return redirect()->route('student.proposals.index')

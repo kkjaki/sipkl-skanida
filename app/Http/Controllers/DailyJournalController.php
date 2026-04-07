@@ -79,11 +79,11 @@ class DailyJournalController extends Controller
         }
 
         DailyJournal::create([
-            'internship_id'       => $internship->id,
-            'date'                => $validated['date'],
-            'status_attendance'   => $validated['status_attendance'],
-            'activity'            => $validated['activity'] ?? null,
-            'attachment_path'     => $attachmentPath,
+            'internship_id' => $internship->id,
+            'date' => $validated['date'],
+            'status_attendance' => $validated['status_attendance'],
+            'activity' => $validated['activity'] ?? null,
+            'attachment_path' => $attachmentPath,
             'verification_status' => 'pending',
         ]);
 
@@ -105,7 +105,7 @@ class DailyJournalController extends Controller
             ->firstOrFail();
 
         // Only allow edit if pending or rejected
-        if (!in_array($journal->verification_status, ['pending', 'rejected'])) {
+        if (! in_array($journal->verification_status, ['pending', 'rejected'])) {
             return redirect()->route('student.journals.index')
                 ->with('error', 'Jurnal yang sudah divalidasi tidak dapat diedit.');
         }
@@ -127,7 +127,7 @@ class DailyJournalController extends Controller
             ->firstOrFail();
 
         // Only allow update if pending or rejected
-        if (!in_array($journal->verification_status, ['pending', 'rejected'])) {
+        if (! in_array($journal->verification_status, ['pending', 'rejected'])) {
             return redirect()->route('student.journals.index')
                 ->with('error', 'Jurnal yang sudah divalidasi tidak dapat diedit.');
         }
@@ -148,7 +148,7 @@ class DailyJournalController extends Controller
 
         $journal->update(array_merge($validated, [
             'verification_status' => 'pending',
-            'rejection_note'     => null,
+            'rejection_note' => null,
         ]));
 
         return redirect()->route('student.journals.index')

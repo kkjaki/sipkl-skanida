@@ -43,9 +43,9 @@ class StorePartnershipRequest extends FormRequest
                 $validator->errors()->add(
                     'start_date',
                     'Periode MoU bertumpuk dengan MoU aktif ('
-                    . $overlap->start_date->format('d M Y') . ' – '
-                    . $overlap->end_date->format('d M Y')
-                    . '). Hapus MoU lama terlebih dahulu jika ingin menggantinya.'
+                    .$overlap->start_date->format('d M Y').' – '
+                    .$overlap->end_date->format('d M Y')
+                    .'). Hapus MoU lama terlebih dahulu jika ingin menggantinya.'
                 );
             }
         });

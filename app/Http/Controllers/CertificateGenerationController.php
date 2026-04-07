@@ -51,7 +51,7 @@ class CertificateGenerationController extends Controller
         ]);
 
         $year = Carbon::parse($request->issued_date)->format('Y');
-        $certificateNumber = '422.6 / ' . $request->middle_number . ' / ' . $year;
+        $certificateNumber = '422.6 / '.$request->middle_number.' / '.$year;
 
         // Bulk update the selected certificates
         Certificate::whereIn('id', $request->certificate_ids)->update([
@@ -71,6 +71,6 @@ class CertificateGenerationController extends Controller
         $pdf = Pdf::loadView('certificates.pdf-template', compact('certificates'))
             ->setPaper('a4', 'landscape');
 
-        return $pdf->stream('Sertifikat_PKL_(' . $className . ').pdf');
+        return $pdf->stream('Sertifikat_PKL_('.$className.').pdf');
     }
 }

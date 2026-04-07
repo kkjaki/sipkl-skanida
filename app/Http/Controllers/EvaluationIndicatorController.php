@@ -38,7 +38,7 @@ class EvaluationIndicatorController extends Controller
     public function update(Request $request, EvaluationIndicator $evaluationIndicator)
     {
         $request->validate([
-            'name' => 'required|string|max:255|unique:evaluation_indicators,name,' . $evaluationIndicator->id,
+            'name' => 'required|string|max:255|unique:evaluation_indicators,name,'.$evaluationIndicator->id,
         ]);
 
         $evaluationIndicator->update($request->only('name'));

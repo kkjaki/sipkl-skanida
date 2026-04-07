@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Sertifikat PKL</title>
     <style>
         @page {
@@ -122,13 +123,17 @@
         }
     </style>
 </head>
+
 <body>
-    @foreach($certificates as $cert)
+    @foreach ($certificates as $cert)
         @php
             $student = $cert->internship->student;
             $industry = $cert->internship->industry;
             $internship = $cert->internship;
-            $ttl = $student->place_of_birth . ', ' . \Carbon\Carbon::parse($student->date_of_birth)->locale('id')->translatedFormat('d F Y');
+            $ttl =
+                $student->place_of_birth .
+                ', ' .
+                \Carbon\Carbon::parse($student->date_of_birth)->locale('id')->translatedFormat('d F Y');
             $startDate = \Carbon\Carbon::parse($internship->start_date)->locale('id')->translatedFormat('d F Y');
             $endDate = $internship->actual_end_date
                 ? \Carbon\Carbon::parse($internship->actual_end_date)->locale('id')->translatedFormat('d F Y')
@@ -211,7 +216,7 @@
                         <td class="sig-left">
                             <div class="sig-spacer"></div>
                             {{ $industry->pic_name ?? '-' }}
-                            @if(trim($industry->nip) && trim($industry->nip) !== '-')
+                            @if (trim($industry->nip) && trim($industry->nip) !== '-')
                                 <br>NIP. {{ $industry->nip }}
                             @endif
                         </td>
@@ -227,4 +232,5 @@
         </div>
     @endforeach
 </body>
+
 </html>

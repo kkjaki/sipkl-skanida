@@ -2,8 +2,6 @@
 
 namespace App\Providers;
 
-use App\Models\Internship;
-use App\Observers\InternshipObserver;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider

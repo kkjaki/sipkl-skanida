@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -20,7 +21,8 @@
             Alpine.store('theme', {
                 init() {
                     const savedTheme = localStorage.getItem('theme');
-                    const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+                    const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' :
+                        'light';
                     this.theme = savedTheme || systemTheme;
                     this.updateTheme();
                 },
@@ -37,30 +39,35 @@
     </script>
 
     <style>
-        [x-cloak] { display: none !important; }
+        [x-cloak] {
+            display: none !important;
+        }
     </style>
 </head>
-<body class="font-sans antialiased bg-gray-50 dark:bg-amoled text-gray-800 dark:text-gray-100 min-h-screen flex flex-col">
+
+<body
+    class="font-sans antialiased bg-gray-50 dark:bg-amoled text-gray-800 dark:text-gray-100 min-h-screen flex flex-col">
     <div class="flex-grow flex flex-col items-center justify-center p-4 sm:p-6 lg:p-8">
         <!-- Logo Section -->
         <div class="mb-8 text-center">
             <div class="flex flex-col items-center gap-2">
-                <div class="w-20 h-20 bg-school-blue/10 dark:bg-white/10 rounded-2xl flex items-center justify-center p-2 mb-2">
-                     <!-- Logo SMKN 2 Magelang -->
-                     <img 
-                        src="{{ asset('images/logo-smkn2.webp') }}" 
-                        alt="Logo SMKN 2 Magelang" 
+                <div
+                    class="w-20 h-20 bg-school-blue/10 dark:bg-white/10 rounded-2xl flex items-center justify-center p-2 mb-2">
+                    <!-- Logo SMKN 2 Magelang -->
+                    <img src="{{ asset('images/logo-smkn2.webp') }}" alt="Logo SMKN 2 Magelang"
                         class="h-full w-full object-contain p-1"
-                        onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
-                     >
-                     {{-- Fallback SVG Logo or Placeholder --}}
-                     <svg class="w-12 h-12 text-school-blue dark:text-white" style="display:none;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    {{-- Fallback SVG Logo or Placeholder --}}
+                    <svg class="w-12 h-12 text-school-blue dark:text-white" style="display:none;" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
                         <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
                         <polyline points="9 22 9 12 15 12 15 22"></polyline>
-                     </svg>
+                    </svg>
                 </div>
                 <h1 class="text-2xl font-bold text-gray-900 dark:text-white tracking-widest uppercase">SIM-PKL</h1>
-                <p class="text-sm font-medium text-gray-500 dark:text-amoled-text tracking-wider uppercase">SMK Negeri 2 Magelang</p>
+                <p class="text-sm font-medium text-gray-500 dark:text-amoled-text tracking-wider uppercase">SMK Negeri 2
+                    Magelang</p>
             </div>
         </div>
 
@@ -79,4 +86,5 @@
 
     @stack('scripts')
 </body>
+
 </html>

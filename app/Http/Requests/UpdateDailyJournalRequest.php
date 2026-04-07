@@ -16,16 +16,16 @@ class UpdateDailyJournalRequest extends FormRequest
 
     public function rules(): array
     {
-        $journal    = $this->route('journal');
+        $journal = $this->route('journal');
         $internship = Internship::where('student_id', Auth::id())
             ->where('id', $journal->internship_id)
             ->firstOrFail();
 
         $startDate = $internship->start_date?->format('Y-m-d') ?? now()->toDateString();
-        $maxDate   = min(now()->toDateString(), $internship->actual_end_date?->format('Y-m-d') ?? now()->toDateString());
+        $maxDate = min(now()->toDateString(), $internship->actual_end_date?->format('Y-m-d') ?? now()->toDateString());
 
         return [
-            'date'              => [
+            'date' => [
                 'required', 'date',
                 "after_or_equal:{$startDate}",
                 "before_or_equal:{$maxDate}",
@@ -34,8 +34,8 @@ class UpdateDailyJournalRequest extends FormRequest
                     ->ignore($journal->id),
             ],
             'status_attendance' => ['required', Rule::in(['present', 'excused', 'sick'])],
-            'activity'          => ['required_if:status_attendance,present', 'nullable', 'string', 'max:5000'],
-            'attachment_path'   => [
+            'activity' => ['required_if:status_attendance,present', 'nullable', 'string', 'max:5000'],
+            'attachment_path' => [
                 $this->attachmentRule($journal),
                 'nullable',
                 'file',
@@ -48,15 +48,15 @@ class UpdateDailyJournalRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'date.required'              => 'Tanggal wajib diisi.',
-            'date.after_or_equal'        => 'Tanggal tidak boleh sebelum tanggal mulai PKL Anda.',
-            'date.before_or_equal'       => 'Tanggal tidak boleh melebihi hari ini atau tanggal akhir PKL.',
-            'date.unique'                => 'Anda sudah mengisi jurnal untuk tanggal ini.',
+            'date.required' => 'Tanggal wajib diisi.',
+            'date.after_or_equal' => 'Tanggal tidak boleh sebelum tanggal mulai PKL Anda.',
+            'date.before_or_equal' => 'Tanggal tidak boleh melebihi hari ini atau tanggal akhir PKL.',
+            'date.unique' => 'Anda sudah mengisi jurnal untuk tanggal ini.',
             'status_attendance.required' => 'Status kehadiran wajib dipilih.',
-            'activity.required_if'       => 'Kegiatan wajib diisi jika status hadir.',
-            'attachment_path.required'   => 'Bukti surat keterangan wajib diunggah untuk status sakit/izin.',
-            'attachment_path.mimes'      => 'File harus berformat JPG, JPEG, PNG, atau PDF.',
-            'attachment_path.max'        => 'Ukuran file maksimal 2MB.',
+            'activity.required_if' => 'Kegiatan wajib diisi jika status hadir.',
+            'attachment_path.required' => 'Bukti surat keterangan wajib diunggah untuk status sakit/izin.',
+            'attachment_path.mimes' => 'File harus berformat JPG, JPEG, PNG, atau PDF.',
+            'attachment_path.max' => 'Ukuran file maksimal 2MB.',
         ];
     }
 

@@ -30,14 +30,14 @@ class SupervisorPlacementController extends Controller
      */
     public function index()
     {
-        $activeYear   = AcademicYear::where('is_active', true)->firstOrFail();
+        $activeYear = AcademicYear::where('is_active', true)->firstOrFail();
         $departmentId = $this->kaprogDepartmentId();
 
         // Supervisors: same department + has allocation with quota > 0 in active year
         $supervisors = Supervisor::where('department_id', $departmentId)
             ->whereHas('allocations', function ($q) use ($activeYear) {
                 $q->where('academic_year_id', $activeYear->id)
-                  ->where('quota', '>', 0);
+                    ->where('quota', '>', 0);
             })
             ->with(['user', 'allocations' => function ($q) use ($activeYear) {
                 $q->where('academic_year_id', $activeYear->id);
@@ -53,7 +53,7 @@ class SupervisorPlacementController extends Controller
                     ->whereHas('student', fn ($q) => $q->where('department_id', $departmentId))
                     ->count();
 
-                $supervisor->interns_count   = $internsCount;
+                $supervisor->interns_count = $internsCount;
                 $supervisor->remaining_quota = $supervisor->quota - $internsCount;
 
                 // Load current interns with student, user, and industry info
@@ -84,12 +84,12 @@ class SupervisorPlacementController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'supervisor_id'    => 'required|exists:supervisors,user_id',
-            'internship_ids'   => 'required|array|min:1',
+            'supervisor_id' => 'required|exists:supervisors,user_id',
+            'internship_ids' => 'required|array|min:1',
             'internship_ids.*' => 'exists:internships,id',
         ]);
 
-        $activeYear   = AcademicYear::where('is_active', true)->firstOrFail();
+        $activeYear = AcademicYear::where('is_active', true)->firstOrFail();
         $departmentId = $this->kaprogDepartmentId();
         $supervisorId = $request->supervisor_id;
         $internshipIds = $request->internship_ids;
@@ -140,7 +140,7 @@ class SupervisorPlacementController extends Controller
                     ->with('success', 'Guru pembimbing berhasil di-plot ke siswa.');
             });
         } catch (\Exception $e) {
-            return back()->with('error', 'Gagal menyimpan penempatan: ' . $e->getMessage());
+            return back()->with('error', 'Gagal menyimpan penempatan: '.$e->getMessage());
         }
     }
 
@@ -150,7 +150,7 @@ class SupervisorPlacementController extends Controller
     public function destroy(Request $request)
     {
         $request->validate([
-            'internship_ids'   => 'required|array|min:1',
+            'internship_ids' => 'required|array|min:1',
             'internship_ids.*' => 'exists:internships,id',
         ]);
 
@@ -176,7 +176,7 @@ class SupervisorPlacementController extends Controller
 
             return back()->with('success', "{$count} penempatan guru pembimbing berhasil dihapus.");
         } catch (\Exception $e) {
-            return back()->with('error', 'Gagal menghapus penempatan: ' . $e->getMessage());
+            return back()->with('error', 'Gagal menghapus penempatan: '.$e->getMessage());
         }
     }
 }

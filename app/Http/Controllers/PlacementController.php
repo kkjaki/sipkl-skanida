@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\AcademicYear;
+use App\Models\Certificate;
 use App\Models\Industry;
 use App\Models\Internship;
 use App\Models\Student;
-use App\Models\Certificate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -32,7 +32,7 @@ class PlacementController extends Controller
      */
     public function index()
     {
-        $activeYear   = AcademicYear::where('is_active', true)->firstOrFail();
+        $activeYear = AcademicYear::where('is_active', true)->firstOrFail();
         $departmentId = $this->kaprogDepartmentId();
 
         // Industries: synced, open, with allocation for this department in active year
@@ -40,17 +40,17 @@ class PlacementController extends Controller
             ->where('status', 'open')
             ->whereHas('allocations', function ($q) use ($departmentId, $activeYear) {
                 $q->where('department_id', $departmentId)
-                  ->where('academic_year_id', $activeYear->id)
-                  ->where('quota', '>', 0);
+                    ->where('academic_year_id', $activeYear->id)
+                    ->where('quota', '>', 0);
             })
             ->with(['allocations' => function ($q) use ($departmentId, $activeYear) {
                 $q->where('department_id', $departmentId)
-                  ->where('academic_year_id', $activeYear->id);
+                    ->where('academic_year_id', $activeYear->id);
             }, 'partnerships', 'internships' => function ($q) use ($departmentId, $activeYear) {
                 $q->where('academic_year_id', $activeYear->id)
-                  ->whereIn('status', ['ongoing', 'finished'])
-                  ->whereHas('student', fn ($q2) => $q2->where('department_id', $departmentId))
-                  ->with('student.user');
+                    ->whereIn('status', ['ongoing', 'finished'])
+                    ->whereHas('student', fn ($q2) => $q2->where('department_id', $departmentId))
+                    ->with('student.user');
             }])
             ->get()
             ->map(function ($industry) {
@@ -60,7 +60,7 @@ class PlacementController extends Controller
                 // Hitung dari relasi yang sudah di-eager load (no N+1 query)
                 $internsCount = $industry->internships->count();
 
-                $industry->interns_count   = $internsCount;
+                $industry->interns_count = $internsCount;
                 $industry->remaining_quota = $industry->quota - $internsCount;
 
                 // Flag: apakah industri ini memiliki MoU aktif
@@ -77,7 +77,7 @@ class PlacementController extends Controller
         $candidates = Student::where('department_id', $departmentId)
             ->whereDoesntHave('internships', function ($q) use ($activeYear) {
                 $q->where('academic_year_id', $activeYear->id)
-                  ->whereIn('status', ['ongoing', 'finished']);
+                    ->whereIn('status', ['ongoing', 'finished']);
             })
             ->with('user')
             ->get()
@@ -101,16 +101,16 @@ class PlacementController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'industry_id'         => 'required|exists:industries,id',
-            'student_ids'         => 'required|array|min:1',
-            'student_ids.*'       => 'exists:students,user_id',
+            'industry_id' => 'required|exists:industries,id',
+            'student_ids' => 'required|array|min:1',
+            'student_ids.*' => 'exists:students,user_id',
             'transfer_start_date' => 'nullable|date|before_or_equal:today',
         ]);
 
-        $activeYear   = AcademicYear::where('is_active', true)->firstOrFail();
+        $activeYear = AcademicYear::where('is_active', true)->firstOrFail();
         $departmentId = $this->kaprogDepartmentId();
-        $industryId   = $request->industry_id;
-        $studentIds   = $request->student_ids;
+        $industryId = $request->industry_id;
+        $studentIds = $request->student_ids;
 
         try {
             return DB::transaction(function () use ($industryId, $studentIds, $activeYear, $departmentId, $request) {
@@ -150,7 +150,7 @@ class PlacementController extends Controller
                     ->where('department_id', $departmentId)
                     ->whereDoesntHave('internships', function ($q) use ($activeYear) {
                         $q->where('academic_year_id', $activeYear->id)
-                          ->whereIn('status', ['ongoing', 'finished']);
+                            ->whereIn('status', ['ongoing', 'finished']);
                     })
                     ->get();
 
@@ -175,14 +175,14 @@ class PlacementController extends Controller
                         : $mou->start_date->toDateString();
 
                     $placements[] = [
-                        'student_id'       => $student->user_id,
-                        'industry_id'      => $industryId,
+                        'student_id' => $student->user_id,
+                        'industry_id' => $industryId,
                         'academic_year_id' => $activeYear->id,
-                        'start_date'       => $startDate,
-                        'actual_end_date'  => $mou->end_date->toDateString(),
-                        'status'           => 'ongoing',
-                        'created_at'       => now(),
-                        'updated_at'       => now(),
+                        'start_date' => $startDate,
+                        'actual_end_date' => $mou->end_date->toDateString(),
+                        'status' => 'ongoing',
+                        'created_at' => now(),
+                        'updated_at' => now(),
                     ];
                 }
 
@@ -199,13 +199,13 @@ class PlacementController extends Controller
                 foreach ($newInternships as $internship) {
                     $certificates[] = [
                         'internship_id' => $internship->id,
-                        'status'        => 'draft',
-                        'created_at'    => now(),
-                        'updated_at'    => now(),
+                        'status' => 'draft',
+                        'created_at' => now(),
+                        'updated_at' => now(),
                     ];
                 }
 
-                if (!empty($certificates)) {
+                if (! empty($certificates)) {
                     Certificate::insert($certificates);
                 }
 
@@ -213,7 +213,7 @@ class PlacementController extends Controller
                     ->with('success', 'Siswa berhasil di-plot ke industri.');
             });
         } catch (\Exception $e) {
-            return back()->with('error', 'Gagal menyimpan penempatan: ' . $e->getMessage());
+            return back()->with('error', 'Gagal menyimpan penempatan: '.$e->getMessage());
         }
     }
 
@@ -245,7 +245,7 @@ class PlacementController extends Controller
     public function destroyBulk(Request $request)
     {
         $request->validate([
-            'internship_ids'   => 'required|array|min:1',
+            'internship_ids' => 'required|array|min:1',
             'internship_ids.*' => 'exists:internships,id',
         ]);
 
@@ -268,7 +268,7 @@ class PlacementController extends Controller
 
             return back()->with('success', "{$deleted} penempatan siswa berhasil dihapus.");
         } catch (\Exception $e) {
-            return back()->with('error', 'Gagal menghapus penempatan: ' . $e->getMessage());
+            return back()->with('error', 'Gagal menghapus penempatan: '.$e->getMessage());
         }
     }
 }

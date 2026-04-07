@@ -1,21 +1,26 @@
 @extends('layouts.app')
 
 @section('content')
-
-<div class="flex flex-col gap-6" x-data="{
-    supervisors: @js($supervisors->map(fn($s) => [
-        'user_id' => $s->user_id,
-        'name' => $s->user->name,
-        'nip' => $s->nip,
-        'department_id' => $s->department_id,
-        'department_name' => $s->department?->name,
-        'department_code' => $s->department?->code,
-    ])->values()),
-    allocations: {
-        @foreach ($supervisors as $supervisor)
+    <div class="flex flex-col gap-6" x-data="{
+        supervisors: @js(
+    $supervisors
+        ->map(
+            fn($s) => [
+                'user_id' => $s->user_id,
+                'name' => $s->user->name,
+                'nip' => $s->nip,
+                'department_id' => $s->department_id,
+                'department_name' => $s->department?->name,
+                'department_code' => $s->department?->code,
+            ],
+        )
+        ->values(),
+),
+        allocations: {
+            @foreach ($supervisors as $supervisor)
         {{ $supervisor->user_id }}: {{ $supervisor->allocations->first()->quota ?? 0 }}, @endforeach
-    },
-    initialAllocations: {
+        },
+        initialAllocations: {
             @foreach ($supervisors as $supervisor)
                 {{ $supervisor->user_id }}: {{ $supervisor->allocations->first()->quota ?? 0 }}, @endforeach
         },
@@ -45,7 +50,7 @@
             if (this.searchQuery.trim()) {
                 const q = this.searchQuery.toLowerCase();
                 visible = s.name.toLowerCase().includes(q) ||
-                          (s.nip && s.nip.toLowerCase().includes(q));
+                    (s.nip && s.nip.toLowerCase().includes(q));
             }
             if (visible && this.filterDepartment !== 'all') {
                 visible = String(s.department_id) === String(this.filterDepartment);
@@ -102,16 +107,22 @@
                     </path>
                 </svg>
                 <span>Simpan Perubahan</span>
-                <span x-show="isDirty" style="display: none;" x-transition class="ml-1 text-xs bg-white/20 px-1.5 py-0.5 rounded-md">Unsaved</span>
+                <span x-show="isDirty" style="display: none;" x-transition
+                    class="ml-1 text-xs bg-white/20 px-1.5 py-0.5 rounded-md">Unsaved</span>
             </button>
         </div>
 
         <div class="flex flex-col gap-6">
             <!-- Flash Messages -->
-            @if(session('success'))
-                <div class="flex w-full border-l-4 border-blue-500 bg-white dark:bg-amoled-surface px-4 py-3 shadow-sm rounded-r-xl">
+            @if (session('success'))
+                <div
+                    class="flex w-full border-l-4 border-blue-500 bg-white dark:bg-amoled-surface px-4 py-3 shadow-sm rounded-r-xl">
                     <div class="w-full flex items-center gap-2">
-                        <svg class="w-5 h-5 text-blue-500 shrink-0" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        <svg class="w-5 h-5 text-blue-500 shrink-0" width="20" height="20" fill="none"
+                            stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
                         <p class="text-sm text-blue-600 dark:text-blue-400 font-medium">{{ session('success') }}</p>
                     </div>
                 </div>
@@ -121,21 +132,23 @@
         <!-- Search & Filter Bar -->
         <div class="flex flex-col sm:flex-row gap-3">
             <div class="relative flex-1">
-                <svg class="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-                <input type="text"
-                       x-model="searchQuery"
-                       placeholder="Cari berdasarkan nama atau NIP..."
-                       class="h-11 w-full rounded-xl border border-gray-200 bg-white pl-10 pr-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 outline-none transition duration-150 focus:border-school-blue focus:ring-3 focus:ring-school-blue/10 dark:border-amoled-border dark:bg-amoled-surface dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-school-blue">
+                <svg class="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500"
+                    fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+                <input type="text" x-model="searchQuery" placeholder="Cari berdasarkan nama atau NIP..."
+                    class="h-11 w-full rounded-xl border border-gray-200 bg-white pl-10 pr-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 outline-none transition duration-150 focus:border-school-blue focus:ring-3 focus:ring-school-blue/10 dark:border-amoled-border dark:bg-amoled-surface dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-school-blue">
             </div>
             <select x-model="filterDepartment" aria-label="Filter Program Keahlian"
-                    class="h-11 rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm text-gray-800 outline-none transition duration-150 focus:border-school-blue focus:ring-3 focus:ring-school-blue/10 dark:border-amoled-border dark:bg-amoled-surface dark:text-white/90 dark:focus:border-school-blue appearance-none cursor-pointer min-w-[180px]">
+                class="h-11 rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm text-gray-800 outline-none transition duration-150 focus:border-school-blue focus:ring-3 focus:ring-school-blue/10 dark:border-amoled-border dark:bg-amoled-surface dark:text-white/90 dark:focus:border-school-blue appearance-none cursor-pointer min-w-[180px]">
                 <option value="all">Semua Program Keahlian</option>
-                @foreach($departments as $dept)
+                @foreach ($departments as $dept)
                     <option value="{{ $dept->id }}">{{ $dept->name }}</option>
                 @endforeach
             </select>
             <select x-model="filterStatus" aria-label="Filter Status"
-                    class="h-11 rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm text-gray-800 outline-none transition duration-150 focus:border-school-blue focus:ring-3 focus:ring-school-blue/10 dark:border-amoled-border dark:bg-amoled-surface dark:text-white/90 dark:focus:border-school-blue appearance-none cursor-pointer min-w-[180px]">
+                class="h-11 rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm text-gray-800 outline-none transition duration-150 focus:border-school-blue focus:ring-3 focus:ring-school-blue/10 dark:border-amoled-border dark:bg-amoled-surface dark:text-white/90 dark:focus:border-school-blue appearance-none cursor-pointer min-w-[180px]">
                 <option value="all">Semua Status</option>
                 <option value="empty">Belum Diisi (Kuota 0)</option>
                 <option value="filled">Sudah Diisi</option>
@@ -148,7 +161,8 @@
 
             {{-- Hidden inputs for ALL supervisors so form submits complete data --}}
             @foreach ($supervisors as $supervisor)
-                <input type="hidden" :name="'allocations[{{ $supervisor->user_id }}]'" x-model="allocations[{{ $supervisor->user_id }}]">
+                <input type="hidden" :name="'allocations[{{ $supervisor->user_id }}]'"
+                    x-model="allocations[{{ $supervisor->user_id }}]">
             @endforeach
 
             <div
@@ -165,10 +179,11 @@
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-100 dark:divide-amoled-border">
-                            @foreach($supervisors as $index => $supervisor)
+                            @foreach ($supervisors as $index => $supervisor)
                                 <tr x-show="isVisible(supervisors.find(s => s.user_id == {{ $supervisor->user_id }}))"
                                     class="hover:bg-gray-50/50 dark:hover:bg-white/[0.02] transition-colors duration-150">
-                                    <td class="px-6 py-4 font-medium text-gray-900 dark:text-gray-200">{{ $loop->iteration }}</td>
+                                    <td class="px-6 py-4 font-medium text-gray-900 dark:text-gray-200">
+                                        {{ $loop->iteration }}</td>
                                     <td class="px-6 py-4">
                                         <div class="flex items-center gap-3">
                                             <div
@@ -176,13 +191,15 @@
                                                 {{ substr($supervisor->user->name, 0, 2) }}
                                             </div>
                                             <div class="min-w-0">
-                                                <div class="font-medium text-gray-900 dark:text-white truncate">{{ $supervisor->user->name }}</div>
-                                                <div class="text-sm text-gray-400 truncate">{{ $supervisor->nip ?? '-' }}</div>
+                                                <div class="font-medium text-gray-900 dark:text-white truncate">
+                                                    {{ $supervisor->user->name }}</div>
+                                                <div class="text-sm text-gray-400 truncate">{{ $supervisor->nip ?? '-' }}
+                                                </div>
                                             </div>
                                         </div>
                                     </td>
                                     <td class="px-6 py-4">
-                                        @if($supervisor->department)
+                                        @if ($supervisor->department)
                                             <x-department-badge :code="$supervisor->department->code" />
                                         @else
                                             <span class="text-gray-400 italic">-</span>
@@ -190,10 +207,11 @@
                                     </td>
                                     <td class="px-6 py-4">
                                         <div class="relative flex items-center justify-center"
-                                            :class="{ 'text-school-blue font-bold': allocations[{{ $supervisor->user_id }}] != initialAllocations[{{ $supervisor->user_id }}] }">
-                                            <input type="number"
-                                                x-model.number="allocations[{{ $supervisor->user_id }}]"
-                                                @input="checkDirty()" min="0" value="{{ $supervisor->allocations->first()->quota ?? 0 }}"
+                                            :class="{ 'text-school-blue font-bold': allocations[{{ $supervisor->user_id }}] !=
+                                                    initialAllocations[{{ $supervisor->user_id }}] }">
+                                            <input type="number" x-model.number="allocations[{{ $supervisor->user_id }}]"
+                                                @input="checkDirty()" min="0"
+                                                value="{{ $supervisor->allocations->first()->quota ?? 0 }}"
                                                 class="peer block w-24 rounded-lg border-0 bg-gray-50 py-2 px-3 text-center text-gray-900 ring-1 ring-inset ring-gray-200 focus:ring-2 focus:ring-inset focus:ring-school-blue text-base sm:leading-6 dark:bg-white/[0.05] dark:text-white dark:ring-white/10 dark:focus:ring-school-blue transition-all duration-200
                                                           hover:bg-white dark:hover:bg-white/[0.08]"
                                                 placeholder="0" />
@@ -216,7 +234,9 @@
                                                 d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z">
                                             </path>
                                         </svg>
-                                        <p class="text-base">{{ count($supervisors) === 0 ? 'Belum ada data guru pembimbing.' : 'Tidak ada guru yang cocok dengan filter.' }}</p>
+                                        <p class="text-base">
+                                            {{ count($supervisors) === 0 ? 'Belum ada data guru pembimbing.' : 'Tidak ada guru yang cocok dengan filter.' }}
+                                        </p>
                                     </div>
                                 </td>
                             </tr>
@@ -227,7 +247,8 @@
                 <!-- Footer with summary -->
                 <div
                     class="bg-gray-50 px-6 py-4 border-t border-gray-200 dark:bg-amoled-surface dark:border-amoled-border flex justify-between items-center">
-                    <span class="text-sm text-gray-500 dark:text-gray-400">Menampilkan <span class="font-medium" x-text="filteredCount">{{ count($supervisors) }}</span> dari {{ count($supervisors) }} guru
+                    <span class="text-sm text-gray-500 dark:text-gray-400">Menampilkan <span class="font-medium"
+                            x-text="filteredCount">{{ count($supervisors) }}</span> dari {{ count($supervisors) }} guru
                         pembimbing</span>
                     <div class="text-base font-medium text-gray-700 dark:text-gray-300">
                         Total Kuota: <span

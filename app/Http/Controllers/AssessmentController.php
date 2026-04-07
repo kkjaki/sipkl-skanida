@@ -76,10 +76,10 @@ class AssessmentController extends Controller
         }
 
         $request->validate([
-            'scores'                        => 'required|array',
-            'scores.*.indicator_id'         => 'required|exists:evaluation_indicators,id',
-            'scores.*.industry_score'       => 'nullable|numeric|min:0|max:100',
-            'scores.*.supervisor_score'     => 'nullable|numeric|min:0|max:100',
+            'scores' => 'required|array',
+            'scores.*.indicator_id' => 'required|exists:evaluation_indicators,id',
+            'scores.*.industry_score' => 'nullable|numeric|min:0|max:100',
+            'scores.*.supervisor_score' => 'nullable|numeric|min:0|max:100',
         ]);
 
         try {
@@ -88,11 +88,11 @@ class AssessmentController extends Controller
                     AssessmentScore::updateOrCreate(
                         [
                             'internship_id' => $internship->id,
-                            'indicator_id'  => $score['indicator_id'],
+                            'indicator_id' => $score['indicator_id'],
                         ],
                         [
                             'score_industry' => $score['industry_score'] ?? null,
-                            'score_school'   => $score['supervisor_score'] ?? null,
+                            'score_school' => $score['supervisor_score'] ?? null,
                         ]
                     );
                 }
@@ -103,7 +103,7 @@ class AssessmentController extends Controller
                 ->with('success', 'Nilai berhasil disimpan.');
         } catch (\Exception $e) {
             return back()
-                ->with('error', 'Gagal menyimpan nilai: ' . $e->getMessage())
+                ->with('error', 'Gagal menyimpan nilai: '.$e->getMessage())
                 ->withInput();
         }
     }

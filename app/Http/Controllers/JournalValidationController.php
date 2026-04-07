@@ -47,7 +47,7 @@ class JournalValidationController extends Controller
 
         // Filter & Sort
         $status = $request->input('status', 'all');
-        $sort   = $request->input('sort', 'date_desc');
+        $sort = $request->input('sort', 'date_desc');
 
         $query = DailyJournal::where('internship_id', $internship->id);
 
@@ -73,9 +73,9 @@ class JournalValidationController extends Controller
         }
 
         $request->validate([
-            'journal_ids'    => 'required|array|min:1',
-            'journal_ids.*'  => 'exists:daily_journals,id',
-            'action'         => 'required|in:verify,reject',
+            'journal_ids' => 'required|array|min:1',
+            'journal_ids.*' => 'exists:daily_journals,id',
+            'action' => 'required|in:verify,reject',
             'rejection_note' => 'required_if:action,reject|nullable|string|max:1000',
         ]);
 
@@ -96,25 +96,25 @@ class JournalValidationController extends Controller
                 if ($request->action === 'verify') {
                     $journals->update([
                         'verification_status' => 'verified',
-                        'verified_at'         => now(),
-                        'rejection_note'      => null,
+                        'verified_at' => now(),
+                        'rejection_note' => null,
                     ]);
-                    $message = count($request->journal_ids) . ' jurnal berhasil divalidasi.';
+                    $message = count($request->journal_ids).' jurnal berhasil divalidasi.';
                 } else {
                     $journals->update([
                         'verification_status' => 'rejected',
-                        'rejection_note'      => $request->rejection_note,
+                        'rejection_note' => $request->rejection_note,
                     ]);
-                    $message = count($request->journal_ids) . ' jurnal ditolak.';
+                    $message = count($request->journal_ids).' jurnal ditolak.';
                 }
 
                 // Invalidate dashboard cache supaya angka pending langsung terupdate
-                Cache::forget('dashboard_supervisor_' . Auth::id());
+                Cache::forget('dashboard_supervisor_'.Auth::id());
 
                 return back()->with('success', $message);
             });
         } catch (\Exception $e) {
-            return back()->with('error', 'Gagal memproses: ' . $e->getMessage());
+            return back()->with('error', 'Gagal memproses: '.$e->getMessage());
         }
     }
 }

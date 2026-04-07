@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Student;
-use App\Models\User;
-use App\Models\Department;
-use App\Models\AcademicYear;
 use App\Http\Requests\StoreStudentRequest;
 use App\Http\Requests\UpdateStudentRequest;
+use App\Models\AcademicYear;
+use App\Models\Department;
+use App\Models\Student;
+use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Http\Request;
 
 class StudentController extends Controller
 {
@@ -33,13 +33,13 @@ class StudentController extends Controller
         $search = $request->query('search');
         $filterDept = $request->query('department');
         $filterClass = $request->query('class');
-        
+
         $activeYear = AcademicYear::where('is_active', true)->first();
         $activeYearId = $activeYear?->id;
 
         // Cache key includes search, filters, active year, and page for proper caching.
         $page = $request->query('page', 1);
-        $cacheKey = 'students_list_' . md5(json_encode(compact('search', 'filterDept', 'filterClass', 'activeYearId', 'page')));
+        $cacheKey = 'students_list_'.md5(json_encode(compact('search', 'filterDept', 'filterClass', 'activeYearId', 'page')));
         $cacheTtl = $search || $filterDept || $filterClass ? 120 : 600;
 
         $students = Cache::remember($cacheKey, $cacheTtl, function () use ($search, $filterDept, $filterClass, $activeYearId) {
@@ -50,11 +50,11 @@ class StudentController extends Controller
                 ->when($search, function ($query, $search) {
                     $query->where(function ($q) use ($search) {
                         $q->where('nis', 'like', "%{$search}%")
-                          ->orWhere('class_name', 'like', "%{$search}%")
-                          ->orWhereHas('user', function ($q2) use ($search) {
-                              $q2->where('name', 'like', "%{$search}%")
-                                 ->orWhere('email', 'like', "%{$search}%");
-                          });
+                            ->orWhere('class_name', 'like', "%{$search}%")
+                            ->orWhereHas('user', function ($q2) use ($search) {
+                                $q2->where('name', 'like', "%{$search}%")
+                                    ->orWhere('email', 'like', "%{$search}%");
+                            });
                     });
                 })
                 ->when($filterDept, function ($query, $filterDept) {
@@ -96,19 +96,19 @@ class StudentController extends Controller
 
         DB::transaction(function () use ($validated) {
             // Auto-generate email if empty
-            $email = !empty($validated['email'])
+            $email = ! empty($validated['email'])
                 ? $validated['email']
-                : $validated['nis'] . '@smkn2magelang.sch.id';
+                : $validated['nis'].'@smkn2magelang.sch.id';
 
             // Auto-detect active academic year
             $activeYear = AcademicYear::where('is_active', true)->first();
 
             // Step 1: Create User
             $user = User::create([
-                'name'     => $validated['name'],
-                'email'    => $email,
+                'name' => $validated['name'],
+                'email' => $email,
                 'password' => Hash::make($validated['nis']),
-                'role'     => 'student',
+                'role' => 'student',
             ]);
 
             // Assign Spatie role
@@ -116,15 +116,15 @@ class StudentController extends Controller
 
             // Step 2: Create Student profile
             Student::create([
-                'user_id'          => $user->id,
-                'nis'              => $validated['nis'],
-                'class_name'       => $validated['class_name'],
-                'place_of_birth'   => $validated['place_of_birth'],
-                'date_of_birth'    => $validated['date_of_birth'],
-                'department_id'    => $validated['department_id'],
+                'user_id' => $user->id,
+                'nis' => $validated['nis'],
+                'class_name' => $validated['class_name'],
+                'place_of_birth' => $validated['place_of_birth'],
+                'date_of_birth' => $validated['date_of_birth'],
+                'department_id' => $validated['department_id'],
                 'academic_year_id' => $activeYear?->id,
-                'address'          => $validated['address'] ?? null,
-                'phone'            => $validated['phone'] ?? null,
+                'address' => $validated['address'] ?? null,
+                'phone' => $validated['phone'] ?? null,
             ]);
         });
 
@@ -161,20 +161,20 @@ class StudentController extends Controller
             if ($request->boolean('reset_email')) {
                 // Reset to default school email pattern
                 $nis = $validated['nis'] ?? $student->nis;
-                $email = $nis . '@smkn2magelang.sch.id';
-            } elseif (!empty($validated['email'])) {
+                $email = $nis.'@smkn2magelang.sch.id';
+            } elseif (! empty($validated['email'])) {
                 $email = $validated['email'];
             }
 
             // If NIS changed, and email was using the old NIS pattern, update it
-            $oldNisEmail = $student->nis . '@smkn2magelang.sch.id';
+            $oldNisEmail = $student->nis.'@smkn2magelang.sch.id';
             if ($student->user->email === $oldNisEmail && $validated['nis'] !== $student->nis) {
-                $email = $validated['nis'] . '@smkn2magelang.sch.id';
+                $email = $validated['nis'].'@smkn2magelang.sch.id';
             }
 
             // Update User
             $userData = [
-                'name'  => $validated['name'],
+                'name' => $validated['name'],
                 'email' => $email,
             ];
 
@@ -188,13 +188,13 @@ class StudentController extends Controller
 
             // Update Student
             $student->update([
-                'nis'           => $validated['nis'],
-                'class_name'    => $validated['class_name'],
-                'place_of_birth'=> $validated['place_of_birth'],
+                'nis' => $validated['nis'],
+                'class_name' => $validated['class_name'],
+                'place_of_birth' => $validated['place_of_birth'],
                 'date_of_birth' => $validated['date_of_birth'],
                 'department_id' => $validated['department_id'],
-                'address'       => $validated['address'] ?? null,
-                'phone'         => $validated['phone'] ?? null,
+                'address' => $validated['address'] ?? null,
+                'phone' => $validated['phone'] ?? null,
             ]);
         });
 

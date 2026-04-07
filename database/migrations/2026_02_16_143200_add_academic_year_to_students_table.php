@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::table('students', function (Blueprint $table) {
             $table->foreignId('academic_year_id')
-                  ->after('department_id')
-                  ->constrained('academic_years');
+                ->after('department_id')
+                ->constrained('academic_years');
 
             // Performance indexes for dashboard statistics queries
             $table->index('academic_year_id');

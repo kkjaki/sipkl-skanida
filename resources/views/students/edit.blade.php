@@ -10,7 +10,8 @@
             <nav>
                 <ol class="flex items-center gap-1.5 text-sm">
                     <li>
-                        <a class="font-medium text-gray-400 dark:text-amoled-text hover:text-school-blue transition duration-150" href="{{ route('students.index') }}">Peserta Didik</a>
+                        <a class="font-medium text-gray-400 dark:text-amoled-text hover:text-school-blue transition duration-150"
+                            href="{{ route('students.index') }}">Peserta Didik</a>
                     </li>
                     <li class="text-gray-300 dark:text-gray-600">/</li>
                     <li class="font-medium text-gray-800 dark:text-gray-200">Edit</li>
@@ -36,15 +37,9 @@
                         <label for="name" class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
                             Nama Lengkap <span class="text-red-500">*</span>
                         </label>
-                        <input
-                            type="text"
-                            id="name"
-                            name="name"
-                            value="{{ old('name', $student->user->name) }}"
-                            placeholder="cth. Ahmad Fauzi"
-                            required
-                            class="h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 outline-none transition duration-150 focus:border-school-blue focus:ring-3 focus:ring-school-blue/10 dark:border-amoled-border dark:bg-amoled-input dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-school-blue"
-                        />
+                        <input type="text" id="name" name="name" value="{{ old('name', $student->user->name) }}"
+                            placeholder="cth. Ahmad Fauzi" required
+                            class="h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 outline-none transition duration-150 focus:border-school-blue focus:ring-3 focus:ring-school-blue/10 dark:border-amoled-border dark:bg-amoled-input dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-school-blue" />
                         @error('name')
                             <p class="text-red-500 text-xs mt-1.5">{{ $message }}</p>
                         @enderror
@@ -55,14 +50,9 @@
                         <label for="email" class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
                             Email
                         </label>
-                        <input
-                            type="email"
-                            id="email"
-                            name="email"
-                            value="{{ old('email', $student->user->email) }}"
-                            placeholder="cth. nama@email.com"
-                            class="h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 outline-none transition duration-150 focus:border-school-blue focus:ring-3 focus:ring-school-blue/10 dark:border-amoled-border dark:bg-amoled-input dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-school-blue"
-                        />
+                        <input type="email" id="email" name="email"
+                            value="{{ old('email', $student->user->email) }}" placeholder="cth. nama@email.com"
+                            class="h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 outline-none transition duration-150 focus:border-school-blue focus:ring-3 focus:ring-school-blue/10 dark:border-amoled-border dark:bg-amoled-input dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-school-blue" />
                         @error('email')
                             <p class="text-red-500 text-xs mt-1.5">{{ $message }}</p>
                         @enderror
@@ -72,9 +62,10 @@
                     <div x-data="{ resetEmail: false }">
                         <label class="inline-flex items-center cursor-pointer gap-2.5">
                             <input type="checkbox" name="reset_email" value="1" x-model="resetEmail"
-                                   class="w-4 h-4 rounded border-gray-300 text-school-blue focus:ring-school-blue/20 dark:border-amoled-border dark:bg-amoled-input" />
+                                class="w-4 h-4 rounded border-gray-300 text-school-blue focus:ring-school-blue/20 dark:border-amoled-border dark:bg-amoled-input" />
                             <span class="text-sm text-gray-600 dark:text-gray-400">
-                                Reset email ke pola default (<span class="font-mono text-xs">NIS@smkn2magelang.sch.id</span>)
+                                Reset email ke pola default (<span
+                                    class="font-mono text-xs">NIS@smkn2magelang.sch.id</span>)
                             </span>
                         </label>
                         <p class="mt-1 text-xs text-gray-400 dark:text-gray-500">
@@ -86,7 +77,7 @@
                     <div x-data="{ resetPassword: false }">
                         <label class="inline-flex items-center cursor-pointer gap-2.5">
                             <input type="checkbox" name="reset_password" value="1" x-model="resetPassword"
-                                   class="w-4 h-4 rounded border-gray-300 text-school-blue focus:ring-school-blue/20 dark:border-amoled-border dark:bg-amoled-input" />
+                                class="w-4 h-4 rounded border-gray-300 text-school-blue focus:ring-school-blue/20 dark:border-amoled-border dark:bg-amoled-input" />
                             <span class="text-sm text-gray-600 dark:text-gray-400">
                                 Reset kata sandi ke NIS (<span class="font-mono text-xs">{{ $student->nis }}</span>)
                             </span>
@@ -109,15 +100,9 @@
                         <label for="nis" class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
                             NIS <span class="text-red-500">*</span>
                         </label>
-                        <input
-                            type="text"
-                            id="nis"
-                            name="nis"
-                            value="{{ old('nis', $student->nis) }}"
-                            placeholder="cth. 12345678"
-                            required
-                            class="h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 outline-none transition duration-150 focus:border-school-blue focus:ring-3 focus:ring-school-blue/10 dark:border-amoled-border dark:bg-amoled-input dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-school-blue"
-                        />
+                        <input type="text" id="nis" name="nis" value="{{ old('nis', $student->nis) }}"
+                            placeholder="cth. 12345678" required
+                            class="h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 outline-none transition duration-150 focus:border-school-blue focus:ring-3 focus:ring-school-blue/10 dark:border-amoled-border dark:bg-amoled-input dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-school-blue" />
                         @error('nis')
                             <p class="text-red-500 text-xs mt-1.5">{{ $message }}</p>
                         @enderror
@@ -125,18 +110,14 @@
 
                     <!-- Tempat Lahir -->
                     <div>
-                        <label for="place_of_birth" class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                        <label for="place_of_birth"
+                            class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
                             Tempat Lahir <span class="text-red-500">*</span>
                         </label>
-                        <input
-                            type="text"
-                            id="place_of_birth"
-                            name="place_of_birth"
-                            value="{{ old('place_of_birth', $student->place_of_birth) }}"
-                            placeholder="cth. Magelang"
+                        <input type="text" id="place_of_birth" name="place_of_birth"
+                            value="{{ old('place_of_birth', $student->place_of_birth) }}" placeholder="cth. Magelang"
                             required
-                            class="h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 outline-none transition duration-150 focus:border-school-blue focus:ring-3 focus:ring-school-blue/10 dark:border-amoled-border dark:bg-amoled-input dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-school-blue"
-                        />
+                            class="h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 outline-none transition duration-150 focus:border-school-blue focus:ring-3 focus:ring-school-blue/10 dark:border-amoled-border dark:bg-amoled-input dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-school-blue" />
                         @error('place_of_birth')
                             <p class="text-red-500 text-xs mt-1.5">{{ $message }}</p>
                         @enderror
@@ -144,17 +125,13 @@
 
                     <!-- Tanggal Lahir -->
                     <div>
-                        <label for="date_of_birth" class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                        <label for="date_of_birth"
+                            class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
                             Tanggal Lahir <span class="text-red-500">*</span>
                         </label>
-                        <input
-                            type="date"
-                            id="date_of_birth"
-                            name="date_of_birth"
-                            value="{{ old('date_of_birth', $student->date_of_birth?->format('Y-m-d')) }}"
-                            required
-                            class="h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 outline-none transition duration-150 focus:border-school-blue focus:ring-3 focus:ring-school-blue/10 dark:border-amoled-border dark:bg-amoled-input dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-school-blue"
-                        />
+                        <input type="date" id="date_of_birth" name="date_of_birth"
+                            value="{{ old('date_of_birth', $student->date_of_birth?->format('Y-m-d')) }}" required
+                            class="h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 outline-none transition duration-150 focus:border-school-blue focus:ring-3 focus:ring-school-blue/10 dark:border-amoled-border dark:bg-amoled-input dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-school-blue" />
                         @error('date_of_birth')
                             <p class="text-red-500 text-xs mt-1.5">{{ $message }}</p>
                         @enderror
@@ -165,15 +142,12 @@
                         <label for="class_name" class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
                             Kelas <span class="text-red-500">*</span>
                         </label>
-                        <select
-                            id="class_name"
-                            name="class_name"
-                            required
-                            class="h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 outline-none transition duration-150 focus:border-school-blue focus:ring-3 focus:ring-school-blue/10 dark:border-amoled-border dark:bg-amoled-input dark:text-white/90 dark:focus:border-school-blue appearance-none cursor-pointer"
-                        >
+                        <select id="class_name" name="class_name" required
+                            class="h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 outline-none transition duration-150 focus:border-school-blue focus:ring-3 focus:ring-school-blue/10 dark:border-amoled-border dark:bg-amoled-input dark:text-white/90 dark:focus:border-school-blue appearance-none cursor-pointer">
                             <option value="" class="dark:bg-amoled-surface">— Pilih Kelas —</option>
-                            @foreach($availableClasses as $class)
-                                <option value="{{ $class }}" class="dark:bg-amoled-surface" {{ old('class_name', $student->class_name) == $class ? 'selected' : '' }}>
+                            @foreach ($availableClasses as $class)
+                                <option value="{{ $class }}" class="dark:bg-amoled-surface"
+                                    {{ old('class_name', $student->class_name) == $class ? 'selected' : '' }}>
                                     {{ $class }}
                                 </option>
                             @endforeach
@@ -185,18 +159,16 @@
 
                     <!-- Program Keahlian (Dropdown) -->
                     <div>
-                        <label for="department_id" class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                        <label for="department_id"
+                            class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
                             Program Keahlian <span class="text-red-500">*</span>
                         </label>
-                        <select
-                            id="department_id"
-                            name="department_id"
-                            required
-                            class="h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 outline-none transition duration-150 focus:border-school-blue focus:ring-3 focus:ring-school-blue/10 dark:border-amoled-border dark:bg-amoled-input dark:text-white/90 dark:focus:border-school-blue appearance-none cursor-pointer"
-                        >
+                        <select id="department_id" name="department_id" required
+                            class="h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 outline-none transition duration-150 focus:border-school-blue focus:ring-3 focus:ring-school-blue/10 dark:border-amoled-border dark:bg-amoled-input dark:text-white/90 dark:focus:border-school-blue appearance-none cursor-pointer">
                             <option value="" class="dark:bg-amoled-surface">— Pilih Program Keahlian —</option>
-                            @foreach($departments as $department)
-                                <option value="{{ $department->id }}" class="dark:bg-amoled-surface" {{ old('department_id', $student->department_id) == $department->id ? 'selected' : '' }}>
+                            @foreach ($departments as $department)
+                                <option value="{{ $department->id }}" class="dark:bg-amoled-surface"
+                                    {{ old('department_id', $student->department_id) == $department->id ? 'selected' : '' }}>
                                     {{ $department->name }}
                                 </option>
                             @endforeach
@@ -219,13 +191,8 @@
                         <label for="address" class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
                             Alamat
                         </label>
-                        <textarea
-                            id="address"
-                            name="address"
-                            rows="3"
-                            placeholder="cth. Jl. Raya No. 1, Kec. Magelang Selatan"
-                            class="w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 outline-none transition duration-150 focus:border-school-blue focus:ring-3 focus:ring-school-blue/10 dark:border-amoled-border dark:bg-amoled-input dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-school-blue resize-none"
-                        >{{ old('address', $student->address) }}</textarea>
+                        <textarea id="address" name="address" rows="3" placeholder="cth. Jl. Raya No. 1, Kec. Magelang Selatan"
+                            class="w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 outline-none transition duration-150 focus:border-school-blue focus:ring-3 focus:ring-school-blue/10 dark:border-amoled-border dark:bg-amoled-input dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-school-blue resize-none">{{ old('address', $student->address) }}</textarea>
                         @error('address')
                             <p class="text-red-500 text-xs mt-1.5">{{ $message }}</p>
                         @enderror
@@ -236,14 +203,9 @@
                         <label for="phone" class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
                             No. HP
                         </label>
-                        <input
-                            type="text"
-                            id="phone"
-                            name="phone"
-                            value="{{ old('phone', $student->phone) }}"
+                        <input type="text" id="phone" name="phone" value="{{ old('phone', $student->phone) }}"
                             placeholder="cth. 08123456789"
-                            class="h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 outline-none transition duration-150 focus:border-school-blue focus:ring-3 focus:ring-school-blue/10 dark:border-amoled-border dark:bg-amoled-input dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-school-blue"
-                        />
+                            class="h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 outline-none transition duration-150 focus:border-school-blue focus:ring-3 focus:ring-school-blue/10 dark:border-amoled-border dark:bg-amoled-input dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-school-blue" />
                         @error('phone')
                             <p class="text-red-500 text-xs mt-1.5">{{ $message }}</p>
                         @enderror
@@ -252,13 +214,15 @@
                     <!-- Action Buttons -->
                     <div class="flex items-center justify-end gap-3 pt-2">
                         <a href="{{ route('students.index') }}"
-                           class="inline-flex items-center justify-center rounded-xl border border-gray-200 dark:border-amoled-border bg-transparent py-2.5 px-6 text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/[0.06] transition duration-150 ease-in-out">
+                            class="inline-flex items-center justify-center rounded-xl border border-gray-200 dark:border-amoled-border bg-transparent py-2.5 px-6 text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/[0.06] transition duration-150 ease-in-out">
                             Batal
                         </a>
                         <button type="submit"
-                                class="inline-flex items-center justify-center gap-2.5 rounded-xl bg-school-blue py-2.5 px-6 text-center text-sm font-medium text-white hover:bg-school-blue/90 transition duration-150 ease-in-out shadow-sm">
-                            <svg class="w-4 h-4 fill-current" width="16" height="16" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/>
+                            class="inline-flex items-center justify-center gap-2.5 rounded-xl bg-school-blue py-2.5 px-6 text-center text-sm font-medium text-white hover:bg-school-blue/90 transition duration-150 ease-in-out shadow-sm">
+                            <svg class="w-4 h-4 fill-current" width="16" height="16" viewBox="0 0 20 20"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" />
                             </svg>
                             Simpan Perubahan
                         </button>

@@ -45,20 +45,21 @@ class InternshipWithdrawalController extends Controller
         // Load all active internships within scope
         $internships = $query->latest()->get()->map(function ($internship) {
             $internship->formatted_start_date = $internship->start_date ? $internship->start_date->format('d M Y') : '-';
+
             return $internship;
         });
 
         // For filters
         $departments = \App\Models\Department::orderBy('name')->get();
-        
+
         $industriesQuery = \App\Models\Industry::where('is_synced', true);
         if ($departmentId !== null) {
             $activeYear = \App\Models\AcademicYear::where('is_active', true)->first();
             if ($activeYear) {
                 $industriesQuery->whereHas('allocations', function ($q) use ($departmentId, $activeYear) {
                     $q->where('department_id', $departmentId)
-                      ->where('academic_year_id', $activeYear->id)
-                      ->where('quota', '>', 0);
+                        ->where('academic_year_id', $activeYear->id)
+                        ->where('quota', '>', 0);
                 });
             }
         }
@@ -89,7 +90,7 @@ class InternshipWithdrawalController extends Controller
         }
 
         $internship->update([
-            'status'          => 'withdrawn',
+            'status' => 'withdrawn',
             'actual_end_date' => now()->toDateString(),
         ]);
 

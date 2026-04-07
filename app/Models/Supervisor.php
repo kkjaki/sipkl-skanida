@@ -11,6 +11,7 @@ class Supervisor extends Model
 
     // user_id is the primary key and foreign key to users
     protected $primaryKey = 'user_id';
+
     public $incrementing = false;
 
     protected $fillable = [
@@ -42,6 +43,7 @@ class Supervisor extends Model
     {
         return $this->hasMany(Internship::class, 'supervisor_id', 'user_id');
     }
+
     /**
      * Get the quota allocations for the supervisor.
      */

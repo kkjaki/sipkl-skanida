@@ -51,12 +51,15 @@
             </div>
         @endif
 
-        <div class="rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-amoled-border dark:bg-amoled-surface overflow-hidden">
+        <div
+            class="rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-amoled-border dark:bg-amoled-surface overflow-hidden">
             <!-- Header -->
-            <div class="border-b border-gray-200 dark:border-amoled-border py-4 px-6 sm:px-8 flex items-center justify-between">
+            <div
+                class="border-b border-gray-200 dark:border-amoled-border py-4 px-6 sm:px-8 flex items-center justify-between">
                 <div>
                     <h3 class="text-sm font-semibold text-gray-900 dark:text-white">Daftar MoU</h3>
-                    <p class="text-xs text-gray-500 dark:text-amoled-text mt-0.5">Riwayat dokumen kerjasama dengan industri ini</p>
+                    <p class="text-xs text-gray-500 dark:text-amoled-text mt-0.5">Riwayat dokumen kerjasama dengan industri
+                        ini</p>
                 </div>
                 <button @click="showModal = true" type="button"
                     class="inline-flex items-center justify-center gap-2 rounded-lg bg-school-blue py-2 px-4 text-sm font-medium text-white hover:bg-school-blue/90 transition duration-150 shadow-sm">
@@ -70,7 +73,8 @@
             <!-- Partnerships Table -->
             <div class="overflow-x-auto">
                 <table class="w-full text-left text-sm text-gray-600 dark:text-gray-400">
-                    <thead class="text-xs uppercase text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-amoled-border">
+                    <thead
+                        class="text-xs uppercase text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-amoled-border">
                         <tr>
                             <th class="px-6 py-4 font-semibold w-12">No</th>
                             <th class="px-6 py-4 font-semibold">Nomor Dokumen</th>
@@ -86,7 +90,8 @@
                             <tr class="hover:bg-gray-50/50 dark:hover:bg-white/[0.02] transition-colors duration-150">
                                 <td class="px-6 py-4 text-gray-900 dark:text-gray-200">{{ $index + 1 }}</td>
                                 <td class="px-6 py-4">
-                                    <span class="font-medium text-gray-900 dark:text-white">{{ $partnership->document_number ?? '-' }}</span>
+                                    <span
+                                        class="font-medium text-gray-900 dark:text-white">{{ $partnership->document_number ?? '-' }}</span>
                                 </td>
                                 <td class="px-6 py-4">
                                     <div class="text-gray-700 dark:text-gray-300">
@@ -99,7 +104,9 @@
                                 </td>
                                 <td class="px-6 py-4">
                                     @if ($partnership->start_date->startOfDay() > now()->startOfDay())
-                                        <span class="inline-block rounded-lg px-2.5 py-0.5 text-xs font-semibold border bg-blue-500/10 text-blue-600 border-blue-500/20 dark:bg-blue-500/20 dark:text-blue-400 dark:border-blue-500/30">Akan Datang</span>
+                                        <span
+                                            class="inline-block rounded-lg px-2.5 py-0.5 text-xs font-semibold border bg-blue-500/10 text-blue-600 border-blue-500/20 dark:bg-blue-500/20 dark:text-blue-400 dark:border-blue-500/30">Akan
+                                            Datang</span>
                                     @else
                                         {!! $partnership->status_badge !!}
                                     @endif
@@ -127,7 +134,8 @@
                                     @endif
                                 </td>
                                 <td class="px-6 py-4">
-                                    <span class="text-gray-600 dark:text-gray-400 text-xs">{{ Str::limit($partnership->agreement_notes ?? '-', 50) }}</span>
+                                    <span
+                                        class="text-gray-600 dark:text-gray-400 text-xs">{{ Str::limit($partnership->agreement_notes ?? '-', 50) }}</span>
                                 </td>
                                 <td class="px-6 py-4 text-center">
                                     <div class="inline-flex items-center gap-2">
@@ -136,8 +144,10 @@
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit"
-                                                class="inline-flex items-center justify-center p-1.5 text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-lg transition-colors duration-150" title="Hapus">
-                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                class="inline-flex items-center justify-center p-1.5 text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-lg transition-colors duration-150"
+                                                title="Hapus">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor"
+                                                    viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                         d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
                                                     </path>
@@ -151,13 +161,15 @@
                             <tr>
                                 <td colspan="7" class="px-6 py-12 text-center text-gray-500 dark:text-gray-400">
                                     <div class="flex flex-col items-center justify-center gap-2">
-                                        <svg class="h-10 w-10 text-gray-300 dark:text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <svg class="h-10 w-10 text-gray-300 dark:text-gray-600" fill="none"
+                                            stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                 d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
                                             </path>
                                         </svg>
                                         <p class="text-sm">Belum ada data MoU.</p>
-                                        <p class="text-xs text-gray-400">Klik tombol "Upload MoU Baru" untuk menambahkan dokumen kerjasama.</p>
+                                        <p class="text-xs text-gray-400">Klik tombol "Upload MoU Baru" untuk menambahkan
+                                            dokumen kerjasama.</p>
                                     </div>
                                 </td>
                             </tr>
@@ -187,30 +199,38 @@
                         class="relative bg-white dark:bg-amoled-surface rounded-2xl shadow-xl max-w-2xl w-full border border-gray-200 dark:border-amoled-border">
 
                         <!-- Modal Header -->
-                        <div class="border-b border-gray-200 dark:border-amoled-border py-4 px-6 flex items-center justify-between">
+                        <div
+                            class="border-b border-gray-200 dark:border-amoled-border py-4 px-6 flex items-center justify-between">
                             <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Upload MoU Baru</h3>
                             <button @click="showModal = false" type="button"
                                 class="text-gray-400 hover:text-gray-500 dark:hover:text-gray-300">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M6 18L18 6M6 6l12 12"></path>
                                 </svg>
                             </button>
                         </div>
 
                         <!-- Modal Body -->
-                        <form action="{{ route('partnerships.store', $industry) }}" method="POST" enctype="multipart/form-data">
+                        <form action="{{ route('partnerships.store', $industry) }}" method="POST"
+                            enctype="multipart/form-data">
                             @csrf
-                            
+
                             <!-- Error Summary -->
                             @if ($errors->any())
-                                <div class="mx-6 mt-4 p-4 rounded-lg border-l-4 border-red-500 bg-red-50 dark:bg-red-500/10">
+                                <div
+                                    class="mx-6 mt-4 p-4 rounded-lg border-l-4 border-red-500 bg-red-50 dark:bg-red-500/10">
                                     <div class="flex items-start gap-2">
-                                        <svg class="w-5 h-5 text-red-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                        <svg class="w-5 h-5 text-red-500 shrink-0 mt-0.5" fill="none"
+                                            stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                         </svg>
                                         <div class="flex-1">
-                                            <p class="text-sm font-semibold text-red-800 dark:text-red-300">Terdapat kesalahan pada form:</p>
-                                            <ul class="mt-1 text-xs text-red-700 dark:text-red-400 list-disc list-inside space-y-0.5">
+                                            <p class="text-sm font-semibold text-red-800 dark:text-red-300">Terdapat
+                                                kesalahan pada form:</p>
+                                            <ul
+                                                class="mt-1 text-xs text-red-700 dark:text-red-400 list-disc list-inside space-y-0.5">
                                                 @foreach ($errors->all() as $error)
                                                     <li>{{ $error }}</li>
                                                 @endforeach
@@ -223,11 +243,12 @@
                             <div class="p-6 space-y-4">
                                 <!-- Document Number -->
                                 <div>
-                                    <label for="document_number" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
+                                    <label for="document_number"
+                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
                                         Nomor Dokumen <span class="text-gray-400 text-xs">(Opsional)</span>
                                     </label>
                                     <input type="text" name="document_number" id="document_number"
-                                        placeholder="Contoh: 001/MOU/SKANIDA/2026"
+                                        placeholder="Contoh: 001/MOU/281/2026"
                                         class="h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 outline-none transition duration-150 focus:border-school-blue focus:ring-3 focus:ring-school-blue/10 dark:border-amoled-border dark:bg-amoled-input dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-school-blue"
                                         value="{{ old('document_number') }}">
                                     @error('document_number')
@@ -238,7 +259,8 @@
                                 <!-- Date Range -->
                                 <div class="grid grid-cols-2 gap-4">
                                     <div>
-                                        <label for="start_date" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
+                                        <label for="start_date"
+                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
                                             Tanggal Mulai <span class="text-red-500">*</span>
                                         </label>
                                         <input type="date" name="start_date" id="start_date" required
@@ -250,11 +272,12 @@
                                         @enderror
                                     </div>
                                     <div>
-                                        <label for="end_date" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
+                                        <label for="end_date"
+                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
                                             Tanggal Selesai <span class="text-red-500">*</span>
                                         </label>
-                                        <input type="date" name="end_date" id="end_date" required
-                                            min="2000-01-01" max="2099-12-31" onclick="this.showPicker()"
+                                        <input type="date" name="end_date" id="end_date" required min="2000-01-01"
+                                            max="2099-12-31" onclick="this.showPicker()"
                                             class="h-11 w-full rounded-lg border border-gray-300 bg-white dark:bg-amoled-input px-4 py-2.5 text-sm text-gray-800 dark:text-white/90 outline-none transition duration-150 focus:border-school-blue focus:ring-3 focus:ring-school-blue/10 dark:border-amoled-border dark:focus:border-school-blue cursor-pointer"
                                             value="{{ old('end_date') }}" onkeydown="return false;">
                                         @error('end_date')
@@ -265,7 +288,8 @@
 
                                 <!-- File Upload -->
                                 <div>
-                                    <label for="mou_file" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
+                                    <label for="mou_file"
+                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
                                         File MoU <span class="text-gray-400 text-xs">(Opsional)</span>
                                     </label>
                                     <input type="file" name="mou_file" id="mou_file" accept=".pdf,.doc,.docx"
@@ -273,10 +297,13 @@
                                     <div class="mt-1.5 space-y-1">
                                         <p class="text-xs text-gray-400">Format: PDF, DOC, DOCX (Maksimal 5MB)</p>
                                         <p class="text-xs text-amber-600 dark:text-amber-400 flex items-start gap-1">
-                                            <svg class="w-3.5 h-3.5 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                            <svg class="w-3.5 h-3.5 shrink-0 mt-0.5" fill="none" stroke="currentColor"
+                                                viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                             </svg>
-                                            <span>Tip: Scan dokumen MoU dengan resolusi 150-200 DPI (grayscale) untuk hasil optimal</span>
+                                            <span>Tip: Scan dokumen MoU dengan resolusi 150-200 DPI (grayscale) untuk hasil
+                                                optimal</span>
                                         </p>
                                     </div>
                                     @error('mou_file')
@@ -286,7 +313,8 @@
 
                                 <!-- Agreement Notes -->
                                 <div>
-                                    <label for="agreement_notes" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
+                                    <label for="agreement_notes"
+                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
                                         Catatan Kerjasama <span class="text-gray-400 text-xs">(Opsional)</span>
                                     </label>
                                     <textarea name="agreement_notes" id="agreement_notes" rows="3"
@@ -299,7 +327,8 @@
                             </div>
 
                             <!-- Modal Footer -->
-                            <div class="border-t border-gray-200 dark:border-amoled-border py-4 px-6 flex justify-end gap-3">
+                            <div
+                                class="border-t border-gray-200 dark:border-amoled-border py-4 px-6 flex justify-end gap-3">
                                 <button @click="showModal = false" type="button"
                                     class="inline-flex items-center justify-center gap-2 rounded-lg border border-gray-300 dark:border-amoled-border bg-transparent py-2 px-4 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/[0.05] transition duration-150">
                                     Batal
@@ -307,7 +336,9 @@
                                 <button type="submit"
                                     class="inline-flex items-center justify-center gap-2 rounded-lg bg-school-blue py-2 px-4 text-sm font-medium text-white hover:bg-school-blue/90 transition duration-150 shadow-sm">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12">
+                                        </path>
                                     </svg>
                                     Upload MoU
                                 </button>
@@ -318,53 +349,53 @@
             </div>
         </div>
 
-    @push('scripts')
-        <script>
-            // Date validation for MoU form
-            document.addEventListener('DOMContentLoaded', function() {
-                const startDateInput = document.getElementById('start_date');
-                const endDateInput = document.getElementById('end_date');
+        @push('scripts')
+            <script>
+                // Date validation for MoU form
+                document.addEventListener('DOMContentLoaded', function() {
+                    const startDateInput = document.getElementById('start_date');
+                    const endDateInput = document.getElementById('end_date');
 
-                if (startDateInput && endDateInput) {
-                    // Prevent manual keyboard input
-                    [startDateInput, endDateInput].forEach(input => {
-                        input.addEventListener('keydown', function(e) {
-                            e.preventDefault();
-                            return false;
+                    if (startDateInput && endDateInput) {
+                        // Prevent manual keyboard input
+                        [startDateInput, endDateInput].forEach(input => {
+                            input.addEventListener('keydown', function(e) {
+                                e.preventDefault();
+                                return false;
+                            });
+
+                            // Validate date on change
+                            input.addEventListener('change', function() {
+                                const value = this.value;
+                                if (value) {
+                                    const year = parseInt(value.split('-')[0]);
+                                    if (year < 2000 || year > 2099) {
+                                        this.value = '';
+                                        alert('Tahun harus antara 2000-2099');
+                                    }
+                                }
+                            });
                         });
 
-                        // Validate date on change
-                        input.addEventListener('change', function() {
-                            const value = this.value;
-                            if (value) {
-                                const year = parseInt(value.split('-')[0]);
-                                if (year < 2000 || year > 2099) {
-                                    this.value = '';
-                                    alert('Tahun harus antara 2000-2099');
-                                }
+                        // Validate end date is after start date
+                        endDateInput.addEventListener('change', function() {
+                            const startDate = new Date(startDateInput.value);
+                            const endDate = new Date(this.value);
+
+                            if (startDateInput.value && this.value && endDate <= startDate) {
+                                alert('Tanggal selesai harus lebih dari tanggal mulai');
+                                this.value = '';
                             }
                         });
-                    });
 
-                    // Validate end date is after start date
-                    endDateInput.addEventListener('change', function() {
-                        const startDate = new Date(startDateInput.value);
-                        const endDate = new Date(this.value);
-
-                        if (startDateInput.value && this.value && endDate <= startDate) {
-                            alert('Tanggal selesai harus lebih dari tanggal mulai');
-                            this.value = '';
-                        }
-                    });
-
-                    // Update min date for end_date when start_date changes
-                    startDateInput.addEventListener('change', function() {
-                        if (this.value) {
-                            endDateInput.min = this.value;
-                        }
-                    });
-                }
-            });
-        </script>
-    @endpush
-@endsection
+                        // Update min date for end_date when start_date changes
+                        startDateInput.addEventListener('change', function() {
+                            if (this.value) {
+                                endDateInput.min = this.value;
+                            }
+                        });
+                    }
+                });
+            </script>
+        @endpush
+    @endsection
