@@ -30,9 +30,9 @@ class Department extends Model
      */
     public const BADGE_COLORS = [
         'PPLG' => 'bg-blue-500/10 text-blue-600 border-blue-500/20 dark:bg-blue-500/20 dark:text-blue-400',
-        'AKL'  => 'bg-amber-500/10 text-amber-600 border-amber-500/20 dark:bg-amber-500/20 dark:text-amber-400',
+        'AKL' => 'bg-amber-500/10 text-amber-600 border-amber-500/20 dark:bg-amber-500/20 dark:text-amber-400',
         'MPLB' => 'bg-purple-500/10 text-purple-600 border-purple-500/20 dark:bg-purple-500/20 dark:text-purple-400',
-        'PM'   => 'bg-emerald-500/10 text-emerald-600 border-emerald-500/20 dark:bg-emerald-500/20 dark:text-emerald-400',
+        'PM' => 'bg-emerald-500/10 text-emerald-600 border-emerald-500/20 dark:bg-emerald-500/20 dark:text-emerald-400',
     ];
 
     public const BADGE_DEFAULT = 'bg-gray-100 text-gray-600 border-gray-200 dark:bg-white/[0.06] dark:text-gray-300 dark:border-amoled-border';
@@ -51,5 +51,21 @@ class Department extends Model
     public function industryAllocations()
     {
         return $this->hasMany(IndustryAllocation::class);
+    }
+
+    /**
+     * Get the students for this department.
+     */
+    public function students()
+    {
+        return $this->hasMany(Student::class);
+    }
+
+    /**
+     * Get the supervisors for this department.
+     */
+    public function supervisors()
+    {
+        return $this->hasMany(Supervisor::class);
     }
 }

@@ -13,6 +13,7 @@ class DepartmentController extends Controller
     public function index()
     {
         $departments = Department::latest()->paginate(10);
+
         return view('departments.index', compact('departments'));
     }
 
@@ -54,8 +55,8 @@ class DepartmentController extends Controller
     public function update(Request $request, Department $department)
     {
         $request->validate([
-            'name' => 'required|string|max:255|unique:departments,name,' . $department->id,
-            'code' => 'required|string|max:10|unique:departments,code,' . $department->id,
+            'name' => 'required|string|max:255|unique:departments,name,'.$department->id,
+            'code' => 'required|string|max:10|unique:departments,code,'.$department->id,
         ]);
 
         $department->update($request->all());
@@ -69,6 +70,15 @@ class DepartmentController extends Controller
      */
     public function destroy(Department $department)
     {
+        $hasRelatedData = $department->industryAllocations()->exists()
+            || $department->students()->exists()
+            || $department->supervisors()->exists();
+
+        if ($hasRelatedData) {
+            return redirect()->route('departments.index')
+                ->with('error', 'Program keahlian tidak dapat dihapus karena masih memiliki data tertaut.');
+        }
+
         $department->delete();
 
         return redirect()->route('departments.index')
