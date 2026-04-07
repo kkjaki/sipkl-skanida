@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\AcademicYear;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class AcademicYearController extends Controller
 {
@@ -13,6 +15,7 @@ class AcademicYearController extends Controller
     public function index()
     {
         $academicYears = AcademicYear::latest()->paginate(10);
+
         return view('academic-years.index', compact('academicYears'));
     }
 
@@ -50,6 +53,10 @@ class AcademicYearController extends Controller
             'is_active' => $request->boolean('is_active'),
         ]);
 
+        if ($request->boolean('is_active')) {
+            $this->flushDashboardCache();
+        }
+
         return redirect()->route('academic-years.index')
             ->with('success', 'Tahun ajaran berhasil ditambahkan.');
     }
@@ -67,12 +74,14 @@ class AcademicYearController extends Controller
      */
     public function update(Request $request, AcademicYear $academicYear)
     {
+        $wasActive = $academicYear->is_active;
+
         $request->validate([
             'name' => [
                 'required',
                 'string',
                 'regex:/^\d{4}\/\d{4}$/',
-                'unique:academic_years,name,' . $academicYear->id,
+                'unique:academic_years,name,'.$academicYear->id,
             ],
         ], [
             'name.regex' => 'Format tahun ajaran harus YYYY/YYYY, contoh: 2023/2024.',
@@ -90,6 +99,10 @@ class AcademicYearController extends Controller
             'is_active' => $request->boolean('is_active'),
         ]);
 
+        if ($wasActive || $academicYear->is_active) {
+            $this->flushDashboardCache();
+        }
+
         return redirect()->route('academic-years.index')
             ->with('success', 'Tahun ajaran berhasil diperbarui.');
     }
@@ -99,6 +112,16 @@ class AcademicYearController extends Controller
      */
     public function destroy(AcademicYear $academicYear)
     {
+        $hasRelatedData = $academicYear->industryAllocations()->exists()
+            || $academicYear->supervisorAllocations()->exists()
+            || $academicYear->internships()->exists()
+            || $academicYear->students()->exists();
+
+        if ($hasRelatedData) {
+            return redirect()->route('academic-years.index')
+                ->with('error', 'Tahun ajaran tidak dapat dihapus karena masih memiliki data tertaut.');
+        }
+
         $academicYear->delete();
 
         return redirect()->route('academic-years.index')
@@ -116,7 +139,21 @@ class AcademicYearController extends Controller
         // Activate this one
         $academicYear->update(['is_active' => true]);
 
+        $this->flushDashboardCache();
+
         return redirect()->route('academic-years.index')
             ->with('success', "Tahun ajaran \"{$academicYear->name}\" berhasil diaktifkan.");
+    }
+
+    private function flushDashboardCache(): void
+    {
+        Cache::forget('dashboard_stats');
+        Cache::forget('dashboard_admin_stats');
+        Cache::forget('dashboard_curriculum_stats');
+
+        $supervisorIds = User::role('supervisor')->pluck('id');
+        foreach ($supervisorIds as $id) {
+            Cache::forget('dashboard_supervisor_'.$id);
+        }
     }
 }
