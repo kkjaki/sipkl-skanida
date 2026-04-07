@@ -4,10 +4,13 @@
     <div class="flex flex-col gap-6" x-data="{
         selectAll: false,
         selectedIds: [],
-        toggleAll() {
+        getEligibleIds() {
             const checkboxes = document.querySelectorAll('.cert-checkbox:not(:disabled)');
+            return Array.from(new Set(Array.from(checkboxes).map(cb => cb.value)));
+        },
+        toggleAll() {
             if (this.selectAll) {
-                this.selectedIds = Array.from(checkboxes).map(cb => cb.value);
+                this.selectedIds = this.getEligibleIds();
             } else {
                 this.selectedIds = [];
             }
@@ -19,10 +22,10 @@
             if (this.selectedIds.includes(id)) {
                 this.selectedIds = this.selectedIds.filter(i => i !== id);
             } else {
-                this.selectedIds.push(id);
+                this.selectedIds = Array.from(new Set([...this.selectedIds, id]));
             }
-            const checkboxes = document.querySelectorAll('.cert-checkbox:not(:disabled)');
-            this.selectAll = this.selectedIds.length === checkboxes.length && checkboxes.length > 0;
+            const eligibleIds = this.getEligibleIds();
+            this.selectAll = this.selectedIds.length === eligibleIds.length && eligibleIds.length > 0;
         }
     }">
         {{-- Header --}}
@@ -58,12 +61,17 @@
         </form>
 
         @if ($selectedClass)
+            @php
+                $eligibleCount = method_exists($certificates, 'getCollection')
+                    ? $certificates->getCollection()->where('status', '!=', 'draft')->count()
+                    : $certificates->where('status', '!=', 'draft')->count();
+            @endphp
             {{-- Summary Badge --}}
             <div class="flex items-center gap-3">
                 <span class="text-xs text-gray-400 dark:text-gray-500">
                     Kelas: <span class="font-semibold text-gray-600 dark:text-gray-300">{{ $selectedClass }}</span>
                     &middot;
-                    Total: <span class="font-semibold text-gray-600 dark:text-gray-300">{{ $certificates->count() }}</span>
+                    Total: <span class="font-semibold text-gray-600 dark:text-gray-300">{{ $eligibleCount }}</span>
                     siswa
                 </span>
             </div>
@@ -117,7 +125,8 @@
                                     class="bg-gray-50 text-left dark:bg-amoled-surface border-b border-gray-200 dark:border-amoled-border">
                                     <th class="py-3.5 px-4 xl:pl-8 w-12">
                                         <input type="checkbox" x-model="selectAll" @change="toggleAll()"
-                                            class="w-4 h-4 rounded border-gray-300 text-school-blue focus:ring-school-blue/30 dark:border-amoled-border dark:bg-amoled-surface cursor-pointer" />
+                                            {{ $eligibleCount === 0 ? 'disabled' : '' }}
+                                            class="w-4 h-4 rounded border-gray-300 text-school-blue focus:ring-school-blue/30 dark:border-amoled-border dark:bg-amoled-surface cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed" />
                                     </th>
                                     <th class="py-3.5 px-4 text-sm font-semibold text-gray-500 dark:text-amoled-text w-24">
                                         NIS</th>
@@ -203,7 +212,8 @@
                         <div
                             class="p-4 flex items-center gap-3 bg-gray-50 dark:bg-amoled-surface border-b border-gray-200 dark:border-amoled-border">
                             <input type="checkbox" x-model="selectAll" @change="toggleAll()"
-                                class="w-4 h-4 rounded border-gray-300 text-school-blue focus:ring-school-blue/30 dark:border-amoled-border dark:bg-amoled-surface cursor-pointer" />
+                                {{ $eligibleCount === 0 ? 'disabled' : '' }}
+                                class="w-4 h-4 rounded border-gray-300 text-school-blue focus:ring-school-blue/30 dark:border-amoled-border dark:bg-amoled-surface cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed" />
                             <span class="text-sm font-medium text-gray-600 dark:text-gray-300">Pilih Semua (yang siap
                                 cetak)</span>
                         </div>
