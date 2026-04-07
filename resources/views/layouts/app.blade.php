@@ -8,6 +8,8 @@
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
+    <link rel="icon" type="image/webp" href="{{ asset('images/logo-smkn2.webp') }}">
+
     <!-- Synchronous Theme Init (prevents FOUC — runs before body paint) -->
     <script>
         (function() {
