@@ -3,10 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Industry;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Http\Request;
 
 class IndustryVerificationController extends Controller
 {
@@ -27,7 +26,7 @@ class IndustryVerificationController extends Controller
 
         return Industry::whereNotNull('student_submitter_id')
             ->whereHas('studentSubmitter', function ($q) use ($deptId) {
-                $q->whereHas('student', fn($s) => $s->where('department_id', $deptId));
+                $q->whereHas('student', fn ($s) => $s->where('department_id', $deptId));
             });
     }
 
@@ -43,7 +42,7 @@ class IndustryVerificationController extends Controller
             ->when($search, function ($query, $search) {
                 $query->where(function ($q) use ($search) {
                     $q->where('name', 'like', "%{$search}%")
-                      ->orWhere('city', 'like', "%{$search}%");
+                        ->orWhere('city', 'like', "%{$search}%");
                 });
             })
             ->latest()
@@ -82,7 +81,7 @@ class IndustryVerificationController extends Controller
 
         $industry->update([
             'is_synced' => true,
-            'status'    => 'open',
+            'status' => 'open',
         ]);
 
         Cache::forget('dashboard_stats');
@@ -102,6 +101,13 @@ class IndustryVerificationController extends Controller
         if ($industry->is_synced) {
             return redirect()->route('verification.index')
                 ->with('info', 'Industri ini sudah disinkronisasi dan tidak dapat ditolak dari sini.');
+        }
+
+        $hasInternships = $industry->internships()->exists();
+
+        if ($hasInternships) {
+            return redirect()->route('verification.show', $id)
+                ->with('error', 'Tidak dapat blacklist industri ini karena masih ada siswa yang tertaut. Hapus keterkaitan siswa terlebih dahulu.');
         }
 
         $industry->update([
@@ -145,7 +151,7 @@ class IndustryVerificationController extends Controller
     {
         $industry = $this->proposalsForMyDepartment()->findOrFail($id);
 
-        if (!$industry->is_synced) {
+        if (! $industry->is_synced) {
             return redirect()->route('verification.index')
                 ->with('info', 'Industri ini belum disinkronisasi.');
         }

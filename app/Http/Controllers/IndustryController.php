@@ -218,6 +218,16 @@ class IndustryController extends Controller
     public function destroy(string $id)
     {
         $industry = Industry::findOrFail($id);
+
+        $hasOngoingInternships = $industry->internships()
+            ->where('status', 'ongoing')
+            ->exists();
+
+        if ($hasOngoingInternships) {
+            return redirect()->route('industries.index')
+                ->with('error', 'Industri tidak dapat dihapus karena masih ada siswa PKL yang sedang aktif. Pindahkan siswa aktif ke industri lain terlebih dahulu.');
+        }
+
         $industry->delete();
 
         Cache::forget('dashboard_stats');
