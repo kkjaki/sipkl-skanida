@@ -28,6 +28,16 @@
                 </div>
             </div>
         @endif
+        @if(session('error'))
+            <div class="flex w-full border-l-4 border-red-500 bg-white dark:bg-amoled-surface px-4 py-3 shadow-sm rounded-r-xl">
+                <div class="w-full flex items-center gap-2">
+                    <svg class="w-5 h-5 text-red-500 shrink-0" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <p class="text-sm text-red-600 dark:text-red-400 font-medium">{{ session('error') }}</p>
+                </div>
+            </div>
+        @endif
 
         <!-- Search & Filters -->
         <form method="GET" action="{{ route('supervisors.index') }}" class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">

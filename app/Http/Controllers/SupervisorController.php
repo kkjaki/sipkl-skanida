@@ -163,6 +163,14 @@ class SupervisorController extends Controller
     {
         $supervisor = Supervisor::with('user')->findOrFail($id);
 
+        $hasRelatedData = $supervisor->internships()->exists()
+            || $supervisor->allocations()->exists();
+
+        if ($hasRelatedData) {
+            return redirect()->route('supervisors.index')
+                ->with('error', 'Guru pembimbing tidak dapat dihapus karena masih memiliki data tertaut.');
+        }
+
         // Deleting the User cascades to Supervisor
         $supervisor->user->delete();
 
