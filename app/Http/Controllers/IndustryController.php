@@ -23,10 +23,42 @@ class IndustryController extends Controller
     {
         $search = $request->query('search');
         $filter = $request->query('filter');
+        $activeYear = AcademicYear::where('is_active', true)->first();
 
         $industries = Industry::with('studentSubmitter')
-            ->when($filter === 'proposal', function ($query) {
-                $query->proposedByStudents();
+            ->when(! $filter, function ($query) {
+                $query->where('status', '!=', 'blacklisted');
+            })
+            ->when($filter === 'pending_verification', function ($query) {
+                $query->where('is_synced', false)
+                    ->where('status', '!=', 'blacklisted');
+            })
+            ->when($filter === 'pending_quota', function ($query) use ($activeYear) {
+                if ($activeYear) {
+                    $query->where('is_synced', true)
+                        ->where('status', '!=', 'blacklisted')
+                        ->whereDoesntHave('allocations', function ($q) use ($activeYear) {
+                            $q->where('academic_year_id', $activeYear->id)
+                                ->where('quota', '>', 0);
+                        });
+                } else {
+                    $query->whereRaw('1 = 0');
+                }
+            })
+            ->when($filter === 'open', function ($query) use ($activeYear) {
+                if ($activeYear) {
+                    $query->where('is_synced', true)
+                        ->where('status', 'open')
+                        ->whereHas('allocations', function ($q) use ($activeYear) {
+                            $q->where('academic_year_id', $activeYear->id)
+                                ->where('quota', '>', 0);
+                        });
+                } else {
+                    $query->whereRaw('1 = 0');
+                }
+            })
+            ->when($filter === 'blacklisted', function ($query) {
+                $query->where('status', 'blacklisted');
             })
             ->when($search, function ($query, $search) {
                 $query->where(function ($q) use ($search) {

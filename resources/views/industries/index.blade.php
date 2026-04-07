@@ -62,33 +62,12 @@
             </div>
         @endif
 
-        <!-- Filter Tabs -->
-        <div class="flex items-center gap-1 border-b border-gray-200 dark:border-amoled-border">
-            <a href="{{ route('industries.index', array_merge(request()->only('search'), ['filter' => ''])) }}"
-                class="inline-flex items-center gap-1.5 px-4 py-2.5 text-sm font-medium border-b-2 transition duration-150
-                      {{ !$filter ? 'border-school-blue text-school-blue dark:text-white' : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200' }}">
-                Semua
-            </a>
-            <a href="{{ route('industries.index', array_merge(request()->only('search'), ['filter' => 'proposal'])) }}"
-                class="inline-flex items-center gap-1.5 px-4 py-2.5 text-sm font-medium border-b-2 transition duration-150
-                      {{ $filter === 'proposal' ? 'border-school-blue text-school-blue dark:text-white' : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200' }}">
-                <svg class="w-4 h-4" width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z">
-                    </path>
-                </svg>
-                Pengajuan Siswa
-            </a>
-        </div>
-
-        <!-- Search -->
-        <form method="GET" action="{{ route('industries.index') }}" class="flex items-center gap-3">
-            @if ($filter)
-                <input type="hidden" name="filter" value="{{ $filter }}">
-            @endif
-            <div class="relative flex-1">
-                <span class="absolute left-3 top-1/2 -translate-y-1/2">
-                    <svg class="w-4 h-4 text-gray-400" width="16" height="16" fill="none" stroke="currentColor"
+        <!-- Search & Filters -->
+        <form method="GET" action="{{ route('industries.index') }}"
+            class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+            <div class="relative flex-1 sm:max-w-md">
+                <span class="absolute inset-y-0 left-0 flex items-center pl-3.5">
+                    <svg class="w-5 h-5 text-gray-400" width="20" height="20" fill="none" stroke="currentColor"
                         viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
@@ -98,10 +77,47 @@
                     placeholder="Cari nama industri atau kota..."
                     class="h-11 w-full rounded-xl border border-gray-200 bg-white pl-10 pr-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 outline-none transition duration-150 focus:border-school-blue focus:ring-3 focus:ring-school-blue/10 dark:border-amoled-border dark:bg-amoled-surface dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-school-blue" />
             </div>
+
+            <div class="relative sm:min-w-[200px]">
+                <select name="filter" onchange="this.form.submit()" aria-label="Filter Status"
+                    class="h-11 w-full rounded-xl border border-gray-200 bg-white pl-4 pr-10 py-2.5 text-sm text-gray-800 outline-none transition duration-150 focus:border-school-blue focus:ring-3 focus:ring-school-blue/10 dark:border-amoled-border dark:bg-amoled-surface dark:text-white/90 dark:focus:border-school-blue appearance-none cursor-pointer">
+                    <option value="" class="dark:bg-amoled-surface">Semua Status</option>
+                    <option value="pending_verification" {{ ($filter ?? '') === 'pending_verification' ? 'selected' : '' }}
+                        class="dark:bg-amoled-surface">Menunggu Verifikasi</option>
+                    <option value="pending_quota" {{ ($filter ?? '') === 'pending_quota' ? 'selected' : '' }}
+                        class="dark:bg-amoled-surface">Menunggu Kuota</option>
+                    <option value="open" {{ ($filter ?? '') === 'open' ? 'selected' : '' }}
+                        class="dark:bg-amoled-surface">Aktif (Terbuka)</option>
+                    <option value="blacklisted" {{ ($filter ?? '') === 'blacklisted' ? 'selected' : '' }}
+                        class="dark:bg-amoled-surface">Ditolak/Blacklist</option>
+                </select>
+                <span class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                </span>
+            </div>
+
             <button type="submit"
-                class="inline-flex items-center justify-center rounded-xl bg-school-blue py-2.5 px-5 text-sm font-medium text-white hover:bg-school-blue/90 transition duration-150 shadow-sm">
+                class="inline-flex items-center justify-center rounded-xl bg-school-blue py-2.5 px-5 text-sm font-medium text-white hover:bg-school-blue/90 transition duration-150 shadow-sm h-11">
                 Cari
             </button>
+
+            @if ($search || $filter)
+                <a href="{{ route('industries.index') }}"
+                    class="inline-flex items-center justify-center gap-1.5 rounded-xl border border-gray-200 dark:border-amoled-border py-2.5 px-4 text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/[0.06] transition duration-150 h-11">
+                    <svg class="w-4 h-4" width="16" height="16" fill="none" stroke="currentColor"
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                        </path>
+                    </svg>
+                    Reset
+                </a>
+            @endif
+
+            <span class="text-xs text-gray-400 dark:text-gray-500 sm:ml-auto self-center whitespace-nowrap">
+                Total: {{ $industries->total() }} industri
+            </span>
         </form>
 
         <!-- Table (Desktop) -->
@@ -114,9 +130,11 @@
                             <th
                                 class="py-3.5 px-4 text-sm font-semibold text-gray-500 dark:text-amoled-text text-left w-12">
                                 No</th>
-                            <th class="py-3.5 px-4 text-sm font-semibold text-gray-500 dark:text-amoled-text text-left">Nama
+                            <th class="py-3.5 px-4 text-sm font-semibold text-gray-500 dark:text-amoled-text text-left">
+                                Nama
                             </th>
-                            <th class="py-3.5 px-4 text-sm font-semibold text-gray-500 dark:text-amoled-text text-left">Kota
+                            <th class="py-3.5 px-4 text-sm font-semibold text-gray-500 dark:text-amoled-text text-left">
+                                Kota
                             </th>
                             <th
                                 class="py-3.5 px-4 text-sm font-semibold text-gray-500 dark:text-amoled-text text-center w-20">
@@ -158,7 +176,7 @@
                                     @elseif($industry->status === 'blacklisted')
                                         <span
                                             class="inline-block rounded-lg px-2.5 py-0.5 text-xs font-semibold border bg-red-900/10 text-red-600 border-red-900/20 dark:bg-red-900/20 dark:text-red-400 dark:border-red-900/30">
-                                            Ditolak / Blacklist
+                                            Ditolak/Blacklist
                                         </span>
                                     @elseif($industry->is_synced && $industry->total_quota === 0)
                                         <span
@@ -173,7 +191,7 @@
                                     @else
                                         <span
                                             class="inline-block rounded-lg px-2.5 py-0.5 text-xs font-semibold border bg-emerald-500/10 text-emerald-600 border-emerald-500/20 dark:bg-emerald-500/20 dark:text-emerald-400 dark:border-emerald-500/30">
-                                            Aktif (Open)
+                                            Aktif (Terbuka)
                                         </span>
                                     @endif
                                 </td>
@@ -208,7 +226,7 @@
 
                                         @if ($industry->is_synced)
                                             <!-- Copy Magic Link -->
-                                            <div x-data="{ 
+                                            <div x-data="{
                                                 copied: false,
                                                 copyLink() {
                                                     const link = '{{ URL::temporarySignedRoute('mitra.confirm', now()->addDays(14), ['industry' => $industry->id]) }}';
@@ -219,19 +237,27 @@
                                             }" class="relative">
                                                 <button @click="copyLink" type="button"
                                                     class="inline-flex items-center justify-center w-8 h-8 rounded-lg text-gray-500 hover:bg-emerald-50 hover:text-emerald-600 dark:text-gray-400 dark:hover:bg-emerald-500/10 dark:hover:text-emerald-400 transition duration-150"
-                                                    title="Copy Link Akses Mitra" aria-label="Copy Link Akses Mitra {{ $industry->name }}">
-                                                    <svg x-show="!copied" class="w-4 h-4" width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path>
+                                                    title="Copy Link Akses Mitra"
+                                                    aria-label="Copy Link Akses Mitra {{ $industry->name }}">
+                                                    <svg x-show="!copied" class="w-4 h-4" width="16" height="16"
+                                                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            stroke-width="2"
+                                                            d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1">
+                                                        </path>
                                                     </svg>
-                                                    <svg x-show="copied" x-cloak class="w-4 h-4 text-emerald-500" width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                                    <svg x-show="copied" x-cloak class="w-4 h-4 text-emerald-500"
+                                                        width="16" height="16" fill="none"
+                                                        stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            stroke-width="2" d="M5 13l4 4L19 7"></path>
                                                     </svg>
                                                 </button>
-                                                <div x-show="copied" x-cloak 
-                                                     x-transition:enter="transition ease-out duration-200"
-                                                     x-transition:enter-start="opacity-0 translate-y-1"
-                                                     x-transition:enter-end="opacity-100 translate-y-0"
-                                                     class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-gray-900 dark:bg-white text-white dark:text-gray-900 text-[10px] font-bold rounded shadow-xl whitespace-nowrap z-10">
+                                                <div x-show="copied" x-cloak
+                                                    x-transition:enter="transition ease-out duration-200"
+                                                    x-transition:enter-start="opacity-0 translate-y-1"
+                                                    x-transition:enter-end="opacity-100 translate-y-0"
+                                                    class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-gray-900 dark:bg-white text-white dark:text-gray-900 text-[10px] font-bold rounded shadow-xl whitespace-nowrap z-10">
                                                     Link Copied!
                                                 </div>
                                             </div>
@@ -283,8 +309,8 @@
                                 Verifikasi</span>
                         @elseif($industry->status === 'blacklisted')
                             <span
-                                class="inline-block rounded-lg px-2.5 py-0.5 text-xs font-semibold border bg-red-900/10 text-red-600 border-red-900/20 dark:bg-red-900/20 dark:text-red-400 dark:border-red-900/30">Ditolak
-                                / Blacklist</span>
+                                class="inline-block rounded-lg px-2.5 py-0.5 text-xs font-semibold border bg-red-900/10 text-red-600 border-red-900/20 dark:bg-red-900/20 dark:text-red-400 dark:border-red-900/30">Ditolak/Blacklist
+                                </span>
                         @elseif($industry->is_synced && $industry->total_quota === 0)
                             <span
                                 class="inline-block rounded-lg px-2.5 py-0.5 text-xs font-semibold border bg-cyan-500/10 text-cyan-600 border-cyan-500/20 dark:bg-cyan-500/20 dark:text-cyan-400 dark:border-cyan-500/30">Menunggu
@@ -296,7 +322,8 @@
                         @else
                             <span
                                 class="inline-block rounded-lg px-2.5 py-0.5 text-xs font-semibold border bg-emerald-500/10 text-emerald-600 border-emerald-500/20 dark:bg-emerald-500/20 dark:text-emerald-400 dark:border-emerald-500/30">Aktif
-                                (Open)</span>
+                                (Terbuka)
+                            </span>
                         @endif
                     </div>
                     <div class="flex items-center gap-3 text-xs text-gray-500 dark:text-gray-400 mb-1">
@@ -319,19 +346,20 @@
                     @endif
                     <div class="flex items-center gap-2 mt-3 pt-3 border-t border-gray-100 dark:border-amoled-border">
                         <a href="{{ route('industries.edit', $industry->id) }}"
-                            class="inline-flex items-center gap-1.5 text-xs font-medium text-school-blue hover:underline" aria-label="Edit {{ $industry->name }}">
+                            class="inline-flex items-center gap-1.5 text-xs font-medium text-school-blue hover:underline"
+                            aria-label="Edit {{ $industry->name }}">
                             <svg class="w-3.5 h-3.5" width="14" height="14" fill="none" stroke="currentColor"
                                 viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z">
                                 </path>
                             </svg>
-                             Edit
+                            Edit
                         </a>
 
                         @if ($industry->is_synced)
                             <!-- Copy Magic Link (Mobile) -->
-                            <div x-data="{ 
+                            <div x-data="{
                                 copied: false,
                                 copyLink() {
                                     const link = '{{ URL::temporarySignedRoute('mitra.confirm', now()->addDays(14), ['industry' => $industry->id, 'v' => $industry->updated_at->timestamp]) }}';
@@ -341,12 +369,18 @@
                                 }
                             }" class="flex items-center">
                                 <button @click="copyLink" type="button"
-                                    class="inline-flex items-center gap-1.5 text-xs font-medium text-emerald-600 hover:underline" aria-label="Copy Link Akses Mitra {{ $industry->name }}">
-                                    <svg x-show="!copied" class="w-3.5 h-3.5" width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path>
+                                    class="inline-flex items-center gap-1.5 text-xs font-medium text-emerald-600 hover:underline"
+                                    aria-label="Copy Link Akses Mitra {{ $industry->name }}">
+                                    <svg x-show="!copied" class="w-3.5 h-3.5" width="14" height="14"
+                                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1">
+                                        </path>
                                     </svg>
-                                    <svg x-show="copied" x-cloak class="w-3.5 h-3.5" width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    <svg x-show="copied" x-cloak class="w-3.5 h-3.5" width="14" height="14"
+                                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M5 13l4 4L19 7"></path>
                                     </svg>
                                     <span x-text="copied ? 'Link Copied!' : 'Copy Link Akses'"></span>
                                 </button>
@@ -358,7 +392,8 @@
                             @csrf
                             @method('DELETE')
                             <button type="submit"
-                                class="inline-flex items-center gap-1.5 text-xs font-medium text-red-500 hover:underline" aria-label="Hapus {{ $industry->name }}">
+                                class="inline-flex items-center gap-1.5 text-xs font-medium text-red-500 hover:underline"
+                                aria-label="Hapus {{ $industry->name }}">
                                 <svg class="w-3.5 h-3.5" width="14" height="14" fill="none"
                                     stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
