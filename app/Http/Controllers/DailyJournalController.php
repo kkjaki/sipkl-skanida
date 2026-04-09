@@ -27,6 +27,13 @@ class DailyJournalController extends Controller
             })
             ->first();
 
+        $finishedInternship = Internship::where('student_id', $userId)
+            ->where('status', 'finished')
+            ->when($activeYear, function ($q) use ($activeYear) {
+                $q->where('academic_year_id', $activeYear->id);
+            })
+            ->exists();
+
         // Load journals from ALL their internships this year so they don't lose old history
         $allInternshipIds = Internship::where('student_id', $userId)
             ->when($activeYear, function ($q) use ($activeYear) {
@@ -39,7 +46,7 @@ class DailyJournalController extends Controller
             ->orderByDesc('date')
             ->paginate(10);
 
-        return view('journals.index', compact('internship', 'journals'));
+        return view('journals.index', compact('internship', 'journals', 'finishedInternship'));
     }
 
     /**

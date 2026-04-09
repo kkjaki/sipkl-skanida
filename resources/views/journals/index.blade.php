@@ -61,15 +61,27 @@
             {{-- No Active Internship --}}
             <div
                 class="flex flex-col items-center justify-center py-16 bg-white dark:bg-amoled-surface border border-dashed border-gray-200 dark:border-amoled-border rounded-2xl">
-                <div class="p-4 rounded-full bg-yellow-50 dark:bg-yellow-500/10 text-yellow-500 mb-4">
-                    <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                    </svg>
-                </div>
-                <h3 class="text-lg font-bold text-gray-900 dark:text-white">Belum Ada PKL Aktif</h3>
-                <p class="text-sm text-gray-500 dark:text-gray-400 max-w-xs text-center mt-1">Anda belum memiliki penempatan
-                    PKL yang aktif. Hubungi Kaprog untuk informasi lebih lanjut.</p>
+                @if ($finishedInternship)
+                    <div class="p-4 rounded-full bg-emerald-50 dark:bg-emerald-500/10 text-emerald-500 mb-4">
+                        <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-bold text-gray-900 dark:text-white">PKL Anda sudah selesai</h3>
+                    <p class="text-sm text-gray-500 dark:text-gray-400 max-w-xs text-center mt-1">Status PKL Anda tercatat
+                        selesai di sistem.</p>
+                @else
+                    <div class="p-4 rounded-full bg-yellow-50 dark:bg-yellow-500/10 text-yellow-500 mb-4">
+                        <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-bold text-gray-900 dark:text-white">Belum Ada PKL Aktif</h3>
+                    <p class="text-sm text-gray-500 dark:text-gray-400 max-w-xs text-center mt-1">Anda belum memiliki penempatan
+                        PKL yang aktif. Hubungi Kaprog untuk informasi lebih lanjut.</p>
+                @endif
             </div>
         @else
             {{-- Tab Navigation --}}

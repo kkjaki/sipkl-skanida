@@ -26,13 +26,17 @@ class IndustryProposalController extends Controller
         // Block proposal if student already has a plotting (internship)
         $hasPlotting = Internship::where('student_id', $userId)->exists();
 
+        $hasFinished = Internship::where('student_id', $userId)
+            ->where('status', 'finished')
+            ->exists();
+
         // Determine if student can propose again
         $canPropose = ! $hasPlotting && ! $proposals->contains(function ($p) {
             // Block if pending (is_synced=false) or verified+open
             return ! $p->is_synced || ($p->is_synced && $p->status === 'open');
         });
 
-        return view('industries.my-proposals', compact('proposals', 'canPropose', 'hasPlotting'));
+        return view('industries.my-proposals', compact('proposals', 'canPropose', 'hasPlotting', 'hasFinished'));
     }
 
     /**
