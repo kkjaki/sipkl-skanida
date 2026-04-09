@@ -15,13 +15,14 @@ class IndustrySeeder extends Seeder
      */
     public function run(): void
     {
+        $faker = \Faker\Factory::create('id_ID');
         $verifiedIndustries = [
             [
                 'name' => 'PT Telkom Indonesia Tbk',
                 'address' => 'Jl. Japaris No.1, Kota Bandung',
                 'city' => 'Bandung',
                 'contact_person' => 'Rudi Hartono',
-                'email' => 'testing.intern@telkom.co.id',
+                'email' => 'intern@telkom.co.id',
                 'phone' => '0227123456',
                 'pic_name' => 'Ika Permatasari',
                 'pic_position' => 'HR Manager',
@@ -31,7 +32,7 @@ class IndustrySeeder extends Seeder
                 'address' => 'Jl. Pemuda No.20, Magelang',
                 'city' => 'Magelang',
                 'contact_person' => 'Sari Wulandari',
-                'email' => 'testing.magang@bri.co.id',
+                'email' => 'magang@bri.co.id',
                 'phone' => '0293321456',
                 'pic_name' => 'Agung Prabowo',
                 'pic_position' => 'Pimpinan Cabang',
@@ -41,7 +42,7 @@ class IndustrySeeder extends Seeder
                 'address' => 'Jl. Tidar No.55, Magelang',
                 'city' => 'Magelang',
                 'contact_person' => 'Dian Permana',
-                'email' => 'testing.hr@nusantaradigital.id',
+                'email' => 'hr@nusantaradigital.id',
                 'phone' => '0293365789',
                 'pic_name' => 'Faisal Rahman',
                 'pic_position' => 'Direktur Operasional',
@@ -59,25 +60,45 @@ class IndustrySeeder extends Seeder
             );
         }
 
-        // Industri pending: pengajuan dari siswa NIS 90201 tanpa data PIC dan tanpa alokasi
-        $submitter = \App\Models\User::where('email', '90201@smkn2magelang.sch.id')->first();
+        $state2NisList = [];
+        for ($seq = 1; $seq <= 16; $seq++) {
+            $state2NisList[] = sprintf('9%02d%02d', 2, $seq);
+        }
 
-        Industry::firstOrCreate(
-            ['email' => 'testing.kontak@tokojayamakmur.com'],
-            [
-                'student_submitter_id' => $submitter?->id,
-                'name' => 'Toko Jaya Makmur (Pending)',
-                'address' => 'Jl. Soekarno-Hatta No.123, Magelang',
-                'city' => 'Magelang',
-                'contact_person' => 'Andi Susanto',
-                'email' => 'testing.kontak@tokojayamakmur.com',
-                'phone' => '0293367890',
-                'pic_name' => null,
-                'pic_position' => null,
-                'is_synced' => false,
-                'status' => 'open',
-            ]
-        );
+        foreach ($state2NisList as $index => $nis) {
+            $submitter = \App\Models\User::where('email', $nis.'@smkn2magelang.sch.id')->first();
+            if (! $submitter) {
+                continue;
+            }
+
+            $company = $faker->unique()->company;
+            $companySlug = strtolower(preg_replace('/[^a-z0-9]+/i', '', $company));
+            if ($companySlug === '') {
+                $companySlug = 'perusahaan';
+            }
+            $address = $faker->streetAddress;
+            $city = $faker->city;
+            $contactPerson = $faker->name;
+            $phone = $faker->numerify('08#########');
+            $email = 'kontak.'.$nis.'@'.$companySlug.'.co.id';
+
+            Industry::firstOrCreate(
+                ['email' => $email],
+                [
+                    'student_submitter_id' => $submitter->id,
+                    'name' => $company,
+                    'address' => $address,
+                    'city' => $city,
+                    'contact_person' => $contactPerson,
+                    'email' => $email,
+                    'phone' => $phone,
+                    'pic_name' => null,
+                    'pic_position' => null,
+                    'is_synced' => false,
+                    'status' => 'open',
+                ]
+            );
+        }
 
         $activeYear = AcademicYear::where('is_active', true)->first();
         $departments = Department::orderBy('code')->get();

@@ -22,9 +22,9 @@ class InternshipSeeder extends Seeder
         $deptCodes = ['PPLG', 'AKL', 'MPLB', 'PM'];
 
         $industryEmails = [
-            'testing.intern@telkom.co.id',
-            'testing.magang@bri.co.id',
-            'testing.hr@nusantaradigital.id',
+            'intern@telkom.co.id',
+            'magang@bri.co.id',
+            'hr@nusantaradigital.id',
         ];
         $industries = Industry::whereIn('email', $industryEmails)->get();
         if ($industries->isEmpty()) {

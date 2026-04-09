@@ -18,7 +18,7 @@ class DailyJournalSeeder extends Seeder
      */
     public function run(): void
     {
-        $firstIndustry = Industry::where('email', 'testing.intern@telkom.co.id')->first();
+        $firstIndustry = Industry::where('email', 'intern@telkom.co.id')->first();
         $mou = $firstIndustry
             ? IndustryPartnership::where('industry_id', $firstIndustry->id)->first()
             : null;
