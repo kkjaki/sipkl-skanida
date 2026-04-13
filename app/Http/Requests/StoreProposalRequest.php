@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreProposalRequest extends FormRequest
 {
@@ -18,7 +19,14 @@ class StoreProposalRequest extends FormRequest
             'address' => ['required', 'string'],
             'city' => ['required', 'string', 'max:255'],
             'contact_person' => ['nullable', 'string', 'max:255'],
-            'email' => ['nullable', 'string', 'email', 'max:255', 'required_without:phone'],
+            'email' => [
+                'nullable',
+                'string',
+                'email',
+                'max:255',
+                Rule::unique('industries', 'email')->whereNull('deleted_at'),
+                'required_without:phone',
+            ],
             'phone' => ['nullable', 'string', 'max:20', 'required_without:email'],
         ];
     }
@@ -30,6 +38,7 @@ class StoreProposalRequest extends FormRequest
             'address.required' => 'Alamat wajib diisi.',
             'city.required' => 'Kota wajib diisi.',
             'email.email' => 'Format email tidak valid.',
+            'email.unique' => 'Email sudah ada di database. Pastikan email yang Anda masukkan berbeda atau laporkan ke admin.',
             'email.required_without' => 'Email wajib diisi jika No. Telepon / WA tidak diisi.',
             'phone.max' => 'No. Telepon / WA maksimal 20 karakter.',
             'phone.required_without' => 'No. Telepon / WA wajib diisi jika Email tidak diisi.',
