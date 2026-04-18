@@ -9,4 +9,10 @@
         background-color: #09090b; /* amoled-surface */
         color: #e4e4e7; /* zinc-200 */
     }
+
+    /* Hide browser native password reveal icon (Edge/Chrome) */
+    input[type="password"]::-ms-reveal,
+    input[type="password"]::-webkit-credentials-auto-fill-button {
+        display: none !important;
+    }
 }
