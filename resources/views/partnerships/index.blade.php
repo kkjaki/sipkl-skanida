@@ -110,7 +110,7 @@
                                 );
                                 $latestPartnership = $industry->partnerships->first();
                             @endphp
-                            <tr class="hover:bg-gray-50 dark:hover:bg-white/[0.03] transition duration-150">
+                            <tr x-data @click="window.location.href = '{{ route('partnerships.manage', $industry->id) }}'" class="hover:bg-gray-50 dark:hover:bg-white/[0.03] transition duration-150 cursor-pointer">
                                 <td class="py-3 px-4 text-sm text-gray-600 dark:text-gray-300">
                                     {{ $industries->firstItem() + $index }}
                                 </td>
@@ -170,7 +170,7 @@
                                         <span class="text-gray-400 dark:text-gray-500">-</span>
                                     @endif
                                 </td>
-                                <td class="py-3 px-4 text-center">
+                                <td class="py-3 px-4 text-center" @click.stop>
                                     <a href="{{ route('partnerships.manage', $industry->id) }}"
                                         class="inline-flex items-center justify-center w-8 h-8 rounded-lg text-gray-500 hover:bg-blue-50 hover:text-blue-600 dark:text-gray-400 dark:hover:bg-blue-500/10 dark:hover:text-blue-400 transition duration-150"
                                         title="Kelola MoU">
@@ -227,8 +227,8 @@
                     );
                     $latestPartnership = $industry->partnerships->first();
                 @endphp
-                <div
-                    class="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm dark:border-amoled-border dark:bg-amoled-surface">
+                <div x-data @click="window.location.href = '{{ route('partnerships.manage', $industry->id) }}'"
+                    class="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm dark:border-amoled-border dark:bg-amoled-surface cursor-pointer hover:bg-gray-50 dark:hover:bg-white/[0.03] transition duration-150">
                     <div class="flex items-start justify-between mb-2">
                         <div>
                             <p class="text-sm font-semibold text-gray-800 dark:text-white">{{ $industry->name }}</p>
@@ -281,7 +281,7 @@
                             <span class="text-gray-400"> • {{ $industry->partnerships_count }} MoU</span>
                         @endif
                     </div>
-                    <div class="flex items-center pt-3 border-t border-gray-100 dark:border-amoled-border">
+                    <div class="flex items-center pt-3 border-t border-gray-100 dark:border-amoled-border" @click.stop>
                         <a href="{{ route('partnerships.manage', $industry->id) }}"
                             class="inline-flex items-center gap-1.5 text-xs font-medium text-school-blue hover:underline">
                             <svg class="w-3.5 h-3.5" width="14" height="14" fill="none" stroke="currentColor"

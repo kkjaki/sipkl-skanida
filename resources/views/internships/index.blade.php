@@ -190,7 +190,7 @@
                         </thead>
                         <tbody class="divide-y divide-gray-50 dark:divide-amoled-border">
                             <template x-for="internship in filteredInternships" :key="internship.id">
-                                <tr class="hover:bg-gray-50/50 dark:hover:bg-white/[0.02] transition-colors group">
+                                <tr @click="openWithdrawModal(internship.id, internship.student?.user?.name || '')" class="hover:bg-gray-50/50 dark:hover:bg-white/[0.02] transition-colors group cursor-pointer">
                                     {{-- Siswa --}}
                                     <td class="px-5 py-4">
                                         <div class="flex items-center gap-3">
@@ -270,7 +270,7 @@
                                     {{-- Aksi --}}
                                     <td class="px-5 py-4 text-right">
                                         <button type="button"
-                                            @click="openWithdrawModal(internship.id, internship.student?.user?.name || '')"
+                                            @click.stop="openWithdrawModal(internship.id, internship.student?.user?.name || '')"
                                             class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 text-amber-700 dark:text-amber-400 text-xs font-bold border border-amber-500/20 transition-colors">
                                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor"
                                                 viewBox="0 0 24 24">

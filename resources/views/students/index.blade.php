@@ -142,8 +142,8 @@
                     </thead>
                     <tbody>
                         @forelse ($students as $index => $student)
-                            <tr
-                                class="hover:bg-gray-50 dark:hover:bg-white/[0.04] transition duration-150 border-b border-gray-200 dark:border-amoled-border last:border-b-0">
+                            <tr x-data @click="window.location.href = '{{ route('students.edit', $student->user_id) }}'"
+                                class="hover:bg-gray-50 dark:hover:bg-white/[0.04] transition duration-150 border-b border-gray-200 dark:border-amoled-border last:border-b-0 cursor-pointer">
                                 <td class="py-4 px-4 xl:pl-8">
                                     <span
                                         class="text-sm text-gray-500 dark:text-amoled-text">{{ $students->firstItem() + $index }}</span>
@@ -167,7 +167,7 @@
                                     <span
                                         class="text-sm text-gray-500 dark:text-amoled-text">{{ $student->user->email }}</span>
                                 </td>
-                                <td class="py-4 px-4 pr-8 xl:pr-8 text-right">
+                                <td class="py-4 px-4 pr-8 xl:pr-8 text-right" @click.stop>
                                     <div class="flex items-center justify-end space-x-3">
                                         <a href="{{ route('students.edit', $student->user_id) }}"
                                             class="text-gray-400 hover:text-school-blue transition duration-150 flex items-center"
@@ -218,7 +218,7 @@
             <!-- Card View (Mobile) -->
             <div class="md:hidden flex flex-col divide-y divide-gray-200 dark:divide-amoled-border">
                 @forelse ($students as $index => $student)
-                    <div class="p-4">
+                    <div x-data @click="window.location.href = '{{ route('students.edit', $student->user_id) }}'" class="p-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-white/[0.04] transition duration-150">
                         <div class="flex items-start justify-between mb-2">
                             <div>
                                 <h5 class="font-semibold text-gray-800 dark:text-white text-sm">{{ $student->user->name }}
@@ -246,7 +246,7 @@
                         @else
                             <div class="mb-3"></div>
                         @endif
-                        <div class="flex items-center justify-end gap-4 mt-2">
+                        <div class="flex items-center justify-end gap-4 mt-2" @click.stop>
                             <a href="{{ route('students.edit', $student->user_id) }}"
                                 class="text-sm font-medium text-school-blue hover:text-school-blue/80 flex items-center gap-1"
                                 aria-label="Edit {{ $student->user->name }}">

@@ -151,7 +151,7 @@
                     </thead>
                     <tbody class="divide-y divide-gray-100 dark:divide-amoled-border">
                         @forelse($supervisors as $index => $supervisor)
-                            <tr class="hover:bg-gray-50 dark:hover:bg-white/[0.03] transition duration-150">
+                            <tr x-data @click="window.location.href = '{{ route('supervisors.edit', $supervisor->user_id) }}'" class="hover:bg-gray-50 dark:hover:bg-white/[0.03] transition duration-150 cursor-pointer">
                                 <td class="py-3 px-4 text-sm text-gray-600 dark:text-gray-300">
                                     {{ $supervisors->firstItem() + $index }}
                                 </td>
@@ -180,7 +180,7 @@
                                 <td class="py-3 px-4 text-sm text-gray-500 dark:text-gray-400">
                                     {{ $supervisor->user->email }}
                                 </td>
-                                <td class="py-3 px-4">
+                                <td class="py-3 px-4" @click.stop>
                                     <div class="flex items-center justify-center gap-2">
                                         <a href="{{ route('supervisors.edit', $supervisor->user_id) }}"
                                             class="inline-flex items-center justify-center w-8 h-8 rounded-lg text-gray-500 hover:bg-gray-100 hover:text-school-blue dark:text-gray-400 dark:hover:bg-white/[0.06] dark:hover:text-blue-400 transition duration-150"
@@ -226,8 +226,8 @@
         <!-- Mobile Cards -->
         <div class="flex flex-col gap-3 sm:hidden">
             @forelse($supervisors as $supervisor)
-                <div
-                    class="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm dark:border-amoled-border dark:bg-amoled-surface">
+                <div x-data @click="window.location.href = '{{ route('supervisors.edit', $supervisor->user_id) }}'"
+                    class="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm dark:border-amoled-border dark:bg-amoled-surface cursor-pointer hover:bg-gray-50 dark:hover:bg-white/[0.03] transition duration-150">
                     <div class="flex items-start justify-between mb-2">
                         <div>
                             <p class="text-sm font-semibold text-gray-800 dark:text-white">{{ $supervisor->user->name }}
@@ -249,7 +249,7 @@
                     </div>
                     <x-department-badge :code="$supervisor->department->code ?? ''" />
                     <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">{{ $supervisor->user->email }}</p>
-                    <div class="flex items-center gap-2 mt-3 pt-3 border-t border-gray-100 dark:border-amoled-border">
+                    <div class="flex items-center gap-2 mt-3 pt-3 border-t border-gray-100 dark:border-amoled-border" @click.stop>
                         <a href="{{ route('supervisors.edit', $supervisor->user_id) }}"
                             class="inline-flex items-center gap-1.5 text-xs font-medium text-school-blue hover:underline"
                             aria-label="Edit {{ $supervisor->user->name }}">

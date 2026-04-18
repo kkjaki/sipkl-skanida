@@ -68,8 +68,8 @@
                     </thead>
                     <tbody>
                         @forelse ($academicYears as $index => $year)
-                            <tr
-                                class="hover:bg-gray-50 dark:hover:bg-white/[0.04] transition duration-150 border-b border-gray-200 dark:border-amoled-border last:border-b-0">
+                            <tr x-data @click="window.location.href = '{{ route('academic-years.edit', $year) }}'"
+                                class="hover:bg-gray-50 dark:hover:bg-white/[0.04] transition duration-150 border-b border-gray-200 dark:border-amoled-border last:border-b-0 cursor-pointer">
                                 <td class="py-4 px-4 xl:pl-8">
                                     <span
                                         class="text-sm text-gray-500 dark:text-amoled-text">{{ $academicYears->firstItem() + $index }}</span>
@@ -92,7 +92,7 @@
                                         </span>
                                     @endif
                                 </td>
-                                <td class="py-4 px-4 pr-8 xl:pr-8 text-right">
+                                <td class="py-4 px-4 pr-8 xl:pr-8 text-right" @click.stop>
                                     <div class="flex items-center justify-end space-x-3">
                                         {{-- Set Active Button --}}
                                         @unless ($year->is_active)
@@ -162,7 +162,7 @@
             <!-- Card View (Mobile) -->
             <div class="md:hidden flex flex-col divide-y divide-gray-200 dark:divide-amoled-border">
                 @forelse ($academicYears as $index => $year)
-                    <div class="p-4">
+                    <div x-data @click="window.location.href = '{{ route('academic-years.edit', $year) }}'" class="p-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-white/[0.04] transition duration-150">
                         <div class="flex items-start justify-between mb-3">
                             <div>
                                 <h5 class="font-semibold text-gray-800 dark:text-white text-sm">{{ $year->name }}</h5>
@@ -183,7 +183,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="flex items-center justify-end gap-4 mt-2">
+                        <div class="flex items-center justify-end gap-4 mt-2" @click.stop>
                             @unless ($year->is_active)
                                 <form action="{{ route('academic-years.activate', $year) }}" method="POST"
                                     class="inline-flex items-center"
