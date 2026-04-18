@@ -30,7 +30,7 @@
 
             <!-- Filter Status -->
             <div class="relative sm:min-w-[180px]">
-                <select name="filter" onchange="this.form.submit()" aria-label="Filter Status"
+                <select name="filter" onchange="this.form.submit()" title="Filter Status"
                     class="h-11 w-full rounded-xl border border-gray-200 bg-white pl-4 pr-10 py-2.5 text-sm text-gray-800 outline-none transition duration-150 focus:border-school-blue focus:ring-3 focus:ring-school-blue/10 dark:border-amoled-border dark:bg-amoled-surface dark:text-white/90 dark:focus:border-school-blue appearance-none cursor-pointer">
                     <option value="" class="dark:bg-amoled-surface">Semua Status ({{ $totalSynced }})</option>
                     <option value="active" {{ $filter === 'active' ? 'selected' : '' }} class="dark:bg-amoled-surface">MoU

@@ -50,7 +50,7 @@
 
                 {{-- Filter Status --}}
                 <div class="relative w-full sm:w-auto">
-                    <select x-model="status" aria-label="Filter Status"
+                    <select x-model="status" title="Filter Status"
                         class="w-full sm:w-48 pl-4 pr-10 py-2.5 sm:py-2 bg-white dark:bg-amoled-surface border border-gray-200 dark:border-amoled-border text-gray-900 dark:text-white text-sm rounded-xl focus:ring-2 focus:ring-school-blue/20 focus:border-school-blue transition-colors appearance-none cursor-pointer">
                         <option value="">Semua Status</option>
                         <option value="pending">Menunggu Validasi</option>

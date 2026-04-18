@@ -170,13 +170,13 @@
                     placeholder="Cari industri berdasarkan nama, kota, atau alamat..."
                     class="h-11 w-full rounded-xl border border-gray-200 bg-white pl-10 pr-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 outline-none transition duration-150 focus:border-school-blue focus:ring-3 focus:ring-school-blue/10 dark:border-amoled-border dark:bg-amoled-surface dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-school-blue">
             </div>
-            <select x-model="filterStatus" aria-label="Filter Status"
+            <select x-model="filterStatus" title="Filter Status"
                 class="h-11 rounded-xl border border-gray-200 bg-white pl-4 pr-10 py-2.5 text-sm text-gray-800 outline-none transition duration-150 focus:border-school-blue focus:ring-3 focus:ring-school-blue/10 dark:border-amoled-border dark:bg-amoled-surface dark:text-white/90 dark:focus:border-school-blue cursor-pointer min-w-[160px]">
                 <option value="all">Semua Status</option>
                 <option value="available">Tersedia</option>
                 <option value="full">Penuh</option>
             </select>
-            <select x-model="filterCity" aria-label="Filter Kota"
+            <select x-model="filterCity" title="Filter Kota"
                 class="h-11 rounded-xl border border-gray-200 bg-white pl-4 pr-10 py-2.5 text-sm text-gray-800 outline-none transition duration-150 focus:border-school-blue focus:ring-3 focus:ring-school-blue/10 dark:border-amoled-border dark:bg-amoled-surface dark:text-white/90 dark:focus:border-school-blue cursor-pointer min-w-[160px]">
                 <option value="all">Semua Kota</option>
                 <template x-for="city in uniqueCities" :key="city">

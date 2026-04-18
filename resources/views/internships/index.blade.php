@@ -107,7 +107,7 @@
 
             @if ($departmentId === null)
                 {{-- Filter Program keahlian (Admin only) --}}
-                <select x-model="departmentId" aria-label="Filter Program Keahlian"
+                <select x-model="departmentId" title="Filter Program Keahlian"
                     class="px-4 py-2.5 text-sm rounded-2xl border border-gray-200 dark:border-amoled-border bg-gray-50 dark:bg-amoled-input text-gray-900 dark:text-white focus:ring-2 focus:ring-school-blue/30 focus:border-school-blue transition-colors">
                     <option value="">Semua Program Keahlian</option>
                     @foreach ($departments as $dept)
@@ -119,7 +119,7 @@
             @endif
 
             {{-- Filter Industri --}}
-            <select x-model="industryId" aria-label="Filter Industri"
+            <select x-model="industryId" title="Filter Industri"
                 class="px-4 py-2.5 text-sm rounded-2xl border border-gray-200 dark:border-amoled-border bg-gray-50 dark:bg-amoled-input text-gray-900 dark:text-white focus:ring-2 focus:ring-school-blue/30 focus:border-school-blue transition-colors">
                 <option value="">Semua Industri</option>
                 @foreach ($industries as $industry)
