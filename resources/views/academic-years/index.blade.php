@@ -75,7 +75,7 @@
                                         class="text-sm text-gray-500 dark:text-amoled-text">{{ $academicYears->firstItem() + $index }}</span>
                                 </td>
                                 <td class="py-4 px-4">
-                                    <h5 class="font-medium text-gray-800 dark:text-white text-sm">{{ $year->name }}</h5>
+                                    <p class="font-medium text-gray-800 dark:text-white text-sm">{{ $year->name }}</p>
                                 </td>
                                 <td class="py-4 px-4">
                                     @if ($year->is_active)
@@ -165,7 +165,7 @@
                     <div x-data @click="window.location.href = '{{ route('academic-years.edit', $year) }}'" class="p-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-white/[0.04] transition duration-150">
                         <div class="flex items-start justify-between mb-3">
                             <div>
-                                <h5 class="font-semibold text-gray-800 dark:text-white text-sm">{{ $year->name }}</h5>
+                                <p class="font-semibold text-gray-800 dark:text-white text-sm">{{ $year->name }}</p>
                                 <div class="mt-1.5">
                                     @if ($year->is_active)
                                         <span

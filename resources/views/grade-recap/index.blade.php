@@ -151,7 +151,7 @@
                                         class="text-sm text-gray-600 dark:text-gray-300 font-mono">{{ $studentNis }}</span>
                                 </td>
                                 <td class="py-4 px-4">
-                                    <h5 class="font-medium text-gray-800 dark:text-white text-sm">{{ $studentName }}</h5>
+                                    <p class="font-medium text-gray-800 dark:text-white text-sm">{{ $studentName }}</p>
                                 </td>
                                 <td class="py-4 px-4">
                                     <span class="text-sm text-gray-600 dark:text-gray-300">{{ $className }}</span>
@@ -266,7 +266,7 @@
                         ">
                         <div class="flex items-start justify-between mb-2">
                             <div>
-                                <h5 class="font-semibold text-gray-800 dark:text-white text-sm">{{ $studentName }}</h5>
+                                <p class="font-semibold text-gray-800 dark:text-white text-sm">{{ $studentName }}</p>
                                 <p class="text-xs text-gray-500 dark:text-amoled-text mt-0.5 font-mono">
                                     {{ $studentNis }}</p>
                             </div>

@@ -68,8 +68,8 @@
                             <tr x-data @click="window.location.href = '{{ route('departments.edit', $department) }}'"
                                 class="hover:bg-gray-50 dark:hover:bg-white/[0.04] transition duration-150 border-b border-gray-200 dark:border-amoled-border last:border-b-0 cursor-pointer">
                                 <td class="py-4 px-4 pl-8 xl:pl-8">
-                                    <h5 class="font-medium text-gray-800 dark:text-white text-sm">{{ $department->name }}
-                                    </h5>
+                                    <p class="font-medium text-gray-800 dark:text-white text-sm">{{ $department->name }}
+                                    </p>
                                 </td>
                                 <td class="py-4 px-4">
                                     <x-department-badge :code="$department->code" />
@@ -122,7 +122,7 @@
                 @forelse ($departments as $department)
                     <div x-data @click="window.location.href = '{{ route('departments.edit', $department) }}'" class="p-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-white/[0.04] transition duration-150">
                         <div class="flex items-start justify-between mb-3">
-                            <h5 class="font-semibold text-gray-800 dark:text-white text-sm">{{ $department->name }}</h5>
+                            <p class="font-semibold text-gray-800 dark:text-white text-sm">{{ $department->name }}</p>
                             <x-department-badge :code="$department->code" class="ml-2" />
                         </div>
                         <div class="flex items-center justify-end gap-4 mt-2" @click.stop>

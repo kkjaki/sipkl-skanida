@@ -149,8 +149,8 @@
                                         class="text-sm text-gray-500 dark:text-amoled-text">{{ $students->firstItem() + $index }}</span>
                                 </td>
                                 <td class="py-4 px-4">
-                                    <h5 class="font-medium text-gray-800 dark:text-white text-sm">
-                                        {{ $student->user->name }}</h5>
+                                    <p class="font-medium text-gray-800 dark:text-white text-sm">
+                                        {{ $student->user->name }}</p>
                                 </td>
                                 <td class="py-4 px-4">
                                     <span
@@ -221,8 +221,8 @@
                     <div x-data @click="window.location.href = '{{ route('students.edit', $student->user_id) }}'" class="p-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-white/[0.04] transition duration-150">
                         <div class="flex items-start justify-between mb-2">
                             <div>
-                                <h5 class="font-semibold text-gray-800 dark:text-white text-sm">{{ $student->user->name }}
-                                </h5>
+                                <p class="font-semibold text-gray-800 dark:text-white text-sm">{{ $student->user->name }}
+                                </p>
                                 <p class="text-xs text-gray-500 dark:text-amoled-text mt-0.5 font-mono">
                                     {{ $student->nis }}</p>
                             </div>
