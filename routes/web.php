@@ -3,15 +3,20 @@
 use App\Http\Controllers\AcademicYearController;
 use App\Http\Controllers\AssessmentController;
 use App\Http\Controllers\CertificateGenerationController;
+use App\Http\Controllers\CertificateValidationController;
 use App\Http\Controllers\DailyJournalController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\EvaluationIndicatorController;
+use App\Http\Controllers\GradeRecapController;
 use App\Http\Controllers\IndustryController;
+use App\Http\Controllers\IndustryPartnerController;
 use App\Http\Controllers\IndustryPartnershipController;
 use App\Http\Controllers\IndustryProposalController;
 use App\Http\Controllers\IndustryVerificationController;
+use App\Http\Controllers\InternshipWithdrawalController;
 use App\Http\Controllers\JournalValidationController;
+use App\Http\Controllers\PlacementController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\SupervisorAllocationController;
@@ -28,8 +33,8 @@ Route::get('/dashboard', [DashboardController::class, 'index'])
     ->name('dashboard');
 
 Route::middleware(['signed', 'throttle:6,1'])->group(function () {
-    Route::get('/mitra/{industry}/confirm', [App\Http\Controllers\IndustryPartnerController::class, 'edit'])->name('mitra.confirm');
-    Route::put('/mitra/{industry}/confirm', [App\Http\Controllers\IndustryPartnerController::class, 'update'])->name('mitra.update');
+    Route::get('/mitra/{industry}/confirm', [IndustryPartnerController::class, 'edit'])->name('mitra.confirm');
+    Route::put('/mitra/{industry}/confirm', [IndustryPartnerController::class, 'update'])->name('mitra.update');
 });
 
 Route::view('/mitra/locked', 'mitra.locked')->name('mitra.locked');
@@ -52,8 +57,8 @@ Route::middleware('auth')->group(function () {
             ->only(['index', 'store', 'update', 'destroy']);
 
         // Grade Recap (Rekap Nilai PKL)
-        Route::get('/grade-recap', [App\Http\Controllers\GradeRecapController::class, 'index'])->name('grade-recap.index');
-        Route::get('/grade-recap/export', [App\Http\Controllers\GradeRecapController::class, 'export'])->name('grade-recap.export');
+        Route::get('/grade-recap', [GradeRecapController::class, 'index'])->name('grade-recap.index');
+        Route::get('/grade-recap/export', [GradeRecapController::class, 'export'])->name('grade-recap.export');
     });
 
     // =========================================================
@@ -101,10 +106,10 @@ Route::middleware('auth')->group(function () {
         Route::put('verification/{industry}/unsync', [IndustryVerificationController::class, 'unsync'])->name('verification.unsync');
 
         // Placement (Plotting) Routes
-        Route::get('placements', [App\Http\Controllers\PlacementController::class, 'index'])->name('placements.index');
-        Route::post('placements', [App\Http\Controllers\PlacementController::class, 'store'])->name('placements.store');
-        Route::delete('placements/bulk', [App\Http\Controllers\PlacementController::class, 'destroyBulk'])->name('placements.destroyBulk');
-        Route::delete('placements/{internship}', [App\Http\Controllers\PlacementController::class, 'destroy'])->name('placements.destroy');
+        Route::get('placements', [PlacementController::class, 'index'])->name('placements.index');
+        Route::post('placements', [PlacementController::class, 'store'])->name('placements.store');
+        Route::delete('placements/bulk', [PlacementController::class, 'destroyBulk'])->name('placements.destroyBulk');
+        Route::delete('placements/{internship}', [PlacementController::class, 'destroy'])->name('placements.destroy');
 
         // Supervisor Placement (Plotting Guru Pembimbing)
         Route::get('supervisor-placements', [SupervisorPlacementController::class, 'index'])->name('supervisor-placements.index');
@@ -117,8 +122,8 @@ Route::middleware('auth')->group(function () {
     // Scope dikontrol oleh controller berdasarkan role aktif
     // =========================================================
     Route::middleware('role:admin|department_head')->group(function () {
-        Route::get('internships', [App\Http\Controllers\InternshipWithdrawalController::class, 'index'])->name('internships.index');
-        Route::patch('internships/{internship}/withdraw', [App\Http\Controllers\InternshipWithdrawalController::class, 'withdraw'])->name('internships.withdraw');
+        Route::get('internships', [InternshipWithdrawalController::class, 'index'])->name('internships.index');
+        Route::patch('internships/{internship}/withdraw', [InternshipWithdrawalController::class, 'withdraw'])->name('internships.withdraw');
     });
 
     // =========================================================
@@ -143,8 +148,8 @@ Route::middleware('auth')->group(function () {
 
         // Certificate Validation (Validasi Data Sertifikat)
         Route::prefix('student/certificate-validations')->name('student.certificate-validations.')->group(function () {
-            Route::get('/', [App\Http\Controllers\CertificateValidationController::class, 'index'])->name('index');
-            Route::put('/{certificate}/validate', [App\Http\Controllers\CertificateValidationController::class, 'validate'])->name('validate');
+            Route::get('/', [CertificateValidationController::class, 'index'])->name('index');
+            Route::put('/{certificate}/validate', [CertificateValidationController::class, 'validate'])->name('validate');
         });
     });
 

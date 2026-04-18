@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AcademicYear;
 use App\Models\DailyJournal;
 use App\Models\Internship;
 use Illuminate\Http\Request;
@@ -18,7 +19,7 @@ class JournalValidationController extends Controller
     {
         $supervisorId = Auth::id();
 
-        $activeYear = \App\Models\AcademicYear::where('is_active', true)->first();
+        $activeYear = AcademicYear::where('is_active', true)->first();
 
         $internships = Internship::where('supervisor_id', $supervisorId)
             ->when($activeYear, function ($q) use ($activeYear) {

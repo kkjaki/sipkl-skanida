@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exports\GradeRecapExport;
+use App\Models\AcademicYear;
 use App\Models\Internship;
 use App\Models\Student;
 use Illuminate\Support\Facades\Cache;
@@ -16,7 +17,7 @@ class GradeRecapController extends Controller
      */
     public function index()
     {
-        $activeYear = \App\Models\AcademicYear::where('is_active', true)->first();
+        $activeYear = AcademicYear::where('is_active', true)->first();
         $cacheKey = 'grade_recap_'.($activeYear ? $activeYear->id : 'all');
 
         $internships = Cache::remember($cacheKey, 1800, function () use ($activeYear) {

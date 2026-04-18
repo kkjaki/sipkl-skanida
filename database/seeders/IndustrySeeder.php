@@ -6,6 +6,8 @@ use App\Models\AcademicYear;
 use App\Models\Department;
 use App\Models\Industry;
 use App\Models\IndustryAllocation;
+use App\Models\User;
+use Faker\Factory;
 use Illuminate\Database\Seeder;
 
 class IndustrySeeder extends Seeder
@@ -15,7 +17,7 @@ class IndustrySeeder extends Seeder
      */
     public function run(): void
     {
-        $faker = \Faker\Factory::create('id_ID');
+        $faker = Factory::create('id_ID');
         $verifiedIndustries = [
             [
                 'name' => 'PT Telkom Indonesia Tbk',
@@ -66,7 +68,7 @@ class IndustrySeeder extends Seeder
         }
 
         foreach ($state2NisList as $index => $nis) {
-            $submitter = \App\Models\User::where('email', $nis.'@smkn2magelang.sch.id')->first();
+            $submitter = User::where('email', $nis.'@smkn2magelang.sch.id')->first();
             if (! $submitter) {
                 continue;
             }

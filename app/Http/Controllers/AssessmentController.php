@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AcademicYear;
 use App\Models\AssessmentScore;
 use App\Models\EvaluationIndicator;
 use App\Models\Internship;
@@ -20,7 +21,7 @@ class AssessmentController extends Controller
 
         $totalIndicators = EvaluationIndicator::count();
 
-        $activeYear = \App\Models\AcademicYear::where('is_active', true)->first();
+        $activeYear = AcademicYear::where('is_active', true)->first();
 
         $internships = Internship::where('supervisor_id', $supervisorId)
             ->whereIn('status', ['ongoing', 'finished'])

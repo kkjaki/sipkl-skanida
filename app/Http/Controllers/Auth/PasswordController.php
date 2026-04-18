@@ -37,4 +37,3 @@ class PasswordController extends Controller
         return redirect()->route('login')->with('status', 'Password berhasil diperbarui. Silakan masuk kembali dengan password baru Anda.');
     }
 }
-

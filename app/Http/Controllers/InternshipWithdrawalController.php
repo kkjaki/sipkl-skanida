@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AcademicYear;
+use App\Models\Department;
+use App\Models\Industry;
 use App\Models\Internship;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -50,11 +53,11 @@ class InternshipWithdrawalController extends Controller
         });
 
         // For filters
-        $departments = \App\Models\Department::orderBy('name')->get();
+        $departments = Department::orderBy('name')->get();
 
-        $industriesQuery = \App\Models\Industry::where('is_synced', true);
+        $industriesQuery = Industry::where('is_synced', true);
         if ($departmentId !== null) {
-            $activeYear = \App\Models\AcademicYear::where('is_active', true)->first();
+            $activeYear = AcademicYear::where('is_active', true)->first();
             if ($activeYear) {
                 $industriesQuery->whereHas('allocations', function ($q) use ($departmentId, $activeYear) {
                     $q->where('department_id', $departmentId)

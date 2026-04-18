@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StorePartnershipRequest;
+use App\Models\AcademicYear;
 use App\Models\Industry;
 use App\Models\IndustryPartnership;
+use App\Models\Internship;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
@@ -145,9 +147,9 @@ class IndustryPartnershipController extends Controller
 
             // Auto-update student submitter's internship dates
             if ($industry->student_submitter_id) {
-                $activeYear = \App\Models\AcademicYear::where('is_active', true)->first();
+                $activeYear = AcademicYear::where('is_active', true)->first();
                 if ($activeYear) {
-                    \App\Models\Internship::where('student_id', $industry->student_submitter_id)
+                    Internship::where('student_id', $industry->student_submitter_id)
                         ->where('industry_id', $industry->id)
                         ->where('academic_year_id', $activeYear->id)
                         ->update([

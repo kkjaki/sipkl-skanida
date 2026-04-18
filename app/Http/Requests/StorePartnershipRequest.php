@@ -3,8 +3,10 @@
 namespace App\Http\Requests;
 
 use App\Models\IndustryPartnership;
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 
 class StorePartnershipRequest extends FormRequest
 {
@@ -90,9 +92,9 @@ class StorePartnershipRequest extends FormRequest
      * Handle a failed validation attempt.
      * Redirect back with modal flag to auto-reopen modal.
      */
-    protected function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
+    protected function failedValidation(Validator $validator)
     {
-        throw new \Illuminate\Validation\ValidationException(
+        throw new ValidationException(
             $validator,
             redirect()->route('partnerships.manage', $this->route('industry'))
                 ->withErrors($validator)

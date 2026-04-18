@@ -22,7 +22,7 @@ class UpdateStudentRequest extends FormRequest
     public function rules(): array
     {
         $studentId = $this->route('student');
-        $student = \App\Models\Student::findOrFail($studentId);
+        $student = Student::findOrFail($studentId);
 
         return [
             'name' => 'required|string|max:255',

@@ -8,6 +8,7 @@ use App\Models\Student;
 use App\Models\Supervisor;
 use App\Models\SupervisorAllocation;
 use App\Models\User;
+use Faker\Factory;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
@@ -21,7 +22,7 @@ class UserSeeder extends Seeder
         $passwordHash = Hash::make('password');
         $activeAcademicYear = AcademicYear::where('is_active', true)->firstOrFail();
         $departments = Department::all()->keyBy('code');
-        $faker = \Faker\Factory::create('id_ID');
+        $faker = Factory::create('id_ID');
 
         // =================================================================
         // ADMIN & KURIKULUM

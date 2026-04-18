@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreDailyJournalRequest;
 use App\Http\Requests\UpdateDailyJournalRequest;
+use App\Models\AcademicYear;
 use App\Models\DailyJournal;
 use App\Models\Internship;
 use Illuminate\Support\Facades\Auth;
@@ -18,7 +19,7 @@ class DailyJournalController extends Controller
     {
         $userId = Auth::id();
 
-        $activeYear = \App\Models\AcademicYear::where('is_active', true)->first();
+        $activeYear = AcademicYear::where('is_active', true)->first();
 
         $internship = Internship::where('student_id', $userId)
             ->where('status', 'ongoing')
@@ -56,7 +57,7 @@ class DailyJournalController extends Controller
     {
         $userId = Auth::id();
 
-        $activeYear = \App\Models\AcademicYear::where('is_active', true)->first();
+        $activeYear = AcademicYear::where('is_active', true)->first();
 
         $internship = Internship::where('student_id', $userId)
             ->where('status', 'ongoing')

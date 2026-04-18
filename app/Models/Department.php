@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -17,9 +18,9 @@ class Department extends Model
     /**
      * Normalize: kode program keahlian selalu UPPERCASE.
      */
-    protected function code(): \Illuminate\Database\Eloquent\Casts\Attribute
+    protected function code(): Attribute
     {
-        return \Illuminate\Database\Eloquent\Casts\Attribute::make(
+        return Attribute::make(
             set: fn (string $value) => strtoupper(trim($value)),
         );
     }

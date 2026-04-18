@@ -3,6 +3,7 @@
 namespace App\Exports;
 
 use App\Models\Internship;
+use App\Models\Student;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithHeadings;
@@ -42,7 +43,7 @@ class GradeRecapPerClassSheet implements FromCollection, ShouldAutoSize, WithHea
                 $query->where('class_name', $this->className);
             })
             ->orderBy(
-                \App\Models\Student::select('users.name')
+                Student::select('users.name')
                     ->join('users', 'students.user_id', '=', 'users.id')
                     ->whereColumn('students.user_id', 'internships.student_id')
                     ->limit(1)
