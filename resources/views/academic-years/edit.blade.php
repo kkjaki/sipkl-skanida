@@ -32,11 +32,20 @@
                 @method('PUT')
                 <div class="p-6 sm:p-8 space-y-6">
                     <!-- Name -->
-                    <div>
+                    <div x-data="{
+                        name: '{{ old('name', $academicYear->name) }}',
+                        formatYear() {
+                            let v = this.name.replace(/\D/g, '');
+                            if (v.length > 4) {
+                                v = v.substring(0, 4) + '/' + v.substring(4, 8);
+                            }
+                            this.name = v;
+                        }
+                    }">
                         <label for="name" class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
                             Nama Tahun Ajaran <span class="text-red-500">*</span>
                         </label>
-                        <input type="text" id="name" name="name" value="{{ old('name', $academicYear->name) }}"
+                        <input type="text" id="name" name="name" x-model="name" @input="formatYear" maxlength="9"
                             placeholder="cth. 2025/2026" required
                             class="h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 outline-none transition duration-150 focus:border-school-blue focus:ring-3 focus:ring-school-blue/10 dark:border-amoled-border dark:bg-amoled-input dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-school-blue" />
                         @error('name')
