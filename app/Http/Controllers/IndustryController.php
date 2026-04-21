@@ -11,7 +11,7 @@ use App\Models\Industry;
 use App\Models\IndustryAllocation;
 use App\Models\Internship;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
+use App\Services\CacheService;
 use Illuminate\Support\Facades\DB;
 
 class IndustryController extends Controller
@@ -111,7 +111,7 @@ class IndustryController extends Controller
             $this->syncAllocations($industry, $validated['quotas'] ?? []);
         });
 
-        Cache::forget('dashboard_stats');
+        CacheService::flushDashboard();
 
         return redirect()->route('industries.index')
             ->with('success', 'Data industri berhasil ditambahkan.');
@@ -174,7 +174,7 @@ class IndustryController extends Controller
             }
         });
 
-        Cache::forget('dashboard_stats');
+        CacheService::flushDashboard();
 
         return redirect()->route('industries.index')
             ->with('success', 'Data industri berhasil diperbarui.');
@@ -238,7 +238,7 @@ class IndustryController extends Controller
             $this->syncAllocations($industry, $validated['quotas'] ?? []);
         });
 
-        Cache::forget('dashboard_stats');
+        CacheService::flushDashboard();
 
         return redirect()->route('industries.index')
             ->with('success', 'Alokasi kuota industri berhasil disimpan.');
@@ -262,7 +262,7 @@ class IndustryController extends Controller
 
         $industry->delete();
 
-        Cache::forget('dashboard_stats');
+        CacheService::flushDashboard();
 
         return redirect()->route('industries.index')
             ->with('success', 'Data industri berhasil dihapus.');

@@ -8,7 +8,7 @@ use App\Models\Department;
 use App\Models\Supervisor;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
+use App\Services\CacheService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
@@ -100,7 +100,7 @@ class SupervisorController extends Controller
             ]);
         });
 
-        Cache::forget('dashboard_stats');
+        CacheService::flushDashboard();
 
         return redirect()->route('supervisors.index')
             ->with('success', 'Guru pembimbing berhasil ditambahkan.');
@@ -151,7 +151,7 @@ class SupervisorController extends Controller
             ]);
         });
 
-        Cache::forget('dashboard_stats');
+        CacheService::flushDashboard();
 
         return redirect()->route('supervisors.index')
             ->with('success', 'Data guru pembimbing berhasil diperbarui.');
@@ -175,7 +175,7 @@ class SupervisorController extends Controller
         // Deleting the User cascades to Supervisor
         $supervisor->user->delete();
 
-        Cache::forget('dashboard_stats');
+        CacheService::flushDashboard();
 
         return redirect()->route('supervisors.index')
             ->with('success', 'Guru pembimbing berhasil dihapus.');

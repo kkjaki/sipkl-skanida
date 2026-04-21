@@ -8,6 +8,7 @@ use App\Models\EvaluationIndicator;
 use App\Models\Internship;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Services\CacheService;
 use Illuminate\Support\Facades\DB;
 
 class AssessmentController extends Controller
@@ -98,6 +99,9 @@ class AssessmentController extends Controller
                     );
                 }
             });
+
+            CacheService::flushDashboard();
+            CacheService::flushGradeRecap();
 
             return redirect()
                 ->route('supervisor.assessments.edit', $internship)

@@ -12,6 +12,7 @@ use App\Models\Supervisor;
 use App\Models\SupervisorAllocation;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use App\Services\CacheService;
 use Illuminate\Support\Facades\Cache;
 
 class DashboardController extends Controller
@@ -59,7 +60,7 @@ class DashboardController extends Controller
     {
         $activeYear = AcademicYear::where('is_active', true)->first();
 
-        $stats = Cache::remember('dashboard_admin_stats', 60 * 60, function () use ($activeYear) {
+        $stats = Cache::remember(CacheService::KEY_DASHBOARD_ADMIN, 60 * 60, function () use ($activeYear) {
             if (! $activeYear) {
                 return [
                     'active_year' => null,
@@ -216,7 +217,7 @@ class DashboardController extends Controller
     {
         $activeYear = AcademicYear::where('is_active', true)->first();
 
-        $stats = Cache::remember('dashboard_curriculum_stats', 30 * 60, function () use ($activeYear) {
+        $stats = Cache::remember(CacheService::KEY_DASHBOARD_CURRICULUM, 30 * 60, function () use ($activeYear) {
             // 1. Total Guru Pembimbing
             $totalSupervisors = User::role('supervisor')->count();
 
@@ -268,7 +269,7 @@ class DashboardController extends Controller
      */
     private function supervisorDashboard($user)
     {
-        $data = Cache::remember('dashboard_supervisor_'.$user->id, 60, function () use ($user) {
+        $data = Cache::remember(CacheService::PREFIX_DASHBOARD_SUPERVISOR.$user->id, 60, function () use ($user) {
             $activeYear = AcademicYear::where('is_active', true)->first();
 
             $supervisor = Supervisor::where('user_id', $user->id)

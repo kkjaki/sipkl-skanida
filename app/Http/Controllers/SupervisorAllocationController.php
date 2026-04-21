@@ -7,6 +7,7 @@ use App\Models\Department;
 use App\Models\Supervisor;
 use App\Models\SupervisorAllocation;
 use Illuminate\Http\Request;
+use App\Services\CacheService;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
@@ -29,7 +30,7 @@ class SupervisorAllocationController extends Controller
 
         // Cache the supervisors data for 60 minutes
         // Key includes active year ID to invalidate when year changes
-        $supervisors = Cache::remember('supervisor_allocations_'.$activeYear->id, 60 * 60, function () use ($activeYear) {
+        $supervisors = Cache::remember(CacheService::PREFIX_SUPERVISOR_ALLOCATIONS.$activeYear->id, 60 * 60, function () use ($activeYear) {
             return Supervisor::whereHas('user', function ($query) {
                 $query->role('supervisor');
             })
@@ -76,10 +77,10 @@ class SupervisorAllocationController extends Controller
         });
 
         // Clear the cache for this academic year so updates are reflected immediately
-        Cache::forget('supervisor_allocations_'.$activeYear->id);
+        CacheService::flushSupervisorAllocations();
 
         // Also clear dashboard stats as total quota changed
-        Cache::forget('dashboard_stats');
+        CacheService::flushDashboard();
 
         return redirect()->route('supervisors.allocate')
             ->with('success', 'Kuota pembimbing berhasil diperbarui.');

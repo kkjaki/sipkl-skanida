@@ -7,6 +7,7 @@ use App\Models\AcademicYear;
 use App\Models\Internship;
 use App\Models\Student;
 use Illuminate\Support\Facades\Cache;
+use App\Services\CacheService;
 use Maatwebsite\Excel\Facades\Excel;
 
 class GradeRecapController extends Controller
@@ -18,7 +19,7 @@ class GradeRecapController extends Controller
     public function index()
     {
         $activeYear = AcademicYear::where('is_active', true)->first();
-        $cacheKey = 'grade_recap_'.($activeYear ? $activeYear->id : 'all');
+        $cacheKey = CacheService::PREFIX_GRADE_RECAP.($activeYear ? $activeYear->id : 'all');
 
         $internships = Cache::remember($cacheKey, 1800, function () use ($activeYear) {
             return Internship::with(['student.user', 'industry'])

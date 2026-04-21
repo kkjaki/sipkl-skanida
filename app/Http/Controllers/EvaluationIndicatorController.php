@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\EvaluationIndicator;
 use Illuminate\Http\Request;
+use App\Services\CacheService;
 
 class EvaluationIndicatorController extends Controller
 {
@@ -28,6 +29,8 @@ class EvaluationIndicatorController extends Controller
 
         EvaluationIndicator::create($request->only('name'));
 
+        CacheService::flushDashboard();
+
         return redirect()->route('evaluation-indicators.index')
             ->with('success', 'Indikator penilaian berhasil ditambahkan.');
     }
@@ -43,6 +46,8 @@ class EvaluationIndicatorController extends Controller
 
         $evaluationIndicator->update($request->only('name'));
 
+        CacheService::flushDashboard();
+
         return redirect()->route('evaluation-indicators.index')
             ->with('success', 'Indikator penilaian berhasil diupdate.');
     }
@@ -53,6 +58,8 @@ class EvaluationIndicatorController extends Controller
     public function destroy(EvaluationIndicator $evaluationIndicator)
     {
         $evaluationIndicator->delete();
+
+        CacheService::flushDashboard();
 
         return redirect()->route('evaluation-indicators.index')
             ->with('success', 'Indikator penilaian berhasil dihapus.');

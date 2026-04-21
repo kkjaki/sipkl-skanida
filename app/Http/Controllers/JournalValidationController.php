@@ -7,7 +7,7 @@ use App\Models\DailyJournal;
 use App\Models\Internship;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Cache;
+use App\Services\CacheService;
 use Illuminate\Support\Facades\DB;
 
 class JournalValidationController extends Controller
@@ -110,7 +110,7 @@ class JournalValidationController extends Controller
                 }
 
                 // Invalidate dashboard cache supaya angka pending langsung terupdate
-                Cache::forget('dashboard_supervisor_'.Auth::id());
+                CacheService::flushDashboard();
 
                 return back()->with('success', $message);
             });

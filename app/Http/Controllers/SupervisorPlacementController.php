@@ -7,6 +7,7 @@ use App\Models\Internship;
 use App\Models\Supervisor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Services\CacheService;
 use Illuminate\Support\Facades\DB;
 
 class SupervisorPlacementController extends Controller
@@ -136,6 +137,8 @@ class SupervisorPlacementController extends Controller
                     'supervisor_id' => $supervisorId,
                 ]);
 
+                CacheService::flushDashboard();
+
                 return redirect()->route('supervisor-placements.index')
                     ->with('success', 'Guru pembimbing berhasil di-plot ke siswa.');
             });
@@ -173,6 +176,8 @@ class SupervisorPlacementController extends Controller
 
                 return $internships->count();
             });
+
+            CacheService::flushDashboard();
 
             return back()->with('success', "{$count} penempatan guru pembimbing berhasil dihapus.");
         } catch (\Exception $e) {

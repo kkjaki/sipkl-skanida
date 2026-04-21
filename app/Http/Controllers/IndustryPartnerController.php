@@ -9,6 +9,7 @@ use App\Models\Industry;
 use App\Models\IndustryAllocation;
 use App\Models\Internship;
 use Illuminate\Http\Request;
+use App\Services\CacheService;
 use Illuminate\Support\Facades\DB;
 
 class IndustryPartnerController extends Controller
@@ -113,6 +114,8 @@ class IndustryPartnerController extends Controller
                 }
             }
         });
+
+        CacheService::flushDashboard();
 
         return redirect()->route('mitra.success');
     }

@@ -8,7 +8,7 @@ use App\Models\Industry;
 use App\Models\IndustryPartnership;
 use App\Models\Internship;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
+use App\Services\CacheService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
@@ -160,7 +160,7 @@ class IndustryPartnershipController extends Controller
             }
         });
 
-        Cache::forget('dashboard_stats');
+        CacheService::flushDashboard();
 
         return redirect()->route('partnerships.manage', $industry)
             ->with('success', 'MoU berhasil diunggah dan disimpan.');
@@ -207,7 +207,7 @@ class IndustryPartnershipController extends Controller
             $partnership->delete();
         });
 
-        Cache::forget('dashboard_stats');
+        CacheService::flushDashboard();
 
         return redirect()->route('partnerships.manage', $industryId)
             ->with('success', 'MoU berhasil dihapus.');

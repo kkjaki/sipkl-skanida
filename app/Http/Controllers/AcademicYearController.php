@@ -3,9 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\AcademicYear;
-use App\Models\User;
+use App\Services\CacheService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
 
 class AcademicYearController extends Controller
 {
@@ -54,7 +53,7 @@ class AcademicYearController extends Controller
         ]);
 
         if ($request->boolean('is_active')) {
-            $this->flushDashboardCache();
+            CacheService::flushAll();
         }
 
         return redirect()->route('academic-years.index')
@@ -100,7 +99,7 @@ class AcademicYearController extends Controller
         ]);
 
         if ($wasActive || $academicYear->is_active) {
-            $this->flushDashboardCache();
+            CacheService::flushAll();
         }
 
         return redirect()->route('academic-years.index')
@@ -124,6 +123,8 @@ class AcademicYearController extends Controller
 
         $academicYear->delete();
 
+        CacheService::flushAll();
+
         return redirect()->route('academic-years.index')
             ->with('success', 'Tahun ajaran berhasil dihapus.');
     }
@@ -139,21 +140,9 @@ class AcademicYearController extends Controller
         // Activate this one
         $academicYear->update(['is_active' => true]);
 
-        $this->flushDashboardCache();
+        CacheService::flushAll();
 
         return redirect()->route('academic-years.index')
             ->with('success', "Tahun ajaran \"{$academicYear->name}\" berhasil diaktifkan.");
-    }
-
-    private function flushDashboardCache(): void
-    {
-        Cache::forget('dashboard_stats');
-        Cache::forget('dashboard_admin_stats');
-        Cache::forget('dashboard_curriculum_stats');
-
-        $supervisorIds = User::role('supervisor')->pluck('id');
-        foreach ($supervisorIds as $id) {
-            Cache::forget('dashboard_supervisor_'.$id);
-        }
     }
 }

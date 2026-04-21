@@ -9,6 +9,7 @@ use App\Models\Internship;
 use App\Models\Student;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Services\CacheService;
 use Illuminate\Support\Facades\DB;
 
 class PlacementController extends Controller
@@ -209,6 +210,9 @@ class PlacementController extends Controller
                     Certificate::insert($certificates);
                 }
 
+                CacheService::flushDashboard();
+                CacheService::flushGradeRecap();
+
                 return redirect()->route('placements.index')
                     ->with('success', 'Siswa berhasil di-plot ke industri.');
             });
@@ -232,6 +236,9 @@ class PlacementController extends Controller
 
         try {
             $internship->delete();
+
+            CacheService::flushDashboard();
+            CacheService::flushGradeRecap();
 
             return back()->with('success', 'Penempatan siswa berhasil dihapus.');
         } catch (\Exception $e) {
@@ -265,6 +272,9 @@ class PlacementController extends Controller
 
                 return $internships->count();
             });
+
+            CacheService::flushDashboard();
+            CacheService::flushGradeRecap();
 
             return back()->with('success', "{$deleted} penempatan siswa berhasil dihapus.");
         } catch (\Exception $e) {

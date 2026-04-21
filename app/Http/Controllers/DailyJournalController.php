@@ -8,6 +8,7 @@ use App\Models\AcademicYear;
 use App\Models\DailyJournal;
 use App\Models\Internship;
 use Illuminate\Support\Facades\Auth;
+use App\Services\CacheService;
 use Illuminate\Support\Facades\Storage;
 
 class DailyJournalController extends Controller
@@ -95,6 +96,8 @@ class DailyJournalController extends Controller
             'verification_status' => 'pending',
         ]);
 
+        CacheService::flushDashboard();
+
         return redirect()->route('student.journals.index')
             ->with('success', 'Jurnal harian berhasil disimpan.');
     }
@@ -158,6 +161,8 @@ class DailyJournalController extends Controller
             'verification_status' => 'pending',
             'rejection_note' => null,
         ]));
+
+        CacheService::flushDashboard();
 
         return redirect()->route('student.journals.index')
             ->with('success', 'Jurnal harian berhasil diperbarui.');

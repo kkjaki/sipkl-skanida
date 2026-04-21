@@ -8,6 +8,7 @@ use App\Models\Industry;
 use App\Models\Internship;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Services\CacheService;
 
 class InternshipWithdrawalController extends Controller
 {
@@ -96,6 +97,9 @@ class InternshipWithdrawalController extends Controller
             'status' => 'withdrawn',
             'actual_end_date' => now()->toDateString(),
         ]);
+
+        CacheService::flushDashboard();
+        CacheService::flushGradeRecap();
 
         return back()->with('success', 'Status siswa berhasil diubah. Siswa dapat di-plot kembali ke lokasi baru.');
     }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Department;
+use App\Services\CacheService;
 use Illuminate\Http\Request;
 
 class DepartmentController extends Controller
@@ -37,6 +38,8 @@ class DepartmentController extends Controller
 
         Department::create($request->all());
 
+        CacheService::flushDashboard();
+
         return redirect()->route('departments.index')
             ->with('success', 'Program keahlian berhasil ditambahkan.');
     }
@@ -61,6 +64,8 @@ class DepartmentController extends Controller
 
         $department->update($request->all());
 
+        CacheService::flushDashboard();
+
         return redirect()->route('departments.index')
             ->with('success', 'Program keahlian berhasil diupdate.');
     }
@@ -80,6 +85,8 @@ class DepartmentController extends Controller
         }
 
         $department->delete();
+
+        CacheService::flushDashboard();
 
         return redirect()->route('departments.index')
             ->with('success', 'Program keahlian berhasil dihapus.');

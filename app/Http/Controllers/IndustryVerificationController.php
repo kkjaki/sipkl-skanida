@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Industry;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Cache;
+use App\Services\CacheService;
 
 class IndustryVerificationController extends Controller
 {
@@ -84,7 +84,7 @@ class IndustryVerificationController extends Controller
             'status' => 'open',
         ]);
 
-        Cache::forget('dashboard_stats');
+        CacheService::flushDashboard();
 
         return redirect()->route('verification.index')
             ->with('success', 'Sinkronisasi kurikulum berhasil. Industri telah diverifikasi dan menunggu input kuota oleh Humas/Admin.');
@@ -114,7 +114,7 @@ class IndustryVerificationController extends Controller
             'status' => 'blacklisted',
         ]);
 
-        Cache::forget('dashboard_stats');
+        CacheService::flushDashboard();
 
         return redirect()->route('verification.index')
             ->with('success', 'Pengajuan industri telah ditolak karena tidak sesuai kurikulum.');
@@ -137,7 +137,7 @@ class IndustryVerificationController extends Controller
             'status' => 'open',
         ]);
 
-        Cache::forget('dashboard_stats');
+        CacheService::flushDashboard();
 
         return redirect()->route('verification.show', $id)
             ->with('success', 'Status penolakan dicabut. Anda dapat meninjau ulang pengajuan ini.');
@@ -168,7 +168,7 @@ class IndustryVerificationController extends Controller
             'is_synced' => false,
         ]);
 
-        Cache::forget('dashboard_stats');
+        CacheService::flushDashboard();
 
         return redirect()->route('verification.show', $id)
             ->with('success', 'Sinkronisasi dicabut. Industri kembali ke status menunggu verifikasi.');

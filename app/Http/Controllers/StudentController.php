@@ -8,8 +8,8 @@ use App\Models\AcademicYear;
 use App\Models\Department;
 use App\Models\Student;
 use App\Models\User;
+use App\Services\CacheService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
@@ -18,16 +18,6 @@ class StudentController extends Controller
     /**
      * Display a listing of the resource.
      */
-    /**
-     * Flush all cached student list data.
-     * Call this whenever students data is mutated.
-     */
-    private function flushStudentCache(): void
-    {
-        Cache::forget('students_list_all');
-        Cache::forget('dashboard_stats');
-    }
-
     public function index(Request $request)
     {
         $search = $request->query('search');
@@ -37,38 +27,31 @@ class StudentController extends Controller
         $activeYear = AcademicYear::where('is_active', true)->first();
         $activeYearId = $activeYear?->id;
 
-        // Cache key includes search, filters, active year, and page for proper caching.
-        $page = $request->query('page', 1);
-        $cacheKey = 'students_list_'.md5(json_encode(compact('search', 'filterDept', 'filterClass', 'activeYearId', 'page')));
-        $cacheTtl = $search || $filterDept || $filterClass ? 120 : 600;
-
-        $students = Cache::remember($cacheKey, $cacheTtl, function () use ($search, $filterDept, $filterClass, $activeYearId) {
-            return Student::with(['user', 'department', 'academicYear'])
-                ->when($activeYearId, function ($query, $activeYearId) {
-                    $query->where('academic_year_id', $activeYearId);
-                })
-                ->when($search, function ($query, $search) {
-                    $query->where(function ($q) use ($search) {
-                        $q->where('nis', 'like', "%{$search}%")
-                            ->orWhere('class_name', 'like', "%{$search}%")
-                            ->orWhereHas('user', function ($q2) use ($search) {
-                                $q2->where('name', 'like', "%{$search}%")
-                                    ->orWhere('email', 'like', "%{$search}%");
-                            });
-                    });
-                })
-                ->when($filterDept, function ($query, $filterDept) {
-                    $query->whereHas('department', fn ($q) => $q->where('name', $filterDept));
-                })
-                ->when($filterClass, function ($query, $filterClass) {
-                    $query->where('class_name', $filterClass);
-                })
-                ->join('users', 'students.user_id', '=', 'users.id')
-                ->orderBy('users.name', 'asc')
-                ->select('students.*')
-                ->paginate(25)
-                ->withQueryString();
-        });
+        $students = Student::with(['user', 'department', 'academicYear'])
+            ->when($activeYearId, function ($query, $activeYearId) {
+                $query->where('academic_year_id', $activeYearId);
+            })
+            ->when($search, function ($query, $search) {
+                $query->where(function ($q) use ($search) {
+                    $q->where('nis', 'like', "%{$search}%")
+                        ->orWhere('class_name', 'like', "%{$search}%")
+                        ->orWhereHas('user', function ($q2) use ($search) {
+                            $q2->where('name', 'like', "%{$search}%")
+                                ->orWhere('email', 'like', "%{$search}%");
+                        });
+                });
+            })
+            ->when($filterDept, function ($query, $filterDept) {
+                $query->whereHas('department', fn ($q) => $q->where('name', $filterDept));
+            })
+            ->when($filterClass, function ($query, $filterClass) {
+                $query->where('class_name', $filterClass);
+            })
+            ->join('users', 'students.user_id', '=', 'users.id')
+            ->orderBy('users.name', 'asc')
+            ->select('students.*')
+            ->paginate(25)
+            ->withQueryString();
 
         $departments = Department::orderBy('name')->get();
         $availableClasses = Student::AVAILABLE_CLASSES;
@@ -128,7 +111,7 @@ class StudentController extends Controller
             ]);
         });
 
-        $this->flushStudentCache();
+        CacheService::flushDashboard();
 
         return redirect()->route('students.index')
             ->with('success', 'Peserta didik berhasil ditambahkan.');
@@ -198,7 +181,7 @@ class StudentController extends Controller
             ]);
         });
 
-        $this->flushStudentCache();
+        CacheService::flushDashboard();
 
         return redirect()->route('students.index')
             ->with('success', 'Data peserta didik berhasil diperbarui.');
@@ -214,7 +197,7 @@ class StudentController extends Controller
         // Deleting the User cascades to Student (onDelete('cascade'))
         $student->user->delete();
 
-        $this->flushStudentCache();
+        CacheService::flushDashboard();
 
         return redirect()->route('students.index')
             ->with('success', 'Peserta didik berhasil dihapus.');

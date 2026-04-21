@@ -7,7 +7,7 @@ use App\Http\Requests\UpdateProposalRequest;
 use App\Models\Industry;
 use App\Models\Internship;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Cache;
+use App\Services\CacheService;
 use Illuminate\Support\Facades\DB;
 
 class IndustryProposalController extends Controller
@@ -138,7 +138,7 @@ class IndustryProposalController extends Controller
             ]);
         });
 
-        Cache::forget('dashboard_stats');
+        CacheService::flushDashboard();
 
         return redirect()->route('student.proposals.index')
             ->with('success', 'Pengajuan lokasi PKL berhasil dikirim. Admin akan segera memverifikasi data Anda.');
@@ -190,6 +190,8 @@ class IndustryProposalController extends Controller
             'phone' => $validated['phone'] ?? null,
         ]);
 
+        CacheService::flushDashboard();
+
         return redirect()->route('student.proposals.index')
             ->with('success', 'Pengajuan lokasi PKL berhasil diperbarui.');
     }
@@ -212,7 +214,7 @@ class IndustryProposalController extends Controller
 
         $proposal->delete();
 
-        Cache::forget('dashboard_stats');
+        CacheService::flushDashboard();
 
         return redirect()->route('student.proposals.index')
             ->with('success', 'Pengajuan lokasi PKL berhasil dibatalkan dan dihapus.');
