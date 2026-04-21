@@ -27,7 +27,7 @@ class UpdateStudentRequest extends FormRequest
         return [
             'name' => 'required|string|max:255',
             'email' => 'nullable|email|max:255|unique:users,email,'.$student->user_id,
-            'nis' => 'required|string|max:20|unique:students,user_id,'.$student->user_id.',user_id',
+            'nis' => 'required|string|max:20|unique:students,nis,'.$student->user_id.',user_id',
             'class_name' => ['required', 'string', Rule::in(Student::AVAILABLE_CLASSES)],
             'place_of_birth' => 'required|string|max:255',
             'date_of_birth' => 'required|date',
