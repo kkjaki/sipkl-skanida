@@ -32,11 +32,16 @@
             this.isDirty = JSON.stringify(this.allocations) !== JSON.stringify(this.initialAllocations);
         },
         submitForm() {
-            if (confirm('Apakah Anda yakin ingin menyimpan perubahan kuota pembimbing?')) {
-                // Set isDirty = false agar beforeunload tidak muncul
-                this.isDirty = false;
-                this.$refs.form.submit();
-            }
+            $store.confirmModal.show({
+                title: 'Simpan Perubahan',
+                message: 'Apakah Anda yakin ingin menyimpan perubahan kuota pembimbing?',
+                type: 'info',
+                confirmText: 'Ya, Simpan',
+                onConfirm: () => {
+                    this.isDirty = false;
+                    this.$refs.form.submit();
+                }
+            });
         },
         get filteredCount() {
             let count = 0;
@@ -79,9 +84,14 @@
             links.forEach(link => {
                 link.addEventListener('click', (e) => {
                     if (this.isDirty && !link.href.includes('#')) {
-                        if (!confirm('Anda memiliki perubahan yang belum disimpan. Apakah Anda yakin ingin meninggalkan halaman ini?')) {
-                            e.preventDefault();
-                        }
+                        e.preventDefault();
+                        $store.confirmModal.show({
+                            title: 'Perubahan Belum Disimpan',
+                            message: 'Anda memiliki perubahan yang belum disimpan. Apakah Anda yakin ingin meninggalkan halaman ini?',
+                            type: 'warning',
+                            confirmText: 'Ya, Tinggalkan',
+                            onConfirm: () => { window.location.href = link.href; }
+                        });
                     }
                 });
             });

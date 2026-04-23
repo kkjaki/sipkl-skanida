@@ -86,7 +86,9 @@
                 @endif
 
                 {{-- Form --}}
-                <form method="POST" action="{{ route('login') }}" novalidate>
+                <form method="POST" action="{{ route('login') }}" novalidate
+                    x-data="{ submitting: false }"
+                    @submit="if (submitting) { $event.preventDefault(); return; } submitting = true;">
                     @csrf
 
                     <div class="space-y-5">
@@ -191,17 +193,25 @@
 
                         {{-- Submit --}}
                         <button type="submit"
+                            :disabled="submitting"
+                            :class="submitting ? 'opacity-60 cursor-not-allowed' : 'hover:bg-school-blue/90 active:scale-[0.98]'"
                             class="mt-1 flex w-full items-center justify-center gap-2 rounded-2xl
                                    bg-school-blue px-4 py-3 text-sm font-bold text-white
                                    shadow-lg shadow-school-blue/10 transition-all
-                                   hover:bg-school-blue/90 active:scale-[0.98] focus:outline-none
+                                   focus:outline-none
                                    focus:ring-2 focus:ring-school-blue focus:ring-offset-2 focus:ring-offset-white
                                    dark:focus:ring-offset-amoled">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            {{-- Normal icon --}}
+                            <svg x-show="!submitting" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
                                     d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
                             </svg>
-                            Masuk ke SIPKL
+                            {{-- Loading spinner --}}
+                            <svg x-show="submitting" x-cloak class="w-4 h-4 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+                            </svg>
+                            <span x-text="submitting ? 'Memproses...' : 'Masuk ke SIPKL'"></span>
                         </button>
 
                     </div>

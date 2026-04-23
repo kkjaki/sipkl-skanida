@@ -118,8 +118,41 @@
                     }
                 }
             });
+
+            // Confirm Modal Store
+            Alpine.store('confirmModal', {
+                open: false,
+                title: '',
+                message: '',
+                confirmText: 'Ya, Lanjutkan',
+                cancelText: 'Batal',
+                type: 'danger',
+                _onConfirm: null,
+                show(options) {
+                    this.title = options.title || 'Konfirmasi';
+                    this.message = options.message || 'Apakah Anda yakin?';
+                    this.confirmText = options.confirmText || 'Ya, Lanjutkan';
+                    this.cancelText = options.cancelText || 'Batal';
+                    this.type = options.type || 'danger';
+                    this._onConfirm = options.onConfirm || null;
+                    this.open = true;
+                },
+                confirm() {
+                    this.open = false;
+                    if (this._onConfirm) this._onConfirm();
+                    this._onConfirm = null;
+                },
+                cancel() {
+                    this.open = false;
+                    this._onConfirm = null;
+                }
+            });
         });
     </script>
+
+    {{-- Global UI Components --}}
+    <x-confirm-modal />
+
 
     @stack('scripts')
 </body>

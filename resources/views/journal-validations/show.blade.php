@@ -130,7 +130,7 @@
 
                 <div class="flex items-center gap-2">
                     <form action="{{ route('supervisor.journal-validations.bulkUpdate', $internship) }}" method="POST"
-                        onsubmit="return confirm('Validasi semua jurnal yang dipilih?')">
+                        @submit.prevent="$store.confirmModal.show({ title: 'Validasi Jurnal', message: 'Validasi semua jurnal yang dipilih?', type: 'info', confirmText: 'Ya, Validasi', onConfirm: () => $el.submit() })">
                         @csrf
                         <input type="hidden" name="action" value="verify">
                         <template x-for="id in selectedIds" :key="'v-' + id">
@@ -178,7 +178,7 @@
                 </form>
                 <div class="grid grid-cols-2 gap-2">
                     <form action="{{ route('supervisor.journal-validations.bulkUpdate', $internship) }}" method="POST"
-                        onsubmit="return confirm('Validasi semua jurnal yang dipilih?')">
+                        @submit.prevent="$store.confirmModal.show({ title: 'Validasi Jurnal', message: 'Validasi semua jurnal yang dipilih?', type: 'info', confirmText: 'Ya, Validasi', onConfirm: () => $el.submit() })">
                         @csrf
                         <input type="hidden" name="action" value="verify">
                         <template x-for="id in selectedIds" :key="'mv-' + id">

@@ -140,7 +140,7 @@
                                         Edit
                                     </a>
                                     <form action="{{ route('student.proposals.destroy', $proposal) }}" method="POST"
-                                        onsubmit="return confirm('Apakah Anda yakin ingin membatalkan dan menghapus pengajuan ini?');"
+                                        @submit.prevent="$store.confirmModal.show({ title: 'Batalkan Pengajuan', message: 'Apakah Anda yakin ingin membatalkan dan menghapus pengajuan ini?', type: 'danger', confirmText: 'Ya, Batalkan', onConfirm: () => $el.submit() })"
                                         class="inline-block">
                                         @csrf
                                         @method('DELETE')

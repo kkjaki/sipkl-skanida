@@ -98,7 +98,7 @@
                                         @unless ($year->is_active)
                                             <form action="{{ route('academic-years.activate', $year) }}" method="POST"
                                                 class="inline-flex items-center"
-                                                onsubmit="return confirm('Set {{ $year->name }} sebagai tahun ajaran aktif?');">
+                                                @submit.prevent="$store.confirmModal.show({ title: 'Aktifkan Tahun Ajaran', message: 'Set {{ $year->name }} sebagai tahun ajaran aktif?', type: 'warning', confirmText: 'Ya, Aktifkan', onConfirm: () => $el.submit() })">
                                                 @csrf
                                                 @method('PATCH')
                                                 <button type="submit"
@@ -130,7 +130,7 @@
                                         {{-- Delete --}}
                                         <form action="{{ route('academic-years.destroy', $year) }}" method="POST"
                                             class="inline-flex items-center"
-                                            onsubmit="return confirm('Apakah Anda yakin ingin menghapus tahun ajaran ini?');">
+                                            @submit.prevent="$store.confirmModal.show({ title: 'Hapus Tahun Ajaran', message: 'Apakah Anda yakin ingin menghapus tahun ajaran ini?', type: 'danger', confirmText: 'Ya, Hapus', onConfirm: () => $el.submit() })">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit"
@@ -187,7 +187,7 @@
                             @unless ($year->is_active)
                                 <form action="{{ route('academic-years.activate', $year) }}" method="POST"
                                     class="inline-flex items-center"
-                                    onsubmit="return confirm('Set {{ $year->name }} sebagai tahun ajaran aktif?');">
+                                    @submit.prevent="$store.confirmModal.show({ title: 'Aktifkan Tahun Ajaran', message: 'Set {{ $year->name }} sebagai tahun ajaran aktif?', type: 'warning', confirmText: 'Ya, Aktifkan', onConfirm: () => $el.submit() })">
                                     @csrf
                                     @method('PATCH')
                                     <button type="submit"
@@ -214,7 +214,7 @@
                             </a>
                             <form action="{{ route('academic-years.destroy', $year) }}" method="POST"
                                 class="inline-flex items-center"
-                                onsubmit="return confirm('Apakah Anda yakin ingin menghapus tahun ajaran ini?');">
+                                @submit.prevent="$store.confirmModal.show({ title: 'Hapus Tahun Ajaran', message: 'Apakah Anda yakin ingin menghapus tahun ajaran ini?', type: 'danger', confirmText: 'Ya, Hapus', onConfirm: () => $el.submit() })">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit"

@@ -366,7 +366,7 @@
                                         <div class="inline-flex items-center gap-2">
                                             <form action="{{ route('partnerships.destroy', $partnership) }}"
                                                 method="POST"
-                                                onsubmit="return confirm('Apakah Anda yakin ingin menghapus MoU ini? Tindakan ini tidak dapat dibatalkan.');">
+                                                @submit.prevent="$store.confirmModal.show({ title: 'Hapus MoU', message: 'Apakah Anda yakin ingin menghapus MoU ini? Tindakan ini tidak dapat dibatalkan.', type: 'danger', confirmText: 'Ya, Hapus', onConfirm: () => $el.submit() })">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit"

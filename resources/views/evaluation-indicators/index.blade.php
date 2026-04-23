@@ -127,7 +127,7 @@
                                             </button>
                                             <form action="{{ route('evaluation-indicators.destroy', $indicator) }}"
                                                 method="POST"
-                                                onsubmit="return confirm('Yakin ingin menghapus indikator ini?')">
+                                                @submit.prevent="$store.confirmModal.show({ title: 'Hapus Indikator', message: 'Yakin ingin menghapus indikator ini?', type: 'danger', confirmText: 'Ya, Hapus', onConfirm: () => $el.submit() })">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit"
@@ -169,7 +169,7 @@
                                     </svg>
                                 </button>
                                 <form action="{{ route('evaluation-indicators.destroy', $indicator) }}" method="POST"
-                                    onsubmit="return confirm('Yakin ingin menghapus indikator ini?')">
+                                    @submit.prevent="$store.confirmModal.show({ title: 'Hapus Indikator', message: 'Yakin ingin menghapus indikator ini?', type: 'danger', confirmText: 'Ya, Hapus', onConfirm: () => $el.submit() })">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit"

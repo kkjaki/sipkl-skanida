@@ -30,14 +30,18 @@
                     return Object.values(this.quotas).reduce((a, b) => (parseInt(a) || 0) + (parseInt(b) || 0), 0);
                 },
                 handleSubmit(e) {
+                    e.preventDefault();
                     if (this.totalQuota <= 0) {
                         alert('Maaf, total kuota kesanggupan harus lebih dari 0.');
-                        e.preventDefault();
                         return;
                     }
-                    if (!confirm('Apakah Anda yakin data yang diisi sudah benar? Setelah dikirim, data tidak dapat diubah lagi.')) {
-                        e.preventDefault();
-                    }
+                    $store.confirmModal.show({
+                        title: 'Konfirmasi Data',
+                        message: 'Apakah Anda yakin data yang diisi sudah benar? Setelah dikirim, data tidak dapat diubah lagi.',
+                        type: 'warning',
+                        confirmText: 'Ya, Kirim Data',
+                        onConfirm: () => $el.submit()
+                    });
                 }
             }"
                 @submit="handleSubmit" class="space-y-8">

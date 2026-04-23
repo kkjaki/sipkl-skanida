@@ -264,7 +264,7 @@
                                         @endif
 
                                         <form action="{{ route('industries.destroy', $industry->id) }}" method="POST"
-                                            onsubmit="return confirm('Apakah Anda yakin ingin menghapus industri ini?')">
+                                            @submit.prevent="$store.confirmModal.show({ title: 'Hapus Industri', message: 'Apakah Anda yakin ingin menghapus industri ini?', type: 'danger', confirmText: 'Ya, Hapus', onConfirm: () => $el.submit() })">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit"
@@ -388,7 +388,7 @@
                         @endif
 
                         <form action="{{ route('industries.destroy', $industry->id) }}" method="POST"
-                            onsubmit="return confirm('Apakah Anda yakin ingin menghapus industri ini?')">
+                            @submit.prevent="$store.confirmModal.show({ title: 'Hapus Industri', message: 'Apakah Anda yakin ingin menghapus industri ini?', type: 'danger', confirmText: 'Ya, Hapus', onConfirm: () => $el.submit() })">
                             @csrf
                             @method('DELETE')
                             <button type="submit"

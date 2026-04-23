@@ -194,7 +194,7 @@
                                         </a>
                                         <form action="{{ route('supervisors.destroy', $supervisor->user_id) }}"
                                             method="POST"
-                                            onsubmit="return confirm('Apakah Anda yakin ingin menghapus guru pembimbing ini?')">
+                                            @submit.prevent="$store.confirmModal.show({ title: 'Hapus Guru Pembimbing', message: 'Apakah Anda yakin ingin menghapus guru pembimbing ini?', type: 'danger', confirmText: 'Ya, Hapus', onConfirm: () => $el.submit() })">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit"
@@ -262,7 +262,7 @@
                             Edit
                         </a>
                         <form action="{{ route('supervisors.destroy', $supervisor->user_id) }}" method="POST"
-                            onsubmit="return confirm('Apakah Anda yakin ingin menghapus guru pembimbing ini?')">
+                            @submit.prevent="$store.confirmModal.show({ title: 'Hapus Guru Pembimbing', message: 'Apakah Anda yakin ingin menghapus guru pembimbing ini?', type: 'danger', confirmText: 'Ya, Hapus', onConfirm: () => $el.submit() })">
                             @csrf
                             @method('DELETE')
                             <button type="submit"

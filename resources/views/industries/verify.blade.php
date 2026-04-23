@@ -145,7 +145,7 @@
 
             <!-- Hidden Reject Form -->
             <form id="rejectForm" action="{{ route('industries.reject', $industry->id) }}" method="POST" class="hidden"
-                onsubmit="return confirm('Apakah Anda yakin ingin menolak pengajuan ini? Industri akan ditandai sebagai Blacklisted.')">
+                @submit.prevent="$store.confirmModal.show({ title: 'Tolak Pengajuan', message: 'Apakah Anda yakin ingin menolak pengajuan ini? Industri akan ditandai sebagai Blacklisted.', type: 'danger', confirmText: 'Ya, Tolak', onConfirm: () => $el.submit() })">
                 @csrf
                 @method('PUT')
             </form>

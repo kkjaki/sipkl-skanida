@@ -88,7 +88,7 @@
                                         </a>
                                         <form action="{{ route('departments.destroy', $department) }}" method="POST"
                                             class="inline-flex items-center"
-                                            onsubmit="return confirm('Apakah Anda yakin ingin menghapus program keahlian ini?');">
+                                            @submit.prevent="$store.confirmModal.show({ title: 'Hapus Program Keahlian', message: 'Apakah Anda yakin ingin menghapus program keahlian ini?', type: 'danger', confirmText: 'Ya, Hapus', onConfirm: () => $el.submit() })">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit"
@@ -139,7 +139,7 @@
                             </a>
                             <form action="{{ route('departments.destroy', $department) }}" method="POST"
                                 class="inline-flex items-center"
-                                onsubmit="return confirm('Apakah Anda yakin ingin menghapus program keahlian ini?');">
+                                @submit.prevent="$store.confirmModal.show({ title: 'Hapus Program Keahlian', message: 'Apakah Anda yakin ingin menghapus program keahlian ini?', type: 'danger', confirmText: 'Ya, Hapus', onConfirm: () => $el.submit() })">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit"

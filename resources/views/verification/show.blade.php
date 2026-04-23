@@ -142,7 +142,7 @@
                     <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
                         <!-- Approve Button -->
                         <form action="{{ route('verification.approve', $industry->id) }}" method="POST" class="flex-1"
-                            onsubmit="return confirm('Apakah industri ini sesuai dengan kurikulum? Data akan disinkronisasi dan menunggu input kuota oleh Admin.')">
+                            @submit.prevent="$store.confirmModal.show({ title: 'Setujui Pengajuan', message: 'Apakah industri ini sesuai dengan kurikulum? Data akan disinkronisasi dan menunggu input kuota oleh Admin.', type: 'info', confirmText: 'Ya, Setujui', onConfirm: () => $el.submit() })">
                             @csrf
                             @method('PUT')
                             <button type="submit"
@@ -158,7 +158,7 @@
 
                         <!-- Reject Button -->
                         <form action="{{ route('verification.reject', $industry->id) }}" method="POST" class="flex-1"
-                            onsubmit="return confirm('Apakah Anda yakin menolak pengajuan ini? Industri akan ditandai sebagai tidak sesuai kurikulum.')">
+                            @submit.prevent="$store.confirmModal.show({ title: 'Tolak Pengajuan', message: 'Apakah Anda yakin menolak pengajuan ini? Industri akan ditandai sebagai tidak sesuai kurikulum.', type: 'danger', confirmText: 'Ya, Tolak', onConfirm: () => $el.submit() })">
                             @csrf
                             @method('PUT')
                             <button type="submit"
@@ -187,7 +187,7 @@
                 </div>
                 <div class="p-6 sm:p-8">
                     <form action="{{ route('verification.unreject', $industry->id) }}" method="POST"
-                        onsubmit="return confirm('Apakah Anda yakin ingin mencabut penolakan? Pengajuan akan kembali ke status menunggu verifikasi.')">
+                        @submit.prevent="$store.confirmModal.show({ title: 'Cabut Penolakan', message: 'Apakah Anda yakin ingin mencabut penolakan? Pengajuan akan kembali ke status menunggu verifikasi.', type: 'warning', confirmText: 'Ya, Cabut', onConfirm: () => $el.submit() })">
                         @csrf
                         @method('PUT')
                         <button type="submit"
@@ -214,7 +214,7 @@
                 </div>
                 <div class="p-6 sm:p-8">
                     <form action="{{ route('verification.unsync', $industry->id) }}" method="POST"
-                        onsubmit="return confirm('Apakah Anda yakin ingin mencabut sinkronisasi? Industri akan kembali ke status menunggu verifikasi.')">
+                        @submit.prevent="$store.confirmModal.show({ title: 'Cabut Sinkronisasi', message: 'Apakah Anda yakin ingin mencabut sinkronisasi? Industri akan kembali ke status menunggu verifikasi.', type: 'warning', confirmText: 'Ya, Cabut', onConfirm: () => $el.submit() })">
                         @csrf
                         @method('PUT')
                         <button type="submit"

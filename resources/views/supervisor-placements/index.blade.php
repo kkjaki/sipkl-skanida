@@ -350,7 +350,7 @@
                                             <!-- Single delete button (non-bulk mode) -->
                                             <template x-if="!deleteMode">
                                                 <form :action="'{{ url('supervisor-placements/bulk') }}'" method="POST"
-                                                    onsubmit="return confirm('Hapus pembimbing dari siswa ini?')">
+                                                    @submit.prevent="$store.confirmModal.show({ title: 'Hapus Pembimbing', message: 'Hapus pembimbing dari siswa ini?', type: 'danger', confirmText: 'Ya, Hapus', onConfirm: () => $el.submit() })">
                                                     @csrf
                                                     @method('DELETE')
                                                     <input type="hidden" name="internship_ids[]" :value="intern.id">
@@ -380,7 +380,7 @@
                             <!-- Bulk Delete Action -->
                             <div x-show="deleteMode && selectedInterns.length > 0" class="mt-3" x-cloak>
                                 <form action="{{ route('supervisor-placements.destroy') }}" method="POST"
-                                    onsubmit="return confirm('Hapus ' + this.querySelector('[data-count]').dataset.count + ' penempatan pembimbing? Siswa akan kembali ke daftar kandidat.')">
+                                    @submit.prevent=".confirmModal.show({ title: 'Hapus Penempatan Massal', message: 'Hapus ' + $el.querySelector('[data-count]').dataset.count + ' penempatan pembimbing? Siswa akan kembali ke daftar kandidat.', type: 'danger', confirmText: 'Ya, Hapus Semua', onConfirm: () => $el.submit() })">
                                     @csrf
                                     @method('DELETE')
                                     <template x-for="id in selectedInterns" :key="'del-' + id">
