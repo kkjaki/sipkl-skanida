@@ -17,7 +17,7 @@ class StoreSupervisorRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['nullable', 'email', 'max:255', 'unique:users,email'],
-            'nip' => ['required', 'string', 'max:30', 'unique:supervisors,nip'],
+            'nip' => ['required', 'string', 'regex:/^[0-9]+$/', 'max:30', 'unique:supervisors,nip'],
             'department_id' => ['required', 'exists:departments,id'],
             'is_department_head' => [
                 'nullable',
@@ -46,6 +46,7 @@ class StoreSupervisorRequest extends FormRequest
             'email.unique' => 'Email sudah digunakan.',
             'nip.required' => 'NIP wajib diisi.',
             'nip.unique' => 'NIP sudah terdaftar.',
+            'nip.regex' => 'NIP hanya boleh berisi angka.',
             'department_id.required' => 'Program Keahlian wajib dipilih.',
             'department_id.exists' => 'Program Keahlian tidak valid.',
         ];

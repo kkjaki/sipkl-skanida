@@ -24,7 +24,7 @@ class StoreStudentRequest extends FormRequest
         return [
             'name' => 'required|string|max:255',
             'email' => 'nullable|email|max:255|unique:users,email',
-            'nis' => 'required|string|max:20|unique:students,nis',
+            'nis' => ['required', 'string', 'regex:/^[0-9]+$/', 'max:20', 'unique:students,nis'],
             'class_name' => ['required', 'string', Rule::in(Student::AVAILABLE_CLASSES)],
             'place_of_birth' => 'required|string|max:255',
             'date_of_birth' => 'required|date',
@@ -45,6 +45,7 @@ class StoreStudentRequest extends FormRequest
             'email.unique' => 'Email sudah digunakan.',
             'nis.required' => 'NIS wajib diisi.',
             'nis.unique' => 'NIS sudah terdaftar.',
+            'nis.regex' => 'NIS hanya boleh berisi angka.',
             'class_name.required' => 'Kelas wajib diisi.',
             'class_name.in' => 'Kelas yang dipilih tidak valid.',
             'place_of_birth.required' => 'Tempat lahir wajib diisi.',

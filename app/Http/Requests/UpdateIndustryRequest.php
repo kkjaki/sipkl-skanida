@@ -39,7 +39,7 @@ class UpdateIndustryRequest extends FormRequest
             'phone' => ['nullable', 'string', 'max:30', 'required_without:email'],
             'pic_name' => ['nullable', 'string', 'max:255'],
             'pic_position' => ['nullable', 'string', 'max:255'],
-            'nip' => ['nullable', 'string', 'max:255'],
+            'nip' => ['nullable', 'string', 'regex:/^[0-9]+$/', 'max:255'],
             'quotas' => ['nullable', 'array'],
             'quotas.*' => ['nullable', 'integer', 'min:0'],
         ];
@@ -59,6 +59,7 @@ class UpdateIndustryRequest extends FormRequest
             'phone.required_without' => 'No. Telepon wajib diisi jika Email tidak diisi.',
             'quotas.*.integer' => 'Kuota harus berupa angka.',
             'quotas.*.min' => 'Kuota minimal 0.',
+            'nip.regex' => 'NIP hanya boleh berisi angka.',
         ];
     }
 }
