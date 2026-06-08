@@ -8,6 +8,7 @@ use App\Models\Internship;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Services\CacheService;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
 class JournalValidationController extends Controller
@@ -49,16 +50,22 @@ class JournalValidationController extends Controller
         // Filter & Sort
         $status = $request->input('status', 'all');
         $sort = $request->input('sort', 'date_desc');
+        $page = $request->input('page', 1);
 
-        $query = DailyJournal::where('internship_id', $internship->id);
+        $cacheKey = CacheService::PREFIX_JOURNAL_VALIDATIONS
+            ."{$internship->id}:{$status}:{$sort}:page:{$page}";
 
-        if ($status !== 'all') {
-            $query->where('verification_status', $status);
-        }
+        $journals = Cache::remember($cacheKey, 60, function () use ($internship, $status, $sort) {
+            $query = DailyJournal::where('internship_id', $internship->id);
 
-        $query->orderBy('date', $sort === 'date_asc' ? 'asc' : 'desc');
+            if ($status !== 'all') {
+                $query->where('verification_status', $status);
+            }
 
-        $journals = $query->paginate(15)->withQueryString();
+            $query->orderBy('date', $sort === 'date_asc' ? 'asc' : 'desc');
+
+            return $query->paginate(15)->withQueryString();
+        });
 
         return view('journal-validations.show', compact('internship', 'journals', 'status', 'sort'));
     }
@@ -109,7 +116,8 @@ class JournalValidationController extends Controller
                     $message = count($request->journal_ids).' jurnal ditolak.';
                 }
 
-                // Invalidate dashboard cache supaya angka pending langsung terupdate
+                // Invalidate caches so updated statuses are reflected immediately
+                CacheService::flushJournalValidations($internship->id);
                 CacheService::flushDashboard();
 
                 return back()->with('success', $message);
