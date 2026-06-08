@@ -25,8 +25,8 @@
     <link rel="preload" href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" as="style">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
-    <!-- CSS only (non-blocking) -->
-    @vite(['resources/css/app.css'])
+    <!-- Assets (CSS + JS modulepreload to eliminate critical chain) -->
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     <style>
         [x-cloak] {
@@ -61,8 +61,6 @@
         </div>
     </div>
 
-    <!-- JS at end of body (non-blocking render) -->
-    @vite(['resources/js/app.js'])
 
     <!-- Alpine.js State Management (runs after Alpine loads) -->
     <script>

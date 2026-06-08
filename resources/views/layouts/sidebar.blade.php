@@ -1,5 +1,5 @@
 <aside
-    class="fixed left-0 top-0 z-50 flex h-screen w-[280px] -translate-x-full flex-col overflow-y-hidden bg-white dark:bg-amoled-surface duration-300 ease-linear lg:static lg:translate-x-0 border-r border-gray-200 dark:border-amoled-border"
+    class="fixed left-0 top-0 z-50 flex h-screen w-[280px] -translate-x-full flex-col overflow-y-hidden bg-white dark:bg-amoled-surface duration-300 ease-linear lg:static lg:translate-x-0 border-r border-gray-200 dark:border-amoled-border will-change-[width]"
     :class="{
         'w-[280px]': $store.sidebar.isExpanded || $store.sidebar.isMobileOpen || $store.sidebar.isHovered,
         'w-[88px]': !$store.sidebar.isExpanded && !$store.sidebar.isHovered && !$store.sidebar.isMobileOpen,
@@ -17,7 +17,7 @@
                 <div class="flex flex-col leading-tight">
                     <span class="text-base font-extrabold text-gray-900 dark:text-white tracking-tight">SIM-PKL</span>
                     <span
-                        class="text-[10px] font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider">SMKN
+                        class="text-[10px] font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">SMKN
                         2 Magelang</span>
                 </div>
             </template>

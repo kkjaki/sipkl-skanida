@@ -20,7 +20,8 @@ export default {
                 white: '#FFFFFF',
                 black: '#1C2434',
                 'primary': '#3C50E0',
-                'school-blue': '#007BFF',
+                'school-blue': '#0069D9',
+                'school-blue-dark': '#0056D2',
                 'school-orange': '#FFA500',
                 'stroke': '#E2E8F0',
 

@@ -130,7 +130,7 @@
         <div class="flex flex-col gap-1">
             <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Penempatan Siswa (Plotting)</h1>
             <p class="text-sm text-gray-500 dark:text-gray-400">Tahun Ajaran Aktif: <span
-                    class="font-medium text-school-blue">{{ $activeYear->name }}</span></p>
+                    class="font-medium text-blue-700 dark:text-blue-400">{{ $activeYear->name }}</span></p>
         </div>
 
         <!-- Flash Messages -->
@@ -207,8 +207,8 @@
                             </span>
                         </div>
 
-                        <h3 class="text-base sm:text-lg font-bold text-gray-900 dark:text-white mb-1.5 sm:mb-2 leading-tight"
-                            x-text="industry.name"></h3>
+                        <h2 class="text-base sm:text-lg font-bold text-gray-900 dark:text-white mb-1.5 sm:mb-2 leading-tight"
+                            x-text="industry.name"></h2>
                         <p class="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mb-1 flex items-start gap-1.5">
                             <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor"
                                 viewBox="0 0 24 24">
@@ -226,14 +226,14 @@
                             class="flex items-center justify-between p-3 sm:p-4 rounded-2xl bg-gray-50 dark:bg-white/[0.02] border border-gray-100 dark:border-amoled-border">
                             <div class="text-center flex-1 border-r border-gray-100 dark:border-amoled-border">
                                 <p
-                                    class="text-[10px] uppercase font-bold text-gray-400 dark:text-amoled-text tracking-widest mb-1">
+                                    class="text-[10px] uppercase font-bold text-gray-500 dark:text-amoled-text tracking-widest mb-1">
                                     Terisi</p>
                                 <p class="text-base sm:text-lg font-bold text-gray-900 dark:text-white"
                                     x-text="industry.interns_count"></p>
                             </div>
                             <div class="text-center flex-1">
                                 <p
-                                    class="text-[10px] uppercase font-bold text-gray-400 dark:text-amoled-text tracking-widest mb-1">
+                                    class="text-[10px] uppercase font-bold text-gray-500 dark:text-amoled-text tracking-widest mb-1">
                                     Total Kuota</p>
                                 <p class="text-base sm:text-lg font-bold text-gray-900 dark:text-white"
                                     x-text="industry.quota"></p>

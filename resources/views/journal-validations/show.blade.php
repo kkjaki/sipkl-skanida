@@ -283,14 +283,16 @@
                                 </td>
                             </tr>
                             {{-- Expanded Content --}}
-                            <tr x-show="expandedRow === {{ $journal->id }}" x-cloak x-transition.opacity.duration.150ms>
-                                <td colspan="6" class="p-0">
-                                    <div
-                                        class="px-5 py-4 bg-gray-50/80 dark:bg-white/[0.015] border-t border-gray-100 dark:border-amoled-border space-y-3">
-                                        @include('journal-validations._expanded', ['journal' => $journal])
-                                    </div>
-                                </td>
-                            </tr>
+                            <template x-if="expandedRow === {{ $journal->id }}">
+                                <tr x-transition.opacity.duration.150ms>
+                                    <td colspan="6" class="p-0">
+                                        <div
+                                            class="px-5 py-4 bg-gray-50/80 dark:bg-white/[0.015] border-t border-gray-100 dark:border-amoled-border space-y-3">
+                                            @include('journal-validations._expanded', ['journal' => $journal])
+                                        </div>
+                                    </td>
+                                </tr>
+                            </template>
                         @empty
                             <tr>
                                 <td colspan="6"
@@ -368,10 +370,12 @@
                         </div>
 
                         {{-- Expanded Mobile --}}
-                        <div x-show="expandedRow === {{ $journal->id }}" x-cloak x-transition.opacity.duration.150ms
-                            class="mt-3 ml-[30px] space-y-3">
-                            @include('journal-validations._expanded', ['journal' => $journal])
-                        </div>
+                        <template x-if="expandedRow === {{ $journal->id }}">
+                            <div x-transition.opacity.duration.150ms
+                                class="mt-3 ml-[30px] space-y-3">
+                                @include('journal-validations._expanded', ['journal' => $journal])
+                            </div>
+                        </template>
                     </div>
                 @empty
                     <div class="px-6 py-12 text-center text-gray-400 dark:text-gray-500 text-sm">Belum ada jurnal harian.
