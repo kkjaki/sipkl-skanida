@@ -22,6 +22,11 @@ return new class extends Migration
             $table->text('rejection_note')->nullable();
             $table->timestamp('verified_at')->nullable();
             $table->timestamps();
+
+            $table->index(
+                ['internship_id', 'verification_status', 'date'],
+                'dj_internship_status_date_idx'
+            );
         });
     }
 
