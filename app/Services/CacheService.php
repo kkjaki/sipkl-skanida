@@ -36,6 +36,10 @@ class CacheService
 
     public const PREFIX_GRADE_RECAP = 'grade_recap:';
 
+    public const PREFIX_PLACEMENTS = 'placements:';
+
+    public const PREFIX_JOURNAL_VALIDATIONS = 'journal_validations:';
+
     // ──────────────────────────────────────────────
     //  Flush Methods
     // ──────────────────────────────────────────────
@@ -84,6 +88,46 @@ class CacheService
     }
 
     /**
+     * Flush placement cache for a specific department in the active year.
+     *
+     * Call this when placements are created or deleted.
+     */
+    public static function flushPlacements(int $departmentId): void
+    {
+        $activeYear = \App\Models\AcademicYear::where('is_active', true)->first();
+        if ($activeYear) {
+            Cache::forget(self::PREFIX_PLACEMENTS."dept:{$departmentId}:year:{$activeYear->id}");
+        }
+    }
+
+    /**
+     * Flush journal validation cache for a specific internship.
+     *
+     * Call this after bulk verify/reject actions to ensure
+     * the cached paginated results are refreshed.
+     */
+    public static function flushJournalValidations(int $internshipId): void
+    {
+        // Flush all pages/filter combinations for this internship
+        // by using a tagged approach with pattern-based forget.
+        // Since Laravel's file/database drivers don't support tags,
+        // we flush by known filter combinations.
+        $statuses = ['all', 'pending', 'verified', 'rejected'];
+        $sorts = ['date_desc', 'date_asc'];
+
+        foreach ($statuses as $status) {
+            foreach ($sorts as $sort) {
+                // Flush first 10 pages (covers typical usage)
+                for ($page = 1; $page <= 10; $page++) {
+                    Cache::forget(
+                        self::PREFIX_JOURNAL_VALIDATIONS."{$internshipId}:{$status}:{$sort}:page:{$page}"
+                    );
+                }
+            }
+        }
+    }
+
+    /**
      * Nuclear option: flush every known cache key.
      *
      * Call this when something fundamental changes (e.g. active
@@ -94,5 +138,11 @@ class CacheService
         self::flushDashboard();
         self::flushGradeRecap();
         self::flushSupervisorAllocations();
+
+        // Flush all placement caches (iterate departments)
+        $departmentIds = \App\Models\Department::pluck('id');
+        foreach ($departmentIds as $deptId) {
+            self::flushPlacements($deptId);
+        }
     }
 }

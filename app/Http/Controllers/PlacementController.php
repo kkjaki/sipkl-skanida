@@ -10,6 +10,7 @@ use App\Models\Student;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Services\CacheService;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
 class PlacementController extends Controller
@@ -36,60 +37,66 @@ class PlacementController extends Controller
         $activeYear = AcademicYear::where('is_active', true)->firstOrFail();
         $departmentId = $this->kaprogDepartmentId();
 
-        // Industries: synced, open, with allocation for this department in active year
-        $industries = Industry::where('is_synced', true)
-            ->where('status', 'open')
-            ->whereHas('allocations', function ($q) use ($departmentId, $activeYear) {
-                $q->where('department_id', $departmentId)
-                    ->where('academic_year_id', $activeYear->id)
-                    ->where('quota', '>', 0);
-            })
-            ->with(['allocations' => function ($q) use ($departmentId, $activeYear) {
-                $q->where('department_id', $departmentId)
-                    ->where('academic_year_id', $activeYear->id);
-            }, 'partnerships', 'internships' => function ($q) use ($departmentId, $activeYear) {
-                $q->where('academic_year_id', $activeYear->id)
-                    ->whereIn('status', ['ongoing', 'finished'])
-                    ->whereHas('student', fn ($q2) => $q2->where('department_id', $departmentId))
-                    ->with('student.user');
-            }])
-            ->get()
-            ->map(function ($industry) {
-                $allocation = $industry->allocations->first();
-                $industry->quota = $allocation->quota ?? 0;
+        $cacheKey = CacheService::PREFIX_PLACEMENTS . "dept:{$departmentId}:year:{$activeYear->id}";
 
-                // Hitung dari relasi yang sudah di-eager load (no N+1 query)
-                $internsCount = $industry->internships->count();
+        [$industries, $candidates] = Cache::remember($cacheKey, 60, function () use ($activeYear, $departmentId) {
+            // Industries: synced, open, with allocation for this department in active year
+            $industries = Industry::where('is_synced', true)
+                ->where('status', 'open')
+                ->whereHas('allocations', function ($q) use ($departmentId, $activeYear) {
+                    $q->where('department_id', $departmentId)
+                        ->where('academic_year_id', $activeYear->id)
+                        ->where('quota', '>', 0);
+                })
+                ->with(['allocations' => function ($q) use ($departmentId, $activeYear) {
+                    $q->where('department_id', $departmentId)
+                        ->where('academic_year_id', $activeYear->id);
+                }, 'partnerships', 'internships' => function ($q) use ($departmentId, $activeYear) {
+                    $q->where('academic_year_id', $activeYear->id)
+                        ->whereIn('status', ['ongoing', 'finished'])
+                        ->whereHas('student', fn ($q2) => $q2->where('department_id', $departmentId))
+                        ->with('student.user');
+                }])
+                ->get()
+                ->map(function ($industry) {
+                    $allocation = $industry->allocations->first();
+                    $industry->quota = $allocation->quota ?? 0;
 
-                $industry->interns_count = $internsCount;
-                $industry->remaining_quota = $industry->quota - $internsCount;
+                    // Hitung dari relasi yang sudah di-eager load (no N+1 query)
+                    $internsCount = $industry->internships->count();
 
-                // Flag: apakah industri ini memiliki MoU aktif
-                $industry->has_active_mou = $industry->active_partnership !== null;
+                    $industry->interns_count = $internsCount;
+                    $industry->remaining_quota = $industry->quota - $internsCount;
 
-                // Assign data intern langsung dari relasi (no N+1 query)
-                $industry->current_interns = $industry->internships;
+                    // Flag: apakah industri ini memiliki MoU aktif
+                    $industry->has_active_mou = $industry->active_partnership !== null;
 
-                return $industry;
-            });
+                    // Assign data intern langsung dari relasi (no N+1 query)
+                    $industry->current_interns = $industry->internships;
 
-        // Candidates: siswa yang TIDAK punya internship ongoing/finished di tahun ajaran ini.
-        // Siswa yang hanya punya internship withdrawn tetap masuk sebagai kandidat (is_transfer = true).
-        $candidates = Student::where('department_id', $departmentId)
-            ->whereDoesntHave('internships', function ($q) use ($activeYear) {
-                $q->where('academic_year_id', $activeYear->id)
-                    ->whereIn('status', ['ongoing', 'finished']);
-            })
-            ->with('user')
-            ->get()
-            ->map(function ($student) use ($activeYear) {
-                $student->is_transfer = $student->internships()
-                    ->where('academic_year_id', $activeYear->id)
-                    ->where('status', 'withdrawn')
-                    ->exists();
+                    return $industry;
+                });
 
-                return $student;
-            });
+            // Candidates: siswa yang TIDAK punya internship ongoing/finished di tahun ajaran ini.
+            // Siswa yang hanya punya internship withdrawn tetap masuk sebagai kandidat (is_transfer = true).
+            $candidates = Student::where('department_id', $departmentId)
+                ->whereDoesntHave('internships', function ($q) use ($activeYear) {
+                    $q->where('academic_year_id', $activeYear->id)
+                        ->whereIn('status', ['ongoing', 'finished']);
+                })
+                ->with('user')
+                ->get()
+                ->map(function ($student) use ($activeYear) {
+                    $student->is_transfer = $student->internships()
+                        ->where('academic_year_id', $activeYear->id)
+                        ->where('status', 'withdrawn')
+                        ->exists();
+
+                    return $student;
+                });
+
+            return [$industries, $candidates];
+        });
 
         return view('placements.index', compact('industries', 'candidates', 'activeYear'));
     }
@@ -212,6 +219,7 @@ class PlacementController extends Controller
 
                 CacheService::flushDashboard();
                 CacheService::flushGradeRecap();
+                CacheService::flushPlacements($departmentId);
 
                 return redirect()->route('placements.index')
                     ->with('success', 'Siswa berhasil di-plot ke industri.');
@@ -239,6 +247,7 @@ class PlacementController extends Controller
 
             CacheService::flushDashboard();
             CacheService::flushGradeRecap();
+            CacheService::flushPlacements($departmentId);
 
             return back()->with('success', 'Penempatan siswa berhasil dihapus.');
         } catch (\Exception $e) {
@@ -275,6 +284,7 @@ class PlacementController extends Controller
 
             CacheService::flushDashboard();
             CacheService::flushGradeRecap();
+            CacheService::flushPlacements($departmentId);
 
             return back()->with('success', "{$deleted} penempatan siswa berhasil dihapus.");
         } catch (\Exception $e) {
